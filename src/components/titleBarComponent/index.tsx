@@ -1,6 +1,6 @@
-import { DimensionValue, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Action, ICON_BACK_COLOR, ICON_MAIN_COLOR, ICON_RADIUS, PAGE_ICON_SIZE, PAGE_SUBTITLE_SIZE, PAGE_TITLE_SIZE, TEXT_COLOR } from "../../utils";
-import MCIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { DimensionValue, StyleSheet, Text, View } from "react-native";
+import { Action, ICON_BACK_COLOR, ICON_RADIUS, PAGE_ICON_SIZE, PAGE_SUBTITLE_SIZE, PAGE_TITLE_SIZE, TEXT_COLOR } from "../../utils";
+import IconComponent from "../IconComponent";
 
 type Props = {
     title: string,
@@ -23,26 +23,15 @@ function TitleBarComponent(props: Props) {
         return titleWidth as DimensionValue
     }
 
-    function getIconView(action: Action | undefined) {
-        if(action !== undefined) {
-            return(
-                <View style={styles.iconView}>
-                    <TouchableOpacity style={styles.iconBackgroundView} onPress={action.action}>
-                        <MCIcons name={action.iconName} color={ICON_MAIN_COLOR} size={PAGE_ICON_SIZE}/>
-                    </TouchableOpacity>
-                </View>
-            )
-        }
-        return(<></>);
-    }
+    const leftAction = props.leftAction;
+    const rightAction = props.rightAction;
 
     const titleWidth = getTitleWidth();
+    const iconWidth = "15%";
 
     return(
         <View style={styles.topView}>
-            <>
-                { getIconView(props.leftAction) }
-            </>
+            <IconComponent icon={leftAction?.icon} action={leftAction?.action} width={iconWidth} size={PAGE_ICON_SIZE}/>
             <View style={[styles.titleView, {width: titleWidth}]}>
                 <Text style={styles.titleText}>{props.title}</Text>
                 <>
@@ -52,9 +41,7 @@ function TitleBarComponent(props: Props) {
                     }
                 </>
             </View>
-            <>
-                { getIconView(props.rightAction) }
-            </>
+            <IconComponent icon={rightAction?.icon} action={rightAction?.action} width={iconWidth} size={PAGE_ICON_SIZE}/>
         </View>
     );
 }

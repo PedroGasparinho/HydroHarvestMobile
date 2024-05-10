@@ -1,9 +1,15 @@
 /***************************************************** TYPES ******************************************************/
 
+export type Icon = {
+    name: string,
+    color: string,
+    backgroundColor: string,
+}
+
 export type Action = {
-    action: (() => void);
-    iconName: string;
-};
+    icon: Icon,
+    action: () => void,
+}
 
 export type Crop = {
     name: string,
@@ -49,9 +55,6 @@ export const DELETE_ICON_MAIN_COLOR = "#D80032";
 export const DELETE_ICON_BACK_COLOR = "#FFB0B0";
 
 export const ICON_RADIUS = 100;
-
-export const GO_BACK_ICON = "chevron-left";
-export const ADD_NEW_ICON = "plus";
 
 //Crop-related Constants
 export const CROP_GREAT_STATUS = "Great";
@@ -111,4 +114,30 @@ export function compareCrops(a: Crop, b: Crop) {
     } else {
         return thirdCriterion;
     }
+}
+
+/*************************************************** CONSTANTS ***************************************************/
+
+export const goBackIcon : Icon = {
+    name: "chevron-left",
+    color: ICON_MAIN_COLOR,
+    backgroundColor: ICON_BACK_COLOR,
+}
+
+export const addNewIcon : Icon = {
+    name: "plus",
+    color: ICON_MAIN_COLOR,
+    backgroundColor: ICON_BACK_COLOR,
+}
+
+export const wateringCanIcon : Icon = {
+    name: "watering-can",
+    color: WATER_ICON_MAIN_COLOR,
+    backgroundColor: WATER_ICON_BACK_COLOR,
+}
+
+export const deleteIcon : Icon = {
+    name: "delete",
+    color: DELETE_ICON_MAIN_COLOR,
+    backgroundColor: DELETE_ICON_BACK_COLOR,
 }

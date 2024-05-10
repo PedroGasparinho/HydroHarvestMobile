@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, View } from "react-native";
-import { ADD_NEW_ICON, Action, Crop, GO_BACK_ICON, compareCrops } from "../../utils";
+import { Action, Crop, addNewIcon, compareCrops, goBackIcon } from "../../utils";
 import CropComponent from "../../components/CropComponent";
 import TitleBarComponent from "../../components/titleBarComponent";
 import { mainStackProp } from "../../routes/stack";
@@ -25,11 +25,11 @@ function HomePage() {
     const subtitle = "You have " + crops.length + " crops";
 
     const leftAction : Action = {
-        iconName: GO_BACK_ICON,
+        icon: goBackIcon,
         action: () => mainNav.goBack(),
     }
     const rightAction : Action = {
-        iconName: ADD_NEW_ICON,
+        icon: addNewIcon,
         action: () => mainNav.goBack(),
     }
 
