@@ -21,6 +21,12 @@ export const ITEM_TEXT_SIZE = 13;
 export const ITEM_ICON_SIZE = 20;
 export const ITEM_BACK_COLOR = "#DDDDDD";
 
+//Bottom Bar Constants
+export const BOTTOM_BAR_ICON_SIZE = 30;
+export const BOTTOM_BAR_FONT_SIZE = 15;
+export const BOTTOM_BAR_ACTIVE_COLOR = "#0A6847";
+export const BOTTOM_BAR_INACTIVE_COLOR = "#000000";
+
 //Global text-related constants
 export const TEXT_COLOR = "#000000";
 
@@ -29,7 +35,7 @@ export const BORDER_COLOR = "#444444";
 
 //Global icon-related constants
 export const ICON_MAIN_COLOR = "#000000";
-export const ICON_BACK_COLOR = "#888888";
+export const ICON_BACK_COLOR = "#AAAAAA";
 
 export const WATER_ICON_MAIN_COLOR = "#39A7FF";
 export const WATER_ICON_BACK_COLOR = "#CAF4FF";

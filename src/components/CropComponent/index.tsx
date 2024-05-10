@@ -2,6 +2,8 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { BORDER_COLOR, Crop, DELETE_ICON_BACK_COLOR, DELETE_ICON_MAIN_COLOR, ICON_RADIUS, ITEM_ICON_SIZE, ITEM_BACK_COLOR, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR, WATER_ICON_BACK_COLOR, WATER_ICON_MAIN_COLOR, cropStatusToColor } from "../../utils";
 import React from "react";
 import MCIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { useNavigation } from "@react-navigation/native";
+import { CROP_PAGE, homeStackProp } from "../../routes/homeStack";
 
 type Props = {
     crop: Crop
@@ -20,8 +22,10 @@ function CropComponent(prop: Props) {
 
     const statusColor = cropStatusToColor(crop.status);
 
-    function onPressItem() {
+    const homeNav = useNavigation<homeStackProp>();
 
+    function onPressItem() {
+        homeNav.navigate(CROP_PAGE);
     }
 
     function onPressWater() {
