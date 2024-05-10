@@ -25,27 +25,16 @@ function CropComponent(prop: Props) {
     const homeNav = useNavigation<homeStackProp>();
 
     function onPressItem() {
-        homeNav.navigate(CROP_PAGE);
+        homeNav.navigate(CROP_PAGE, crop);
     }
 
     function onPressWater() {
-
+        //TODO
     }
 
     function onPressDelete() {
-
+        //TODO
     }
-
-    /*
-            const homeNav = useNavigation<homeStackProp>();
-
-            <Button
-                onPress={() => homeNav.navigate(CROP_PAGE)}
-                title="To Systems"
-                color="#841584"
-                accessibilityLabel="Learn more about this purple button"
-            />
-    */
 
     return (
         <TouchableOpacity style={styles.outerView} onPress={onPressItem}>

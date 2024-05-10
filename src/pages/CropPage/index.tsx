@@ -1,12 +1,17 @@
-import { useNavigation } from "@react-navigation/native";
-import { Button, Text } from "react-native";
-import { HOME_PAGE, SCHEDULE_PAGE, SYSTEM_PAGE, homeStackProp } from "../../routes/homeStack";
+import { homeNavigationStackProp } from "../../routes/homeStack";
+import TitleBarComponent from "../../components/titleBarComponent";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { Action, GO_BACK_ICON } from "../../utils";
 
-function CropPage() {
+type NavProps = NativeStackScreenProps<homeNavigationStackProp, 'CropPage'>;
 
-    const homeNav = useNavigation<homeStackProp>();
+function CropPage({navigation, route}: NavProps) {
 
-    return (
+    const crop = route.params;
+
+    //const homeNav = useNavigation<homeStackProp>();
+
+    /*return (
         <>
             <Text>Crop Page</Text>
             <Button
@@ -28,7 +33,19 @@ function CropPage() {
                 accessibilityLabel="Learn more about this purple button"
             />
         </>
+    );*/
+
+    const leftAction : Action = {
+        iconName: GO_BACK_ICON,
+        action: () => navigation.goBack(),
+    }
+
+    return(
+        <>
+            <TitleBarComponent title={crop.name} leftAction={leftAction}/>
+        </>
     );
-  }
+
+}
   
-  export default CropPage;
+export default CropPage;

@@ -1,5 +1,10 @@
 /***************************************************** TYPES ******************************************************/
 
+export type Action = {
+    action: (() => void);
+    iconName: string;
+};
+
 export type Crop = {
     name: string,
     cropName: string,
@@ -44,6 +49,9 @@ export const DELETE_ICON_MAIN_COLOR = "#D80032";
 export const DELETE_ICON_BACK_COLOR = "#FFB0B0";
 
 export const ICON_RADIUS = 100;
+
+export const GO_BACK_ICON = "chevron-left";
+export const ADD_NEW_ICON = "plus";
 
 //Crop-related Constants
 export const CROP_GREAT_STATUS = "Great";

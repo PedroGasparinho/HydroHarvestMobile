@@ -3,6 +3,7 @@ import HomePage from '../../pages/HomePage';
 import CropPage from '../../pages/CropPage';
 import SystemPage from '../../pages/SystemPage';
 import SchedulePage from '../../pages/SchedulePage';
+import { Crop } from '../../utils';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,7 +14,7 @@ export const SCHEDULE_PAGE = "SchedulePage";
 
 export type homeNavigationStackProp = {
     HomePage: undefined,
-    CropPage: undefined,
+    CropPage: Crop,
     SystemPage: undefined,
     SchedulePage: undefined
   }

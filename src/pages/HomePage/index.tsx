@@ -1,7 +1,9 @@
 import { ScrollView, StyleSheet, View } from "react-native";
-import { Crop, compareCrops } from "../../utils";
+import { ADD_NEW_ICON, Action, Crop, GO_BACK_ICON, compareCrops } from "../../utils";
 import CropComponent from "../../components/CropComponent";
 import TitleBarComponent from "../../components/titleBarComponent";
+import { mainStackProp } from "../../routes/stack";
+import { useNavigation } from "@react-navigation/native";
 
 function HomePage() {
 
@@ -17,14 +19,25 @@ function HomePage() {
         return crops.sort(compareCrops);
     }
 
-    let i = 0;
+    const mainNav = useNavigation<mainStackProp>();
 
     const title = "Crops";
     const subtitle = "You have " + crops.length + " crops";
 
+    const leftAction : Action = {
+        iconName: GO_BACK_ICON,
+        action: () => mainNav.goBack(),
+    }
+    const rightAction : Action = {
+        iconName: ADD_NEW_ICON,
+        action: () => mainNav.goBack(),
+    }
+
+    let i = 0;
+
     return (
         <>
-            <TitleBarComponent title={title} subtitle={subtitle} leftIconName="chevron-left" rightIconName="plus"/>
+            <TitleBarComponent title={title} subtitle={subtitle} leftAction={leftAction} rightAction={rightAction}/>
             <ScrollView 
                 style={styles.bottomView} 
                 contentContainerStyle={{flexDirection: 'row', flexWrap: 'wrap'}}
