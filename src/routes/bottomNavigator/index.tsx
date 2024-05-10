@@ -9,22 +9,22 @@ const Tab = createBottomTabNavigator();
 
 function BottomNavigator() {
 	return (
-    	<Tab.Navigator initialRouteName={"List"} screenOptions={{
+    	<Tab.Navigator initialRouteName={"Home"} screenOptions={{
         	headerShown: false, 
-        	tabBarActiveTintColor: '#0F1A91',
+        	tabBarActiveTintColor: '#0A6847',
         	tabBarInactiveTintColor: '#000000',
-      	}} >
-        	<Tab.Screen name="HomeStack" component={HomeStack} options={{
-            	tabBarIcon: ({ color, size }) => (
-              		<MCIcons name="sprout" color={color} size={size} />
-            	)
-        	}} />
-			<Tab.Screen name="WeatherPage" component={WeatherPage} options={{
+      	}}>
+			<Tab.Screen name="Weather" component={WeatherPage} options={{
 				tabBarIcon: ({ color, size }) => (
 					<MCIcons name="sun-thermometer" color={color} size={size} />
 				)
 			}} />
-			<Tab.Screen name="SettingsPage" component={SettingsPage} options={{
+			<Tab.Screen name="Home" component={HomeStack} options={{
+            	tabBarIcon: ({ color, size }) => (
+              		<MCIcons name="sprout" color={color} size={size} />
+            	)
+        	}} />
+			<Tab.Screen name="Settings" component={SettingsPage} options={{
 				tabBarIcon: ({ color, size }) => (
 					<MCIcons name="cog" color={color} size={size} />
 				)
