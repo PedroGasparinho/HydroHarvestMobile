@@ -94,6 +94,7 @@ export const BOTTOM_BAR_INACTIVE_COLOR = "#000000";
 
 //Global text-related constants
 export const TEXT_COLOR = "#000000";
+export const ALT_TEXT_COLOR = "#ffffff";
 
 //Global border-related constants
 export const BORDER_COLOR = "#444444"; 
