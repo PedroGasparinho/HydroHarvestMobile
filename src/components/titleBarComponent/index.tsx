@@ -1,6 +1,6 @@
 import { DimensionValue, StyleSheet, Text, View } from "react-native";
 import { Action, ICON_BACK_COLOR, ICON_RADIUS, PAGE_ICON_SIZE, PAGE_SUBTITLE_SIZE, PAGE_TITLE_SIZE, TEXT_COLOR } from "../../utils";
-import IconComponent from "../IconComponent";
+import ActionWithIconComponent from "../ActionWithIconComponent";
 
 type Props = {
     title: string,
@@ -31,7 +31,7 @@ function TitleBarComponent(props: Props) {
 
     return(
         <View style={styles.topView}>
-            <IconComponent icon={leftAction?.icon} action={leftAction?.action} width={iconWidth} size={PAGE_ICON_SIZE}/>
+            <ActionWithIconComponent action={leftAction} width={iconWidth} size={PAGE_ICON_SIZE}/>
             <View style={[styles.titleView, {width: titleWidth}]}>
                 <Text style={styles.titleText}>{props.title}</Text>
                 <>
@@ -41,7 +41,7 @@ function TitleBarComponent(props: Props) {
                     }
                 </>
             </View>
-            <IconComponent icon={rightAction?.icon} action={rightAction?.action} width={iconWidth} size={PAGE_ICON_SIZE}/>
+            <ActionWithIconComponent action={rightAction} width={iconWidth} size={PAGE_ICON_SIZE}/>
         </View>
     );
 }

@@ -1,10 +1,10 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { BORDER_COLOR, Crop, ITEM_ICON_SIZE, ITEM_BACK_COLOR, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR, wateringCanIcon, deleteIcon } from "../../utils";
+import { BORDER_COLOR, Crop, ITEM_ICON_SIZE, ITEM_BACK_COLOR, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR, wateringCanIcon, deleteIcon, Action } from "../../utils";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { CROP_PAGE, homeStackProp } from "../../routes/homeStack";
 import StatusComponent from "../StatusComponent";
-import IconComponent from "../IconComponent";
+import ActionWithIconComponent from "../ActionWithIconComponent";
 
 type Props = {
     crop: Crop
@@ -28,15 +28,29 @@ function CropComponent(prop: Props) {
         //TODO
     }
 
+    const wateringAction : Action = {
+        icon: wateringCanIcon,
+        action: onPressWater,
+    }
+
+    const deleteAction : Action = {
+        icon: deleteIcon,
+        action: onPressDelete,
+    }
+
+    function getWateringAction() {
+        return crop.isWatering? wateringAction : undefined; 
+    }
+
     return (
         <TouchableOpacity style={styles.outerView} onPress={onPressItem}>
             <View style={styles.topView}>
-                <IconComponent icon={wateringCanIcon} action={onPressWater} width={"15%"} size={ITEM_ICON_SIZE}/>
+                <ActionWithIconComponent action={getWateringAction()} width={"15%"} size={ITEM_ICON_SIZE}/>
                 <View style={styles.topMiddleView}>
                     <Text style={styles.cropNameText}>{crop.name}</Text>
                     <Text style={styles.cropDistanceText}>{crop.distance + "m"}</Text>
                 </View>
-                <IconComponent icon={deleteIcon} action={onPressDelete} width={"15%"} size={ITEM_ICON_SIZE}/>
+                <ActionWithIconComponent action={deleteAction} width={"15%"} size={ITEM_ICON_SIZE}/>
             </View>
             <View style={styles.middleView}>
                 <View style={styles.imageView}>

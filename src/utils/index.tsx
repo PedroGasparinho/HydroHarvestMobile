@@ -19,6 +19,13 @@ export type Crop = {
     isWatering: boolean,
 }
 
+export enum Property {
+    Humidity = "Humidity",
+    TankLevel = "Tank level",
+    Temperature = "Temperature",
+    Light = "Light",
+}
+
 /*************************************************** CONSTANTS ***************************************************/
 
 //Page Constants
@@ -55,6 +62,7 @@ export const DELETE_ICON_MAIN_COLOR = "#D80032";
 export const DELETE_ICON_BACK_COLOR = "#FFB0B0";
 
 export const ICON_RADIUS = 100;
+export const PROPERTY_ICON_SIZE = 50;
 
 //Crop-related Constants
 export const CROP_GREAT_STATUS = "Great";
@@ -116,6 +124,19 @@ export function compareCrops(a: Crop, b: Crop) {
     }
 }
 
+export function getPropertyIcon(p: Property) {
+    switch(p) {
+        case Property.Humidity:
+            return humidityIcon;
+        case Property.TankLevel:
+            return tankLevelIcon;
+        case Property.Temperature:
+            return temperatureIcon;
+        case Property.Light:
+            return lightIcon;
+    }
+}
+
 /*************************************************** CONSTANTS ***************************************************/
 
 export const goBackIcon : Icon = {
@@ -140,4 +161,34 @@ export const deleteIcon : Icon = {
     name: "delete",
     color: DELETE_ICON_MAIN_COLOR,
     backgroundColor: DELETE_ICON_BACK_COLOR,
+}
+
+export const reloadIcon : Icon = {
+    name: "reload",
+    color: ICON_MAIN_COLOR,
+    backgroundColor: ICON_BACK_COLOR,
+}
+
+export const humidityIcon : Icon = {
+    name: "water",
+    color: ICON_MAIN_COLOR,
+    backgroundColor: ICON_BACK_COLOR,
+}
+
+export const tankLevelIcon : Icon = {
+    name: "cup",
+    color: ICON_MAIN_COLOR,
+    backgroundColor: ICON_BACK_COLOR,
+}
+
+export const temperatureIcon : Icon = {
+    name: "thermometer",
+    color: ICON_MAIN_COLOR,
+    backgroundColor: ICON_BACK_COLOR,
+}
+
+export const lightIcon : Icon = {
+    name: "weather-sunny",
+    color: ICON_MAIN_COLOR,
+    backgroundColor: ICON_BACK_COLOR,
 }

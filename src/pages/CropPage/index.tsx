@@ -1,10 +1,12 @@
 import { homeNavigationStackProp } from "../../routes/homeStack";
 import TitleBarComponent from "../../components/titleBarComponent";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Action, ICON_MAIN_COLOR, ITEM_ICON_SIZE, ITEM_TEXT_SIZE, goBackIcon } from "../../utils";
+import { Action, ITEM_ICON_SIZE, PAGE_SUBTITLE_SIZE, Property, TEXT_COLOR, goBackIcon, reloadIcon, wateringCanIcon } from "../../utils";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import MCIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import StatusComponent from "../../components/StatusComponent";
+import ActionWithIconComponent from "../../components/ActionWithIconComponent";
+import PropertyComponent from "../../components/PropertyComponent";
+import SystemComponent from "../../components/SystemComponent";
 
 type NavProps = NativeStackScreenProps<homeNavigationStackProp, 'CropPage'>;
 
@@ -17,54 +19,54 @@ function CropPage({navigation, route}: NavProps) {
         action: () => navigation.goBack(),
     }
 
+    const rightAction : Action = {
+        icon: wateringCanIcon,
+        action: () => navigation.goBack(),
+    }
+
+    const reloadAction : Action = {
+        icon: reloadIcon,
+        action: () => {},
+    }
+
+    function getRightAction() {
+        return crop.isWatering? rightAction : undefined; 
+    }
+
     return(
         <>
-            <TitleBarComponent title={crop.name} leftAction={leftAction}/>
+            <TitleBarComponent title={crop.name} leftAction={leftAction} rightAction={getRightAction()}/>
             <View style={styles.statusView}>
                 <View style={styles.statusTopView}>
-                    <View style={styles.statusIconView}>
-                        <></>
-                    </View>
+                    <ActionWithIconComponent width={"10%"}/>
                     <View style={styles.statusTitleView}>
-                        <StatusComponent cropStatus={crop.status} fontSize={ITEM_TEXT_SIZE} height="100%"/>
+                        <StatusComponent cropStatus={crop.status} fontSize={PAGE_SUBTITLE_SIZE} height="100%"/>
                     </View>
-                    <View style={styles.statusIconView}>
-                        <MCIcons name="reload" color={ICON_MAIN_COLOR} size={ITEM_ICON_SIZE} />
-                    </View>
+                    <ActionWithIconComponent action={reloadAction} width={"10%"} size={ITEM_ICON_SIZE}/>
                 </View>
                 <View style={styles.statusBottomView}>
-                    <View>
-                        <Text>Average Humidity</Text>
-                        <Text>(5 mins ago)</Text>
-                        <MCIcons name="water" color={ICON_MAIN_COLOR} size={ITEM_ICON_SIZE} />
-                        <MCIcons name="reload" color={ICON_MAIN_COLOR} size={ITEM_ICON_SIZE} />
-                        <Text>5%</Text>
+                    <View style={styles.propertyView}>
+                        <PropertyComponent property={Property.Humidity}/>
+                        <PropertyComponent property={Property.TankLevel}/>
                     </View>
-                    <View>
-                        <Text>Average Humidity</Text>
-                        <Text>(5 mins ago)</Text>
-                        <MCIcons name="water" color={ICON_MAIN_COLOR} size={ITEM_ICON_SIZE} />
-                        <MCIcons name="reload" color={ICON_MAIN_COLOR} size={ITEM_ICON_SIZE} />
-                        <Text>5%</Text>
-                    </View>
-                    <View>
-                        <Text>Average Humidity</Text>
-                        <Text>(5 mins ago)</Text>
-                        <MCIcons name="water" color={ICON_MAIN_COLOR} size={ITEM_ICON_SIZE} />
-                        <MCIcons name="reload" color={ICON_MAIN_COLOR} size={ITEM_ICON_SIZE} />
-                        <Text>5%</Text>
-                    </View>
-                    <View>
-                        <Text>Average Humidity</Text>
-                        <Text>(5 mins ago)</Text>
-                        <MCIcons name="water" color={ICON_MAIN_COLOR} size={ITEM_ICON_SIZE} />
-                        <MCIcons name="reload" color={ICON_MAIN_COLOR} size={ITEM_ICON_SIZE} />
-                        <Text>5%</Text>
+                    <View style={styles.propertyView}>
+                        <PropertyComponent property={Property.Temperature}/>
+                        <PropertyComponent property={Property.Light}/>
                     </View>
                 </View>
             </View>
-            <ScrollView style={styles.systemsView}>
-                <Text>AAA</Text>
+            <View style={styles.systemsTitleView}>
+                <Text style={styles.systemsTitleText}>List of systems</Text>
+            </View>
+            <ScrollView style={styles.systemsListView}>
+                <SystemComponent/>
+                <SystemComponent/>
+                <SystemComponent/>
+                <SystemComponent/>
+                <SystemComponent/>
+                <SystemComponent/>
+                <SystemComponent/>
+                <SystemComponent/>
             </ScrollView>
         </>
     );
@@ -74,7 +76,7 @@ function CropPage({navigation, route}: NavProps) {
 const styles = StyleSheet.create({
 
     statusView: {
-        height: "40%",
+        height: "45%",
     },
 
     statusTopView: {
@@ -89,20 +91,33 @@ const styles = StyleSheet.create({
     },
 
     statusTitleView: {
-        width: "70%",
+        width: "80%",
         justifyContent: "center",
         alignItems: "center",
     },
 
     statusBottomView: {
         height: "85%",
-        backgroundColor: "#ff0000",
+    },
+
+    propertyView: {
+        height: "50%",
         flexDirection: "row",
     },
 
-    systemsView: {
-        height: "50%",
-        backgroundColor: "#ffff00",
+    systemsTitleView: {
+        height: "7.5%",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+
+    systemsTitleText: {
+        fontSize: PAGE_SUBTITLE_SIZE,
+        color: TEXT_COLOR
+    },
+
+    systemsListView: {
+        height: "37.5%",
     }
 
 });
