@@ -1,13 +1,10 @@
 import { homeNavigationStackProp } from "../../routes/homeStack";
 import TitleBarComponent from "../../components/titleBarComponent";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Action, Dimension, ITEM_ICON_SIZE, ITEM_TEXT_SIZE, PAGE_SUBTITLE_SIZE, Property, TEXT_COLOR, goBackIcon, reloadIcon, wateringCanIcon } from "../../utils";
+import { Action, PAGE_SUBTITLE_SIZE, TEXT_COLOR, goBackIcon, reloadIcon, wateringCanIcon } from "../../utils";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import StatusComponent from "../../components/StatusComponent";
-import ActionWithIconComponent from "../../components/ActionWithIconComponent";
-import PropertyComponent from "../../components/PropertyComponent";
 import SystemComponent from "../../components/SystemComponent";
-import EmptyComponent from "../../components/EmptyComponent";
+import StatusPanelComponent from "../../components/StatusPanelComponent";
 
 type NavProps = NativeStackScreenProps<homeNavigationStackProp, 'CropPage'>;
 
@@ -25,52 +22,25 @@ function CropPage({navigation, route}: NavProps) {
         action: () => navigation.goBack(),
     }
 
-    const reloadAction : Action = {
-        icon: reloadIcon,
-        action: () => {},
-    }
-
     function getRightAction() {
         return crop.isWatering? rightAction : undefined; 
     }
 
+    let i = 0;
+
     return(
         <>
             <TitleBarComponent title={crop.name} leftAction={leftAction} rightAction={getRightAction()}/>
-            <View style={styles.statusView}>
-                <View style={styles.statusTopView}>
-                    <EmptyComponent value={10} dimension={Dimension.Width}/>
-                    <View style={styles.statusTitleView}>
-                        <StatusComponent cropStatus={crop.status} fontSize={PAGE_SUBTITLE_SIZE} height={60}/>
-                        <View style={styles.statusLastReadView}>
-                            <Text style={styles.statusLastReadText}>(5 mins ago)</Text>
-                        </View>
-                    </View>
-                    <ActionWithIconComponent action={reloadAction} width={10} size={ITEM_ICON_SIZE}/>
-                </View>
-                <View style={styles.statusBottomView}>
-                    <View style={styles.propertyView}>
-                        <PropertyComponent property={Property.Humidity}/>
-                        <PropertyComponent property={Property.TankLevel}/>
-                    </View>
-                    <View style={styles.propertyView}>
-                        <PropertyComponent property={Property.Temperature}/>
-                        <PropertyComponent property={Property.Light}/>
-                    </View>
-                </View>
-            </View>
+            <StatusPanelComponent item={crop}/>
             <View style={styles.systemsTitleView}>
                 <Text style={styles.systemsTitleText}>List of systems</Text>
             </View>
             <ScrollView style={styles.systemsListView}>
-                <SystemComponent/>
-                <SystemComponent/>
-                <SystemComponent/>
-                <SystemComponent/>
-                <SystemComponent/>
-                <SystemComponent/>
-                <SystemComponent/>
-                <SystemComponent/>
+                <>
+                    {
+                        crop.systems.map(s => <SystemComponent key={i++} system={s}/>)
+                    }
+                </>
             </ScrollView>
         </>
     );
@@ -78,48 +48,6 @@ function CropPage({navigation, route}: NavProps) {
 }
 
 const styles = StyleSheet.create({
-
-    statusView: {
-        height: "45%",
-    },
-
-    statusTopView: {
-        height: "15%",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-
-    statusLastReadView: {
-        height: "40%",
-    },
-
-    statusLastReadText: {
-        color: TEXT_COLOR,
-        fontSize: ITEM_TEXT_SIZE,
-    },
-
-    statusIconView: {
-        width: "15%",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-
-    statusTitleView: {
-        width: "80%",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-
-    statusBottomView: {
-        height: "85%",
-    },
-
-    propertyView: {
-        height: "50%",
-        flexDirection: "row",
-        paddingHorizontal: 5,
-    },
 
     systemsTitleView: {
         height: "7.5%",

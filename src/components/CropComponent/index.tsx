@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { BORDER_COLOR, Crop, ITEM_ICON_SIZE, ITEM_BACK_COLOR, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR, wateringCanIcon, deleteIcon, Action, getSpaceIfNoAction } from "../../utils";
+import { BORDER_COLOR, Crop, ITEM_ICON_SIZE, ITEM_BACK_COLOR, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR, wateringCanIcon, deleteIcon, Action, getSpaceIfNoAction, getCropStatus } from "../../utils";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { CROP_PAGE, homeStackProp } from "../../routes/homeStack";
@@ -61,7 +61,7 @@ function CropComponent(prop: Props) {
                     <Text>{"Image of " + crop.cropName}</Text>
                 </View>
             </View>
-            <StatusComponent cropStatus={crop.status} fontSize={ITEM_TEXT_SIZE} height={15} />
+            <StatusComponent status={getCropStatus(crop)} fontSize={ITEM_TEXT_SIZE} height={15} isCrop={true}/>
         </TouchableOpacity>
     );
 }

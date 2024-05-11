@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
-import ActionWithIconComponent from "../ActionWithIconComponent";
-import { Action, BORDER_COLOR, ITEM_ICON_SIZE, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, PROPERTY_ICON_SIZE, Property, TEXT_COLOR, getPropertyIcon, reloadIcon, wateringCanIcon } from "../../utils";
+import { Action, BORDER_COLOR, Crop, ITEM_TITLE_SIZE, PROPERTY_ICON_SIZE, Property, TEXT_COLOR, getAverage, getPropertyIcon, reloadIcon, wateringCanIcon } from "../../utils";
 import IconComponent from "../IconComponent";
 
 type Props = {
-    property : Property,
+    property: Property,
+    value: number
 }
 
 function PropertyComponent(props: Props) {
@@ -14,7 +14,12 @@ function PropertyComponent(props: Props) {
         action: () => {},
     }
 
+    const v = props.value;
+    const p = props.property;
+
     const title = "Average " + props.property.toString();
+    const unit = p === Property.Temperature? "ºC" : "%";
+    const displayValue = v.toFixed(1) + unit
 
     return(
         <View style={styles.outerView}>
@@ -26,7 +31,7 @@ function PropertyComponent(props: Props) {
                     <IconComponent icon={getPropertyIcon(props.property)} width={100} size={PROPERTY_ICON_SIZE}/>
                 </View>
                 <View style={styles.valueView}>
-                    <Text style={styles.propertyText}>5%</Text>
+                    <Text style={styles.propertyText}>{displayValue}</Text>
                 </View>
             </View>
         </View>

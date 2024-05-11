@@ -1,22 +1,25 @@
 import { DimensionValue, StyleSheet, Text, View } from "react-native";
-import { TEXT_COLOR, cropStatusToColor, valueToDimension } from "../../utils";
+import { Status, TEXT_COLOR, cropStatusToColor, valueToDimension } from "../../utils";
 
 type Props = {
-    cropStatus: string,
+    status: Status,
     fontSize: number,
     height: number,
+    isCrop: boolean,
 }
 
 function StatusComponent(props: Props) {
 
-    const status = props.cropStatus;
+    const status = props.status;
     const height = {height: valueToDimension(props.height)};
     const statusColor = {color: cropStatusToColor(status)};
     const textSize = {fontSize: props.fontSize}
 
+    const preamble = (props.isCrop? "Crop" : "System") + " status: ";
+
     return(
         <View style={[styles.outerView, height]}>
-            <Text style={[styles.textColor, textSize]}>{"Crop status: "}</Text>
+            <Text style={[styles.textColor, textSize]}>{preamble}</Text>
             <Text style={[statusColor, textSize]}>{status}</Text>
         </View>
     )

@@ -1,19 +1,11 @@
 import { ScrollView, StyleSheet, View } from "react-native";
-import { Action, Crop, addNewIcon, compareCrops, goBackIcon } from "../../utils";
+import { Action, Crop, addNewIcon, compareCrops, crops, goBackIcon } from "../../utils";
 import CropComponent from "../../components/CropComponent";
 import TitleBarComponent from "../../components/titleBarComponent";
 import { mainStackProp } from "../../routes/stack";
 import { useNavigation } from "@react-navigation/native";
 
 function HomePage() {
-
-    const crops : Crop[] = [
-        {name: "Backyard Corn", cropName: "Corn", status: "Critical", distance: 50, isWatering: true},
-        {name: "Carob", cropName: "Carob", status: "Good", distance: 1200, isWatering: false},
-        {name: "Strawberries", cropName: "Strawberry", status: "Okay", distance: 10, isWatering: true},
-        {name: "Front porch Corn", cropName: "Corn", status: "Bad", distance: 200, isWatering: false},
-        {name: "Potatoes", cropName: "Potato", status: "Great", distance: 2000, isWatering: true},
-    ];
 
     function getSortedCrops() : Crop[] {
         return crops.sort(compareCrops);

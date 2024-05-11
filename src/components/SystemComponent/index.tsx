@@ -1,21 +1,27 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { BORDER_COLOR, ITEM_BACK_COLOR, ITEM_TEXT_SIZE, TEXT_COLOR } from "../../utils";
+import { BORDER_COLOR, ITEM_BACK_COLOR, ITEM_TEXT_SIZE, System, TEXT_COLOR } from "../../utils";
 import { useNavigation } from "@react-navigation/native";
 import { SYSTEM_PAGE, homeStackProp } from "../../routes/homeStack";
 
-function SystemComponent() {
+type Props = {
+    system: System
+}
+
+function SystemComponent(props: Props) {
 
     const homeNav = useNavigation<homeStackProp>();
 
+    const s = props.system;
+
     function onPressItem() {
-        homeNav.navigate(SYSTEM_PAGE);
+        homeNav.navigate(SYSTEM_PAGE, s);
     }
 
     return(
         <View style={styles.outerView}>
             <TouchableOpacity style={styles.innerView} onPress={onPressItem}>
-                <Text style={styles.textStyle}>Center System: </Text>
-                <Text style={styles.textStyle}>ESP32-Wrover</Text>
+                <Text style={styles.textStyle}>{s.name + " - "}</Text>
+                <Text style={styles.textStyle}>{s.type}</Text>
             </TouchableOpacity>
         </View>
     )

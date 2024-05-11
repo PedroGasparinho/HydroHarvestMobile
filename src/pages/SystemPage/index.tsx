@@ -1,15 +1,25 @@
-import { useNavigation } from "@react-navigation/native";
-import { Button, Text } from "react-native";
-import { CROP_PAGE, homeStackProp } from "../../routes/homeStack";
+import { homeNavigationStackProp } from "../../routes/homeStack";
 import TitleBarComponent from "../../components/titleBarComponent";
+import { Action, goBackIcon } from "../../utils";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import StatusPanelComponent from "../../components/StatusPanelComponent";
 
-function SystemPage() {
+type NavProps = NativeStackScreenProps<homeNavigationStackProp, 'SystemPage'>;
 
-    const homeNave = useNavigation<homeStackProp>();
+function SystemPage({navigation, route}: NavProps) {
+
+    const system = route.params;
+
+    const leftAction : Action = {
+        icon: goBackIcon,
+        action: () => navigation.goBack(),
+    }
+
 
     return (
         <>
-            <TitleBarComponent title={"System Page"}/>
+            <TitleBarComponent leftAction={leftAction} title={system.name}/>
+            <StatusPanelComponent item={system}/>
         </>
     );
   }

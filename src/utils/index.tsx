@@ -18,9 +18,20 @@ export type Action = {
 export type Crop = {
     name: string,
     cropName: string,
-    status: string,
     distance: number,
     isWatering: boolean,
+    systems: System[],
+}
+
+export type System = {
+    name: string,
+    type: string,
+    humidity: number,
+    tankLevel: number,
+    temperature: number,
+    light: number,
+    status: Status,
+    lastRead: Date,
 }
 
 export enum Property {
@@ -33,6 +44,22 @@ export enum Property {
 export enum Dimension {
     Width,
     Height,
+}
+
+export enum Status {
+    Great = "Great",
+    Good = "Good",
+    Okay = "Okay",
+    Bad = "Bad",
+    Critical = "Critical",
+}
+
+export enum StatusColor {
+    Great = "#0A6847",
+    Good = "#87A922",
+    Okay = "#FFC000",
+    Bad = "#FF8911",
+    Critical = "#A94438",
 }
 
 /*************************************************** CONSTANTS ***************************************************/
@@ -73,56 +100,64 @@ export const DELETE_ICON_BACK_COLOR = "#FFB0B0";
 export const ICON_RADIUS = 100;
 export const PROPERTY_ICON_SIZE = 50;
 
-//Crop-related Constants
-export const CROP_GREAT_STATUS = "Great";
-export const CROP_GOOD_STATUS = "Good";
-export const CROP_OKAY_STATUS = "Okay";
-export const CROP_BAD_STATUS = "Bad";
-export const CROP_CRITICAL_STATUS = "Critical";
-
-export const CROP_GREAT_COLOR = "#0A6847";
-export const CROP_GOOD_COLOR = "#87A922";
-export const CROP_OKAY_COLOR = "#FFC000";
-export const CROP_BAD_COLOR = "#FF8911";
-export const CROP_CRITICAL_COLOR = "#A94438";
 
 /*************************************************** FUNCTIONS ***************************************************/
 
-export function cropStatusToColor(status: string) {
+export function cropStatusToColor(status: Status) {
     switch(status) {
-        case CROP_GREAT_STATUS:
-            return CROP_GREAT_COLOR;
-        case CROP_GOOD_STATUS:
-            return CROP_GOOD_COLOR;
-        case CROP_OKAY_STATUS:
-            return CROP_OKAY_COLOR;
-        case CROP_BAD_STATUS:
-            return CROP_BAD_COLOR;
-        case CROP_CRITICAL_STATUS:
-            return CROP_CRITICAL_COLOR;
+        case Status.Great:
+            return StatusColor.Great;
+        case Status.Good:
+            return StatusColor.Good;
+        case Status.Okay:
+            return StatusColor.Okay;
+        case Status.Bad:
+            return StatusColor.Bad;
+        case Status.Critical:
+            return StatusColor.Critical;
     }
 }
 
-export function cropStatusOrder(status: string) : number {
+export function cropStatusOrder(status: Status) : number {
     switch(status) {
-        case CROP_GREAT_STATUS:
+        case Status.Great:
             return 4;
-        case CROP_GOOD_STATUS:
+        case Status.Good:
             return 3;
-        case CROP_OKAY_STATUS:
+        case Status.Okay:
             return 2;
-        case CROP_BAD_STATUS:
+        case Status.Bad:
             return 1;
-        case CROP_CRITICAL_STATUS:
+        case Status.Critical:
             return 0;
         default:
             return 5;
     }
 }
 
+export function getCropStatus(crop: Crop) {
+    let sum = 0;
+    crop.systems.forEach(s => sum += cropStatusOrder(s.status));
+    const avg = Math.round(sum / crop.systems.length);
+    switch(avg) {
+        case 0:
+            return Status.Critical;
+        case 1:
+            return Status.Bad;
+        case 2:
+            return Status.Okay;
+        case 3:
+            return Status.Good;
+        case 4:
+            return Status.Great;
+        default:
+            return Status.Great;
+    }
+}
+
 export function compareCrops(a: Crop, b: Crop) {
     const firstCriterion = a.distance - b.distance;
-    const secondCriterion = cropStatusOrder(a.status) - cropStatusOrder(b.status);
+    const secondCriterion = cropStatusOrder(getCropStatus(a)) - cropStatusOrder(getCropStatus(b));
     const thirdCriterion = (a.name).localeCompare(b.name);
     if(firstCriterion !== 0) {
         return firstCriterion;
@@ -167,8 +202,36 @@ export function getSpaceIfNoAction(action: Action | undefined, width: number, si
     }
 }
 
+export function getPropertyValue(s: System, p: Property) : number {
+    switch(p) {
+        case Property.Humidity:
+            return s.humidity;
+        case Property.TankLevel:
+            return s.tankLevel;
+        case Property.Temperature:
+            return s.temperature;
+        case Property.Light:
+            return s.light;
+    }
+}
 
-/*************************************************** CONSTANTS ***************************************************/
+export function getAverage(c: Crop, p: Property) : number {
+    const systems = c.systems;
+    let sum = 0;
+    systems.forEach(s => sum += getPropertyValue(s, p));
+    return sum / systems.length;
+}
+
+export function getLastCropUpdate(c: Crop) {
+    return [...c.systems].sort(systemSortByDate)[0].lastRead;
+}
+
+export function systemSortByDate(a: System, b: System) {
+    return a.lastRead.getTime() - a.lastRead.getTime();
+}
+
+
+/*************************************************** ICONS ***************************************************/
 
 export const goBackIcon : Icon = {
     name: "chevron-left",
@@ -223,3 +286,278 @@ export const lightIcon : Icon = {
     color: ICON_MAIN_COLOR,
     backgroundColor: ICON_BACK_COLOR,
 }
+
+/*************************************************** DATA ***************************************************/
+
+export const systems0 : System[] = [
+    {
+        name: "North",
+        type: "ESP32-Wrover",
+        humidity: 12,
+        tankLevel: 80,
+        temperature: 27,
+        light: 65,
+        status: Status.Bad,
+        lastRead: new Date(2024, 5-1, 6)
+    },
+    {
+        name: "East",
+        type: "ESP32-Wrover",
+        humidity: 14,
+        tankLevel: 54,
+        temperature: 28,
+        light: 60,
+        status: Status.Critical,
+        lastRead: new Date(2024, 5-1, 1)
+    },
+    {
+        name: "West",
+        type: "ESP32-Wrover",
+        humidity: 15,
+        tankLevel: 93,
+        temperature: 6,
+        light: 55,
+        status: Status.Okay,
+        lastRead: new Date(2024, 4-1, 30)
+    },
+    {
+        name: "South 1",
+        type: "ESP32-Wrover",
+        humidity: 10,
+        tankLevel: 57,
+        temperature: 31,
+        light: 70,
+        status: Status.Good,
+        lastRead: new Date(2024, 4-1, 29)
+    },
+    {
+        name: "South 2",
+        type: "ESP32-Wrover",
+        humidity: 9,
+        tankLevel: 57,
+        temperature: 32,
+        light: 69,
+        status: Status.Great,
+        lastRead: new Date(2024, 5-1, 2)
+    }
+]
+
+export const systems1 : System[] = [
+    {
+        name: "North",
+        type: "ESP32-Wrover",
+        humidity: 12,
+        tankLevel: 80,
+        temperature: 27,
+        light: 65,
+        status: Status.Bad,
+        lastRead: new Date(2024, 5-1, 6)
+    },
+    {
+        name: "East",
+        type: "ESP32-Wrover",
+        humidity: 14,
+        tankLevel: 54,
+        temperature: 28,
+        light: 60,
+        status: Status.Great,
+        lastRead: new Date(2024, 5-1, 1)
+    },
+    {
+        name: "West",
+        type: "ESP32-Wrover",
+        humidity: 15,
+        tankLevel: 93,
+        temperature: 6,
+        light: 55,
+        status: Status.Okay,
+        lastRead: new Date(2024, 4-1, 30)
+    },
+    {
+        name: "South 1",
+        type: "ESP32-Wrover",
+        humidity: 10,
+        tankLevel: 57,
+        temperature: 31,
+        light: 70,
+        status: Status.Good,
+        lastRead: new Date(2024, 4-1, 29)
+    },
+    {
+        name: "South 2",
+        type: "ESP32-Wrover",
+        humidity: 9,
+        tankLevel: 57,
+        temperature: 32,
+        light: 69,
+        status: Status.Great,
+        lastRead: new Date(2024, 5-1, 2)
+    }
+]
+
+export const systems2 : System[] = [
+    {
+        name: "North",
+        type: "ESP32-Wrover",
+        humidity: 12,
+        tankLevel: 80,
+        temperature: 27,
+        light: 65,
+        status: Status.Bad,
+        lastRead: new Date(2024, 5-1, 6)
+    },
+    {
+        name: "East",
+        type: "ESP32-Wrover",
+        humidity: 14,
+        tankLevel: 54,
+        temperature: 28,
+        light: 60,
+        status: Status.Critical,
+        lastRead: new Date(2024, 5-1, 1)
+    },
+    {
+        name: "West",
+        type: "ESP32-Wrover",
+        humidity: 15,
+        tankLevel: 93,
+        temperature: 6,
+        light: 55,
+        status: Status.Critical,
+        lastRead: new Date(2024, 4-1, 30)
+    },
+    {
+        name: "South 1",
+        type: "ESP32-Wrover",
+        humidity: 10,
+        tankLevel: 57,
+        temperature: 31,
+        light: 70,
+        status: Status.Bad,
+        lastRead: new Date(2024, 4-1, 29)
+    },
+    {
+        name: "South 2",
+        type: "ESP32-Wrover",
+        humidity: 9,
+        tankLevel: 57,
+        temperature: 32,
+        light: 69,
+        status: Status.Critical,
+        lastRead: new Date(2024, 5-1, 2)
+    }
+]
+
+export const systems3 : System[] = [
+    {
+        name: "North",
+        type: "ESP32-Wrover",
+        humidity: 12,
+        tankLevel: 80,
+        temperature: 27,
+        light: 65,
+        status: Status.Bad,
+        lastRead: new Date(2024, 5-1, 6)
+    },
+    {
+        name: "East",
+        type: "ESP32-Wrover",
+        humidity: 14,
+        tankLevel: 54,
+        temperature: 28,
+        light: 60,
+        status: Status.Critical,
+        lastRead: new Date(2024, 5-1, 1)
+    },
+    {
+        name: "West",
+        type: "ESP32-Wrover",
+        humidity: 15,
+        tankLevel: 93,
+        temperature: 6,
+        light: 55,
+        status: Status.Okay,
+        lastRead: new Date(2024, 4-1, 30)
+    },
+    {
+        name: "South 1",
+        type: "ESP32-Wrover",
+        humidity: 10,
+        tankLevel: 57,
+        temperature: 31,
+        light: 70,
+        status: Status.Good,
+        lastRead: new Date(2024, 4-1, 29)
+    },
+    {
+        name: "South 2",
+        type: "ESP32-Wrover",
+        humidity: 9,
+        tankLevel: 57,
+        temperature: 32,
+        light: 69,
+        status: Status.Critical,
+        lastRead: new Date(2024, 5-1, 2)
+    }
+]
+
+export const systems4 : System[] = [
+    {
+        name: "North",
+        type: "ESP32-Wrover",
+        humidity: 12,
+        tankLevel: 80,
+        temperature: 27,
+        light: 65,
+        status: Status.Great,
+        lastRead: new Date(2024, 5-1, 6)
+    },
+    {
+        name: "East",
+        type: "ESP32-Wrover",
+        humidity: 14,
+        tankLevel: 54,
+        temperature: 28,
+        light: 60,
+        status: Status.Great,
+        lastRead: new Date(2024, 5-1, 1)
+    },
+    {
+        name: "West",
+        type: "ESP32-Wrover",
+        humidity: 15,
+        tankLevel: 93,
+        temperature: 6,
+        light: 55,
+        status: Status.Good,
+        lastRead: new Date(2024, 4-1, 30)
+    },
+    {
+        name: "South 1",
+        type: "ESP32-Wrover",
+        humidity: 10,
+        tankLevel: 57,
+        temperature: 31,
+        light: 70,
+        status: Status.Good,
+        lastRead: new Date(2024, 4-1, 29)
+    },
+    {
+        name: "South 2",
+        type: "ESP32-Wrover",
+        humidity: 9,
+        tankLevel: 57,
+        temperature: 32,
+        light: 69,
+        status: Status.Great,
+        lastRead: new Date(2024, 5-1, 2)
+    }
+]
+
+export const crops : Crop[] = [
+    {name: "Backyard Corn", cropName: "Corn", distance: 50, isWatering: true, systems: systems0},
+    {name: "Carob", cropName: "Carob", distance: 1200, isWatering: false, systems: systems1},
+    {name: "Strawberries", cropName: "Strawberry", distance: 10, isWatering: true, systems: systems2},
+    {name: "Front porch Corn", cropName: "Corn", distance: 200, isWatering: false, systems: systems3},
+    {name: "Potatoes", cropName: "Potato", distance: 2000, isWatering: true, systems: systems4},
+];
