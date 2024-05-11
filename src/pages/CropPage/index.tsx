@@ -1,12 +1,13 @@
 import { homeNavigationStackProp } from "../../routes/homeStack";
 import TitleBarComponent from "../../components/titleBarComponent";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Action, ITEM_ICON_SIZE, PAGE_SUBTITLE_SIZE, Property, TEXT_COLOR, goBackIcon, reloadIcon, wateringCanIcon } from "../../utils";
+import { Action, Dimension, ITEM_ICON_SIZE, ITEM_TEXT_SIZE, PAGE_SUBTITLE_SIZE, Property, TEXT_COLOR, goBackIcon, reloadIcon, wateringCanIcon } from "../../utils";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import StatusComponent from "../../components/StatusComponent";
 import ActionWithIconComponent from "../../components/ActionWithIconComponent";
 import PropertyComponent from "../../components/PropertyComponent";
 import SystemComponent from "../../components/SystemComponent";
+import EmptyComponent from "../../components/EmptyComponent";
 
 type NavProps = NativeStackScreenProps<homeNavigationStackProp, 'CropPage'>;
 
@@ -38,11 +39,14 @@ function CropPage({navigation, route}: NavProps) {
             <TitleBarComponent title={crop.name} leftAction={leftAction} rightAction={getRightAction()}/>
             <View style={styles.statusView}>
                 <View style={styles.statusTopView}>
-                    <ActionWithIconComponent width={"10%"}/>
+                    <EmptyComponent value={10} dimension={Dimension.Width}/>
                     <View style={styles.statusTitleView}>
-                        <StatusComponent cropStatus={crop.status} fontSize={PAGE_SUBTITLE_SIZE} height="100%"/>
+                        <StatusComponent cropStatus={crop.status} fontSize={PAGE_SUBTITLE_SIZE} height={60}/>
+                        <View style={styles.statusLastReadView}>
+                            <Text style={styles.statusLastReadText}>(5 mins ago)</Text>
+                        </View>
                     </View>
-                    <ActionWithIconComponent action={reloadAction} width={"10%"} size={ITEM_ICON_SIZE}/>
+                    <ActionWithIconComponent action={reloadAction} width={10} size={ITEM_ICON_SIZE}/>
                 </View>
                 <View style={styles.statusBottomView}>
                     <View style={styles.propertyView}>
@@ -82,6 +86,17 @@ const styles = StyleSheet.create({
     statusTopView: {
         height: "15%",
         flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+
+    statusLastReadView: {
+        height: "40%",
+    },
+
+    statusLastReadText: {
+        color: TEXT_COLOR,
+        fontSize: ITEM_TEXT_SIZE,
     },
 
     statusIconView: {
@@ -103,6 +118,7 @@ const styles = StyleSheet.create({
     propertyView: {
         height: "50%",
         flexDirection: "row",
+        paddingHorizontal: 5,
     },
 
     systemsTitleView: {

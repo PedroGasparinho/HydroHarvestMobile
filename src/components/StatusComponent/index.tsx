@@ -1,16 +1,16 @@
 import { DimensionValue, StyleSheet, Text, View } from "react-native";
-import { TEXT_COLOR, cropStatusToColor } from "../../utils";
+import { TEXT_COLOR, cropStatusToColor, valueToDimension } from "../../utils";
 
 type Props = {
     cropStatus: string,
     fontSize: number,
-    height: string,
+    height: number,
 }
 
 function StatusComponent(props: Props) {
 
     const status = props.cropStatus;
-    const height = {height: props.height as DimensionValue};
+    const height = {height: valueToDimension(props.height)};
     const statusColor = {color: cropStatusToColor(status)};
     const textSize = {fontSize: props.fontSize}
 

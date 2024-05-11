@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { BORDER_COLOR, Crop, ITEM_ICON_SIZE, ITEM_BACK_COLOR, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR, wateringCanIcon, deleteIcon, Action } from "../../utils";
+import { BORDER_COLOR, Crop, ITEM_ICON_SIZE, ITEM_BACK_COLOR, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR, wateringCanIcon, deleteIcon, Action, getSpaceIfNoAction } from "../../utils";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { CROP_PAGE, homeStackProp } from "../../routes/homeStack";
@@ -45,19 +45,23 @@ function CropComponent(prop: Props) {
     return (
         <TouchableOpacity style={styles.outerView} onPress={onPressItem}>
             <View style={styles.topView}>
-                <ActionWithIconComponent action={getWateringAction()} width={"15%"} size={ITEM_ICON_SIZE}/>
+                <>
+                    {
+                        getSpaceIfNoAction(getWateringAction(), 15, ITEM_ICON_SIZE)
+                    }
+                </>
                 <View style={styles.topMiddleView}>
                     <Text style={styles.cropNameText}>{crop.name}</Text>
                     <Text style={styles.cropDistanceText}>{crop.distance + "m"}</Text>
                 </View>
-                <ActionWithIconComponent action={deleteAction} width={"15%"} size={ITEM_ICON_SIZE}/>
+                <ActionWithIconComponent action={deleteAction} width={15} size={ITEM_ICON_SIZE}/>
             </View>
             <View style={styles.middleView}>
                 <View style={styles.imageView}>
                     <Text>{"Image of " + crop.cropName}</Text>
                 </View>
             </View>
-            <StatusComponent cropStatus={crop.status} fontSize={ITEM_TEXT_SIZE} height="15%" />
+            <StatusComponent cropStatus={crop.status} fontSize={ITEM_TEXT_SIZE} height={15} />
         </TouchableOpacity>
     );
 }

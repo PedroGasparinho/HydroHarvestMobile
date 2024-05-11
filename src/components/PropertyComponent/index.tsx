@@ -20,19 +20,13 @@ function PropertyComponent(props: Props) {
         <View style={styles.outerView}>
             <View style={styles.borderView}>
                 <View style={styles.topView}>
-                    <View style={styles.topTitleView}>
-                        <Text style={styles.titleText}>{title}</Text>
-                    </View>
-                    <ActionWithIconComponent action={reloadAction} width="15%" size={ITEM_ICON_SIZE}/>
+                    <Text style={styles.titleText}>{title}</Text>
                 </View>
                 <View style={styles.iconView}>
-                    <IconComponent icon={getPropertyIcon(props.property)} width="100%" size={PROPERTY_ICON_SIZE}/>
+                    <IconComponent icon={getPropertyIcon(props.property)} width={100} size={PROPERTY_ICON_SIZE}/>
                 </View>
                 <View style={styles.valueView}>
                     <Text style={styles.propertyText}>5%</Text>
-                </View>
-                <View style={styles.lastReadView}>
-                    <Text style={styles.propertyText}>(5 mins ago)</Text>
                 </View>
             </View>
         </View>
@@ -57,38 +51,29 @@ const styles = StyleSheet.create({
 
     topView: {
         height: "20%",
-        flexDirection: "row",
-    },
-
-    topTitleView: {
-        width: "85%",
         justifyContent: "center",
     },
 
     iconView: {
-        height: "50%",
+        height: "60%",
         justifyContent: "center",
         alignItems: "center"
     },
 
     valueView: {
-        height: "15%",
-    },
-
-    lastReadView: {
-        height: "15%",
+        height: "20%",
     },
 
     titleText: {
         color: TEXT_COLOR,
         fontSize: ITEM_TITLE_SIZE,
-        fontWeight: "bold",
-        paddingLeft: 5,
+        fontWeight: "bold"
     },
 
     propertyText: {
         color: TEXT_COLOR,
-        fontSize: ITEM_TEXT_SIZE,
+        fontSize: ITEM_TITLE_SIZE,
+        fontWeight: "bold",
     },
 
 });

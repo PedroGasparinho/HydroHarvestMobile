@@ -1,3 +1,7 @@
+import { DimensionValue } from "react-native";
+import ActionWithIconComponent from "../components/ActionWithIconComponent";
+import SpaceComponent from "../components/SpaceComponent";
+
 /***************************************************** TYPES ******************************************************/
 
 export type Icon = {
@@ -24,6 +28,11 @@ export enum Property {
     TankLevel = "Tank level",
     Temperature = "Temperature",
     Light = "Light",
+}
+
+export enum Dimension {
+    Width,
+    Height,
 }
 
 /*************************************************** CONSTANTS ***************************************************/
@@ -137,6 +146,28 @@ export function getPropertyIcon(p: Property) {
     }
 }
 
+export function valueToDimension(v: number) {
+    const p = v.toString() + "%";
+    return p as DimensionValue
+}
+
+export function getEmptyIfNoAction(action: Action | undefined, width: number, size: number) {
+    if(action === undefined) {
+        return(<></>)
+    } else {
+        return(<ActionWithIconComponent action={action} width={width} size={size}/>);
+    }
+}
+
+export function getSpaceIfNoAction(action: Action | undefined, width: number, size: number) {
+    if(action === undefined) {
+        return(<SpaceComponent value={width} dimension={Dimension.Width}/>)
+    } else {
+        return(<ActionWithIconComponent action={action} width={width} size={size}/>);
+    }
+}
+
+
 /*************************************************** CONSTANTS ***************************************************/
 
 export const goBackIcon : Icon = {
@@ -188,7 +219,7 @@ export const temperatureIcon : Icon = {
 }
 
 export const lightIcon : Icon = {
-    name: "weather-sunny",
+    name: "brightness-7",
     color: ICON_MAIN_COLOR,
     backgroundColor: ICON_BACK_COLOR,
 }

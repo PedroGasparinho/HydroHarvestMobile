@@ -1,6 +1,5 @@
 import { DimensionValue, StyleSheet, Text, View } from "react-native";
-import { Action, ICON_BACK_COLOR, ICON_RADIUS, PAGE_ICON_SIZE, PAGE_SUBTITLE_SIZE, PAGE_TITLE_SIZE, TEXT_COLOR } from "../../utils";
-import ActionWithIconComponent from "../ActionWithIconComponent";
+import { Action, ICON_BACK_COLOR, ICON_RADIUS, PAGE_ICON_SIZE, PAGE_SUBTITLE_SIZE, PAGE_TITLE_SIZE, TEXT_COLOR, getEmptyIfNoAction, valueToDimension } from "../../utils";
 
 type Props = {
     title: string,
@@ -11,28 +10,31 @@ type Props = {
 
 function TitleBarComponent(props: Props) {
 
+    const iconWidth = 15;
+
     function getTitleWidth() : DimensionValue {
-        const iconViewWidth = 15;
 
         function removeWidth(action: Action | undefined) {
-            return Number(action !== undefined) * iconViewWidth
+            return Number(action !== undefined) * iconWidth
         }
 
         const titleWidthNum = 100 - removeWidth(props.leftAction) - removeWidth(props.rightAction);
-        const titleWidth = titleWidthNum.toString() + "%";
-        return titleWidth as DimensionValue
+        return valueToDimension(titleWidthNum);
     }
 
     const leftAction = props.leftAction;
     const rightAction = props.rightAction;
 
-    const titleWidth = getTitleWidth();
-    const iconWidth = "15%";
+    const titleWidth = {width: getTitleWidth()};
 
     return(
         <View style={styles.topView}>
-            <ActionWithIconComponent action={leftAction} width={iconWidth} size={PAGE_ICON_SIZE}/>
-            <View style={[styles.titleView, {width: titleWidth}]}>
+            <>
+                {
+                    getEmptyIfNoAction(leftAction, iconWidth, PAGE_ICON_SIZE)
+                }
+            </>
+            <View style={[styles.titleView, titleWidth]}>
                 <Text style={styles.titleText}>{props.title}</Text>
                 <>
                     {
@@ -41,7 +43,11 @@ function TitleBarComponent(props: Props) {
                     }
                 </>
             </View>
-            <ActionWithIconComponent action={rightAction} width={iconWidth} size={PAGE_ICON_SIZE}/>
+            <>
+                {
+                    getEmptyIfNoAction(rightAction, iconWidth, PAGE_ICON_SIZE)
+                }
+            </>
         </View>
     );
 }
@@ -56,7 +62,7 @@ const styles = StyleSheet.create({
 
     titleView: {
         paddingLeft: 10,
-        justifyContent: "center"
+        justifyContent: "center",
     },
 
     titleText: {

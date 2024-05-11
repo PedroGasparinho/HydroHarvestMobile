@@ -1,23 +1,22 @@
 import { DimensionValue, StyleSheet, View } from "react-native";
-import { ICON_RADIUS, Icon } from "../../utils";
+import { ICON_RADIUS, Icon, valueToDimension } from "../../utils";
 import MCIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 type Props = {
     icon: Icon
     size: number,
-    width: string,
+    width: number,
 }
 
 function IconComponent(props: Props) {
 
     const icon = props.icon;
     const size = props.size;
-    const width = {width: props.width as DimensionValue};
-    //const background = {backgroundColor: icon.backgroundColor}
+    const width = {width: valueToDimension(props.width)};
 
     return(
         <View style={[styles.iconView, width]}>
-            <View /*style={[styles.iconRadius]}*/>
+            <View>
                 <MCIcons name={icon.name} color={icon.color} size={size}/>
             </View>
         </View>
