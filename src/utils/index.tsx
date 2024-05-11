@@ -34,6 +34,13 @@ export type System = {
     lastRead: Date,
 }
 
+export type Schedule = {
+    startDate: Date,
+    endDate: Date,
+    isSuggestion: boolean,
+    systems: System[],
+}
+
 export enum Property {
     Humidity = "Humidity",
     TankLevel = "Tank level",
@@ -74,6 +81,10 @@ export const ITEM_TITLE_SIZE = 16;
 export const ITEM_TEXT_SIZE = 13;
 export const ITEM_ICON_SIZE = 20;
 export const ITEM_BACK_COLOR = "#DDDDDD";
+export const ITEM_RADIUS = 10;
+
+export const SUGGESTION_BACK_COLOR = "#dee3a6";
+export const WATERING_BACK_COLOR = "#c1d8f0";
 
 //Bottom Bar Constants
 export const BOTTOM_BAR_ICON_SIZE = 30;
@@ -96,6 +107,9 @@ export const WATER_ICON_BACK_COLOR = "#CAF4FF";
 
 export const DELETE_ICON_MAIN_COLOR = "#D80032";
 export const DELETE_ICON_BACK_COLOR = "#FFB0B0";
+
+export const CONFIRM_ICON_MAIN_COLOR = "#039c21";
+export const CONFIRM_ICON_BACK_COLOR = "#9ff28f";
 
 export const ICON_RADIUS = 100;
 export const PROPERTY_ICON_SIZE = 50;
@@ -227,8 +241,51 @@ export function getLastCropUpdate(c: Crop) {
 }
 
 export function systemSortByDate(a: System, b: System) {
-    return a.lastRead.getTime() - a.lastRead.getTime();
+    return a.lastRead.getTime() - b.lastRead.getTime();
 }
+
+export function getLastReadFormatted(date: Date) {
+    return date.getDate().toString().padStart(2, "0") + "/" +
+           (date.getMonth() + 1).toString().padStart(2, "0") + "/" +
+           date.getFullYear().toString() + " " +
+           date.getHours().toString().padStart(2, "0") + ":" +
+           date.getMinutes().toString().padStart(2, "0") + ":" +
+           date.getSeconds().toString().padStart(2, "0");
+}
+
+export function scheduleSortByDate(a: Schedule, b: Schedule) {
+    const firstCriterion = a.startDate.getTime() - b.startDate.getTime();
+    if(firstCriterion == 0) {
+        return a.endDate.getTime() - b.endDate.getTime();
+    } else {
+        return firstCriterion;
+    }
+}
+
+export function getScheduleFormatted(date: Date) {
+    return date.getDate().toString().padStart(2, "0") + "/" +
+           (date.getMonth() + 1).toString().padStart(2, "0") + " " +
+           date.getHours().toString().padStart(2, "0") + ":" +
+           date.getMinutes().toString().padStart(2, "0");
+}
+
+export function dayDifference(a : Date, b: Date) {
+    const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+    // Discard the time and time-zone information.
+    const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+    const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+  
+    return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+}
+
+export function hourDifference(a : Date, b: Date) {
+    const _MS_PER_DAY = 1000 * 60 * 60;
+    // Discard the time and time-zone information.
+    const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate(), a.getHours());
+    const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate(), b.getHours());
+  
+    return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+  }
 
 
 /*************************************************** ICONS ***************************************************/
@@ -287,6 +344,24 @@ export const lightIcon : Icon = {
     backgroundColor: ICON_BACK_COLOR,
 }
 
+export const editIcon : Icon = {
+    name: "pencil",
+    color: ICON_MAIN_COLOR,
+    backgroundColor: ICON_BACK_COLOR,
+}
+
+export const cancelIcon : Icon = {
+    name: "cancel",
+    color: DELETE_ICON_MAIN_COLOR,
+    backgroundColor: DELETE_ICON_BACK_COLOR,
+}
+
+export const confirmIcon : Icon = {
+    name: "check",
+    color: CONFIRM_ICON_MAIN_COLOR,
+    backgroundColor: CONFIRM_ICON_BACK_COLOR,
+}
+
 /*************************************************** DATA ***************************************************/
 
 export const systems0 : System[] = [
@@ -298,7 +373,7 @@ export const systems0 : System[] = [
         temperature: 27,
         light: 65,
         status: Status.Bad,
-        lastRead: new Date(2024, 5-1, 6)
+        lastRead: new Date(2024, 5-1, 6, 23, 59, 59)
     },
     {
         name: "East",
@@ -308,7 +383,7 @@ export const systems0 : System[] = [
         temperature: 28,
         light: 60,
         status: Status.Critical,
-        lastRead: new Date(2024, 5-1, 1)
+        lastRead: new Date(2024, 5-1, 1, 1, 1, 1)
     },
     {
         name: "West",
@@ -318,7 +393,7 @@ export const systems0 : System[] = [
         temperature: 6,
         light: 55,
         status: Status.Okay,
-        lastRead: new Date(2024, 4-1, 30)
+        lastRead: new Date(2024, 4-1, 30, 12, 30, 12)
     },
     {
         name: "South 1",
@@ -328,7 +403,7 @@ export const systems0 : System[] = [
         temperature: 31,
         light: 70,
         status: Status.Good,
-        lastRead: new Date(2024, 4-1, 29)
+        lastRead: new Date(2024, 4-1, 29, 0, 0, 0)
     },
     {
         name: "South 2",
@@ -338,7 +413,7 @@ export const systems0 : System[] = [
         temperature: 32,
         light: 69,
         status: Status.Great,
-        lastRead: new Date(2024, 5-1, 2)
+        lastRead: new Date(2024, 5-1, 2, 16, 30, 16)
     }
 ]
 
@@ -351,7 +426,7 @@ export const systems1 : System[] = [
         temperature: 27,
         light: 65,
         status: Status.Bad,
-        lastRead: new Date(2024, 5-1, 6)
+        lastRead: new Date(2024, 5-1, 6, 23, 59, 59)
     },
     {
         name: "East",
@@ -361,7 +436,7 @@ export const systems1 : System[] = [
         temperature: 28,
         light: 60,
         status: Status.Great,
-        lastRead: new Date(2024, 5-1, 1)
+        lastRead: new Date(2024, 5-1, 1, 1, 1, 1)
     },
     {
         name: "West",
@@ -371,7 +446,7 @@ export const systems1 : System[] = [
         temperature: 6,
         light: 55,
         status: Status.Okay,
-        lastRead: new Date(2024, 4-1, 30)
+        lastRead: new Date(2024, 4-1, 30, 12, 30, 12)
     },
     {
         name: "South 1",
@@ -381,7 +456,7 @@ export const systems1 : System[] = [
         temperature: 31,
         light: 70,
         status: Status.Good,
-        lastRead: new Date(2024, 4-1, 29)
+        lastRead: new Date(2024, 4-1, 29, 0, 0, 0)
     },
     {
         name: "South 2",
@@ -391,7 +466,7 @@ export const systems1 : System[] = [
         temperature: 32,
         light: 69,
         status: Status.Great,
-        lastRead: new Date(2024, 5-1, 2)
+        lastRead: new Date(2024, 5-1, 2, 16, 30, 16)
     }
 ]
 
@@ -404,7 +479,7 @@ export const systems2 : System[] = [
         temperature: 27,
         light: 65,
         status: Status.Bad,
-        lastRead: new Date(2024, 5-1, 6)
+        lastRead: new Date(2024, 5-1, 6, 23, 59, 59)
     },
     {
         name: "East",
@@ -414,7 +489,7 @@ export const systems2 : System[] = [
         temperature: 28,
         light: 60,
         status: Status.Critical,
-        lastRead: new Date(2024, 5-1, 1)
+        lastRead: new Date(2024, 5-1, 1, 1, 1, 1)
     },
     {
         name: "West",
@@ -424,7 +499,7 @@ export const systems2 : System[] = [
         temperature: 6,
         light: 55,
         status: Status.Critical,
-        lastRead: new Date(2024, 4-1, 30)
+        lastRead: new Date(2024, 4-1, 30, 12, 30, 12)
     },
     {
         name: "South 1",
@@ -434,7 +509,7 @@ export const systems2 : System[] = [
         temperature: 31,
         light: 70,
         status: Status.Bad,
-        lastRead: new Date(2024, 4-1, 29)
+        lastRead: new Date(2024, 4-1, 29, 0, 0, 0)
     },
     {
         name: "South 2",
@@ -444,7 +519,7 @@ export const systems2 : System[] = [
         temperature: 32,
         light: 69,
         status: Status.Critical,
-        lastRead: new Date(2024, 5-1, 2)
+        lastRead: new Date(2024, 5-1, 2, 16, 30, 16)
     }
 ]
 
@@ -457,7 +532,7 @@ export const systems3 : System[] = [
         temperature: 27,
         light: 65,
         status: Status.Bad,
-        lastRead: new Date(2024, 5-1, 6)
+        lastRead: new Date(2024, 5-1, 6, 23, 59, 59)
     },
     {
         name: "East",
@@ -467,7 +542,7 @@ export const systems3 : System[] = [
         temperature: 28,
         light: 60,
         status: Status.Critical,
-        lastRead: new Date(2024, 5-1, 1)
+        lastRead: new Date(2024, 5-1, 1, 1, 1, 1)
     },
     {
         name: "West",
@@ -477,7 +552,7 @@ export const systems3 : System[] = [
         temperature: 6,
         light: 55,
         status: Status.Okay,
-        lastRead: new Date(2024, 4-1, 30)
+        lastRead: new Date(2024, 4-1, 30, 12, 30, 12)
     },
     {
         name: "South 1",
@@ -487,7 +562,7 @@ export const systems3 : System[] = [
         temperature: 31,
         light: 70,
         status: Status.Good,
-        lastRead: new Date(2024, 4-1, 29)
+        lastRead: new Date(2024, 4-1, 29, 0, 0, 0)
     },
     {
         name: "South 2",
@@ -497,7 +572,7 @@ export const systems3 : System[] = [
         temperature: 32,
         light: 69,
         status: Status.Critical,
-        lastRead: new Date(2024, 5-1, 2)
+        lastRead: new Date(2024, 5-1, 2, 16, 30, 16)
     }
 ]
 
@@ -510,7 +585,7 @@ export const systems4 : System[] = [
         temperature: 27,
         light: 65,
         status: Status.Great,
-        lastRead: new Date(2024, 5-1, 6)
+        lastRead: new Date(2024, 5-1, 6, 23, 59, 59)
     },
     {
         name: "East",
@@ -520,7 +595,7 @@ export const systems4 : System[] = [
         temperature: 28,
         light: 60,
         status: Status.Great,
-        lastRead: new Date(2024, 5-1, 1)
+        lastRead: new Date(2024, 5-1, 1, 1, 1, 1)
     },
     {
         name: "West",
@@ -530,7 +605,7 @@ export const systems4 : System[] = [
         temperature: 6,
         light: 55,
         status: Status.Good,
-        lastRead: new Date(2024, 4-1, 30)
+        lastRead: new Date(2024, 4-1, 30, 12, 30, 12)
     },
     {
         name: "South 1",
@@ -540,7 +615,7 @@ export const systems4 : System[] = [
         temperature: 31,
         light: 70,
         status: Status.Good,
-        lastRead: new Date(2024, 4-1, 29)
+        lastRead: new Date(2024, 4-1, 29, 0, 0, 0)
     },
     {
         name: "South 2",
@@ -550,7 +625,7 @@ export const systems4 : System[] = [
         temperature: 32,
         light: 69,
         status: Status.Great,
-        lastRead: new Date(2024, 5-1, 2)
+        lastRead: new Date(2024, 5-1, 2, 16, 30, 16)
     }
 ]
 

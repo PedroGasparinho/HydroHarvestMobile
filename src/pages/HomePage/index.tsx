@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Action, Crop, addNewIcon, compareCrops, crops, goBackIcon } from "../../utils";
 import CropComponent from "../../components/CropComponent";
-import TitleBarComponent from "../../components/titleBarComponent";
+import TitleBarComponent from "../../components/TitleBarComponent";
 import { mainStackProp } from "../../routes/stack";
 import { useNavigation } from "@react-navigation/native";
 
@@ -22,7 +22,7 @@ function HomePage() {
     }
     const rightAction : Action = {
         icon: addNewIcon,
-        action: () => mainNav.goBack(),
+        action: () => {},
     }
 
     let i = 0;

@@ -1,22 +1,71 @@
-import { useNavigation } from "@react-navigation/native";
-import { Button, Text } from "react-native";
-import { CROP_PAGE, homeStackProp } from "../../routes/homeStack";
+import { homeNavigationStackProp } from "../../routes/homeStack";
+import TitleBarComponent from "../../components/TitleBarComponent";
+import { Action, Schedule, addNewIcon, goBackIcon, scheduleSortByDate } from "../../utils";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { ScrollView, StyleSheet } from "react-native";
+import ScheduleComponent from "../../components/ScheduleComponent";
 
-function SchedulePage() {
+type NavProps = NativeStackScreenProps<homeNavigationStackProp, 'SchedulePage'>;
 
-    const homeNave = useNavigation<homeStackProp>();
+function SchedulePage({navigation, route}: NavProps) {
+
+    const crop = route.params;
+
+    const leftAction : Action = {
+        icon: goBackIcon,
+        action: () => navigation.goBack(),
+    }
+
+    const rightAction : Action = {
+        icon: addNewIcon,
+        action: () => {},
+    }
+
+    const s1 : Schedule = {
+        startDate: new Date("2024-05-11T18:00:00.000+00:00"),
+        endDate: new Date("2024-05-11T20:00:00.000+00:00"),
+        isSuggestion: false,
+        systems: []
+    }
+
+    const s2 : Schedule = {
+        startDate: new Date("2024-05-12T18:00:00.000+00:00"),
+        endDate: new Date("2024-05-12T20:00:00.000+00:00"),
+        isSuggestion: true,
+        systems: []
+    }
+
+    const s3 : Schedule = {
+        startDate: new Date("2024-05-11T22:00:00.000+00:00"),
+        endDate: new Date("2024-05-11T23:00:00.000+00:00"),
+        isSuggestion: false,
+        systems: []
+    }
+
+    const schedules = [s1, s2, s3];
+
+    let i = 0;
 
     return (
         <>
-            <Text>Schedule Page</Text>
-            <Button
-                onPress={() => homeNave.navigate(CROP_PAGE)}
-                title="Go Back"
-                color="#841584"
-                accessibilityLabel="Learn more about this purple button"
-            />
+            <TitleBarComponent title={crop.name} subtitle="Schedule" leftAction={leftAction} rightAction={rightAction}/>
+            <ScrollView style={styles.scrollView}>
+            <>
+                {
+                    schedules.sort(scheduleSortByDate).map(s => <ScheduleComponent key={i++} schedule={s}/>)
+                }
+            </>
+            </ScrollView>
         </>
     );
-  }
+}
+
+const styles = StyleSheet.create({
+
+    scrollView: {
+        height: "90%",
+    }
+
+});
   
-  export default SchedulePage;
+export default SchedulePage;

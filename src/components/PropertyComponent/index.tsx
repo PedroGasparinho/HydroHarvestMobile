@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import { Action, BORDER_COLOR, Crop, ITEM_TITLE_SIZE, PROPERTY_ICON_SIZE, Property, TEXT_COLOR, getAverage, getPropertyIcon, reloadIcon, wateringCanIcon } from "../../utils";
+import { Action, BORDER_COLOR, Crop, ITEM_BACK_COLOR, ITEM_RADIUS, ITEM_TITLE_SIZE, PROPERTY_ICON_SIZE, Property, TEXT_COLOR, getAverage, getPropertyIcon, reloadIcon, wateringCanIcon } from "../../utils";
 import IconComponent from "../IconComponent";
 
 type Props = {
@@ -50,8 +50,10 @@ const styles = StyleSheet.create({
         width: "100%",
         borderWidth: 2,
         borderColor: BORDER_COLOR,
+        borderRadius: ITEM_RADIUS,
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: ITEM_BACK_COLOR,
     },
 
     topView: {

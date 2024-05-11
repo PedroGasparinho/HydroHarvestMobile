@@ -1,8 +1,8 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { BORDER_COLOR, Crop, ITEM_ICON_SIZE, ITEM_BACK_COLOR, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR, wateringCanIcon, deleteIcon, Action, getSpaceIfNoAction, getCropStatus } from "../../utils";
+import { BORDER_COLOR, Crop, ITEM_ICON_SIZE, ITEM_BACK_COLOR, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR, wateringCanIcon, deleteIcon, Action, getSpaceIfNoAction, getCropStatus, ITEM_RADIUS } from "../../utils";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
-import { CROP_PAGE, homeStackProp } from "../../routes/homeStack";
+import { CROP_PAGE, SCHEDULE_PAGE, homeStackProp } from "../../routes/homeStack";
 import StatusComponent from "../StatusComponent";
 import ActionWithIconComponent from "../ActionWithIconComponent";
 
@@ -21,7 +21,7 @@ function CropComponent(prop: Props) {
     }
 
     function onPressWater() {
-        //TODO
+        homeNav.navigate(SCHEDULE_PAGE, crop);
     }
 
     function onPressDelete() {
@@ -74,6 +74,7 @@ const styles = StyleSheet.create({
         height: 200,
         margin: 10,
         backgroundColor: ITEM_BACK_COLOR,
+        borderRadius: ITEM_RADIUS,
     },
 
     topView: {
@@ -111,6 +112,7 @@ const styles = StyleSheet.create({
         borderWidth: 3,
         justifyContent: "center",
         alignItems: "center",
+        borderRadius: ITEM_RADIUS,
     },
 
 });

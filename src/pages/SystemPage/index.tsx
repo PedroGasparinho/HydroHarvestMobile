@@ -1,5 +1,5 @@
 import { homeNavigationStackProp } from "../../routes/homeStack";
-import TitleBarComponent from "../../components/titleBarComponent";
+import TitleBarComponent from "../../components/TitleBarComponent";
 import { Action, goBackIcon } from "../../utils";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import StatusPanelComponent from "../../components/StatusPanelComponent";

@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { BORDER_COLOR, ITEM_BACK_COLOR, ITEM_TEXT_SIZE, System, TEXT_COLOR } from "../../utils";
+import { BORDER_COLOR, ITEM_BACK_COLOR, ITEM_RADIUS, ITEM_TEXT_SIZE, System, TEXT_COLOR } from "../../utils";
 import { useNavigation } from "@react-navigation/native";
 import { SYSTEM_PAGE, homeStackProp } from "../../routes/homeStack";
 
@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: BORDER_COLOR,
         backgroundColor: ITEM_BACK_COLOR,
+        borderRadius: ITEM_RADIUS,
         height: "100%",
         alignItems: "center",
         paddingLeft: 10,

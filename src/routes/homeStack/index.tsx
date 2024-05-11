@@ -16,7 +16,7 @@ export type homeNavigationStackProp = {
     HomePage: undefined,
     CropPage: Crop,
     SystemPage: System,
-    SchedulePage: undefined
+    SchedulePage: Crop,
   }
 
 export type homeStackProp = NativeStackNavigationProp<homeNavigationStackProp>;   

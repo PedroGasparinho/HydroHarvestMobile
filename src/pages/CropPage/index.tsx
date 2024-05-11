@@ -1,7 +1,7 @@
-import { homeNavigationStackProp } from "../../routes/homeStack";
-import TitleBarComponent from "../../components/titleBarComponent";
+import { SCHEDULE_PAGE, homeNavigationStackProp } from "../../routes/homeStack";
+import TitleBarComponent from "../../components/TitleBarComponent";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Action, PAGE_SUBTITLE_SIZE, TEXT_COLOR, goBackIcon, reloadIcon, wateringCanIcon } from "../../utils";
+import { Action, PAGE_SUBTITLE_SIZE, TEXT_COLOR, goBackIcon, wateringCanIcon } from "../../utils";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import SystemComponent from "../../components/SystemComponent";
 import StatusPanelComponent from "../../components/StatusPanelComponent";
@@ -19,7 +19,7 @@ function CropPage({navigation, route}: NavProps) {
 
     const rightAction : Action = {
         icon: wateringCanIcon,
-        action: () => navigation.goBack(),
+        action: () => navigation.navigate(SCHEDULE_PAGE, crop),
     }
 
     function getRightAction() {

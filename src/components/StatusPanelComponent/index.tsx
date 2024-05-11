@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import StatusComponent from "../StatusComponent";
 import ActionWithIconComponent from "../ActionWithIconComponent";
 import PropertyComponent from "../PropertyComponent";
-import { Action, Crop, Dimension, ITEM_ICON_SIZE, ITEM_TEXT_SIZE, PAGE_SUBTITLE_SIZE, Property, System, TEXT_COLOR, getAverage, getCropStatus, getLastCropUpdate, reloadIcon } from "../../utils";
+import { Action, Crop, Dimension, ITEM_ICON_SIZE, ITEM_TEXT_SIZE, PAGE_SUBTITLE_SIZE, Property, System, TEXT_COLOR, getAverage, getCropStatus, getLastCropUpdate, getLastReadFormatted, reloadIcon } from "../../utils";
 import SpaceComponent from "../SpaceComponent";
 
 type Props = {
@@ -30,7 +30,7 @@ function StatusPanelComponent(props: Props) {
     const tankLevel = isCrop ? getAverage(item, Property.TankLevel) : item.tankLevel;
     const temperature = isCrop ? getAverage(item, Property.Temperature) : item.temperature;
     const light = isCrop ? getAverage(item, Property.Light) : item.light;
-    const lastUpdated = "Last Updated: " + (isCrop ? getLastCropUpdate(item) : item.lastRead).toLocaleString();
+    const lastUpdated = "Last Updated: " + getLastReadFormatted(isCrop ? getLastCropUpdate(item) : item.lastRead);
 
     return(
         <View style={styles.statusView}>
