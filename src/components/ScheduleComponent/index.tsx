@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import { Action, BORDER_COLOR, ITEM_BACK_COLOR, ITEM_ICON_SIZE, ITEM_RADIUS, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, SUGGESTION_BACK_COLOR, Schedule, TEXT_COLOR, WATERING_BACK_COLOR, confirmIcon, dayDifference, deleteIcon, editIcon, getScheduleFormatted, getSpaceIfNoAction, hourDifference } from "../../utils";
+import { Action, BORDER_COLOR, ITEM_BACK_COLOR, ITEM_ICON_SIZE, ITEM_RADIUS, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, SUGGESTION_BACK_COLOR, Schedule, TEXT_COLOR, WATERING_BACK_COLOR, confirmIcon, dayDifference, deleteIcon, editIcon, getHourFormatted, getScheduleFormatted, getSpaceIfNoAction, hourDifference, isInBetweenDates } from "../../utils";
 
 type Props = {
     schedule: Schedule,
@@ -29,13 +29,8 @@ function ScheduleComponent(props: Props) {
         action: () => {},
     }
 
-    const now = new Date();
+    const isWatering = isInBetweenDates(new Date(), s.startDate, s.endDate);
 
-    function isWateringFun() {
-        return s.startDate.getTime() <= now.getTime() && now.getTime() < s.endDate.getTime();
-    }
-
-    const isWatering = isWateringFun();
     function getBackgroundColor() {
         if(s.isSuggestion) {
             return SUGGESTION_BACK_COLOR;
@@ -70,9 +65,8 @@ function ScheduleComponent(props: Props) {
         if(isWatering) {
             return "Now (Until " + getScheduleFormatted(s.endDate) + ")";
         } else {
-            const dayDiff = dayDifference(now, s.startDate);
+            const dayDiff = dayDifference(new Date(), s.startDate);
             const hourDiff = hourDifference(s.startDate, s.endDate);
-            console.log(hourDiff);
 
             function getPreamble() {
                 if(dayDiff == 0) {
@@ -84,7 +78,7 @@ function ScheduleComponent(props: Props) {
                 }
             }
 
-            return getPreamble() + " (Duration: " + hourDiff + "h)";
+            return getPreamble() + " at " + getHourFormatted(s.startDate) + " (Duration: " + hourDiff + "h)";
         }
     }
 

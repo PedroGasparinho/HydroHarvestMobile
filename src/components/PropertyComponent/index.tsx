@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
 
     outerView: {
         width: "50%",
-        padding: 5,
+        padding: 10,
     },
 
     borderView: {

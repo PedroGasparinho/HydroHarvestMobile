@@ -93,7 +93,6 @@ const styles = StyleSheet.create({
     propertyView: {
         height: "50%",
         flexDirection: "row",
-        paddingHorizontal: 5,
     },
 
 });

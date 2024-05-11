@@ -39,10 +39,14 @@ function CropPage({navigation, route}: NavProps) {
             <View style={styles.systemsTitleView}>
                 <Text style={styles.systemsTitleText}>List of systems</Text>
             </View>
-            <ScrollView style={styles.systemsListView}>
+            <ScrollView style={styles.systemsListView} contentContainerStyle={{flexDirection: 'row', flexWrap: 'wrap'}}>
                 <>
                     {
-                        crop.systems.map(s => <SystemComponent key={i++} system={s}/>)
+                        crop.systems.map(s => 
+                            <View key={i++} style={styles.systemsItemView}>
+                                <SystemComponent system={s}/>
+                            </View>
+                        )
                     }
                 </>
             </ScrollView>
@@ -71,6 +75,11 @@ const styles = StyleSheet.create({
 
     systemsListView: {
         height: "30%",
+    },
+
+    systemsItemView: {
+        width : '50%',
+        flexDirection : "row"
     },
 
     scheduleButtonView: {

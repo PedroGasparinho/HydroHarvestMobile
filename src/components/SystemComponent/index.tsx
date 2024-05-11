@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
     outerView: {
         height: 60,
         padding: 10,
+        width: "100%"
     },
 
     innerView: {

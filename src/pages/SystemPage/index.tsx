@@ -1,6 +1,6 @@
 import { homeNavigationStackProp } from "../../routes/homeStack";
 import TitleBarComponent from "../../components/TitleBarComponent";
-import { Action, goBackIcon } from "../../utils";
+import { Action, editIcon, goBackIcon } from "../../utils";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import StatusPanelComponent from "../../components/StatusPanelComponent";
 
@@ -15,10 +15,14 @@ function SystemPage({navigation, route}: NavProps) {
         action: () => navigation.goBack(),
     }
 
+    const rightAction : Action = {
+        icon: editIcon,
+        action: () => {},
+    }
 
     return (
         <>
-            <TitleBarComponent leftAction={leftAction} title={system.name}/>
+            <TitleBarComponent leftAction={leftAction} title={system.name} rightAction={rightAction}/>
             <StatusPanelComponent item={system}/>
         </>
     );

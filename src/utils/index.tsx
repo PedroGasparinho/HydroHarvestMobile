@@ -112,7 +112,7 @@ export const DELETE_ICON_BACK_COLOR = "#FFB0B0";
 export const CONFIRM_ICON_MAIN_COLOR = "#039c21";
 export const CONFIRM_ICON_BACK_COLOR = "#9ff28f";
 
-export const ICON_RADIUS = 100;
+export const ICON_RADIUS = 1000;
 export const PROPERTY_ICON_SIZE = 50;
 
 
@@ -266,7 +266,16 @@ export function scheduleSortByDate(a: Schedule, b: Schedule) {
 export function getScheduleFormatted(date: Date) {
     return date.getDate().toString().padStart(2, "0") + "/" +
            (date.getMonth() + 1).toString().padStart(2, "0") + " " +
-           date.getHours().toString().padStart(2, "0") + ":" +
+           getHourFormatted(date);
+}
+
+export function isDSTDate(date: Date) {
+    const month = date.getMonth() + 1;
+    return 4 <= month && month <= 10;
+}
+
+export function getHourFormatted(date: Date) {
+    return (date.getHours() + (isDSTDate(date)? 1 : 0)).toString().padStart(2, "0") + ":" +
            date.getMinutes().toString().padStart(2, "0");
 }
 
@@ -286,7 +295,15 @@ export function hourDifference(a : Date, b: Date) {
     const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate(), b.getHours());
   
     return Math.floor((utc2 - utc1) / _MS_PER_DAY);
-  }
+}
+
+export function isInBetweenDates(a: Date, b: Date, c: Date) {
+    const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate(), a.getHours(), a.getMinutes(), a.getSeconds());
+    const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate(), b.getHours(), b.getMinutes(), b.getSeconds());
+    const utc3 = Date.UTC(c.getFullYear(), c.getMonth(), c.getDate(), c.getHours(), c.getMinutes(), c.getSeconds());
+
+    return utc2 <= utc1 && utc1 < utc3;
+}
 
 
 /*************************************************** ICONS ***************************************************/
