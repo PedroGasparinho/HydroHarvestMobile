@@ -1,9 +1,11 @@
 import { homeNavigationStackProp } from "../../routes/homeStack";
 import TitleBarComponent from "../../components/TitleBarComponent";
-import { Action, Schedule, addNewIcon, goBackIcon, scheduleSortByDate } from "../../utils";
+import { Action } from "../../utils";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ScrollView, StyleSheet } from "react-native";
 import ScheduleComponent from "../../components/ScheduleComponent";
+import { addNewIcon, goBackIcon } from "../../utils/icons";
+import { Schedule, scheduleSortByDate } from "../../utils/domain";
 
 type NavProps = NativeStackScreenProps<homeNavigationStackProp, 'SchedulePage'>;
 

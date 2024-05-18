@@ -3,7 +3,7 @@ import HomePage from '../../pages/HomePage';
 import CropPage from '../../pages/CropPage';
 import SystemPage from '../../pages/SystemPage';
 import SchedulePage from '../../pages/SchedulePage';
-import { Crop, System } from '../../utils';
+import { Crop, System } from '../../utils/domain';
 
 const Stack = createNativeStackNavigator();
 

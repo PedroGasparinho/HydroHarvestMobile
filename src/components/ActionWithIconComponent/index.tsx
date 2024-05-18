@@ -1,6 +1,7 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import MCIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { Action, ICON_RADIUS, valueToDimension } from "../../utils";
+import { Action, valueToDimension } from "../../utils";
+import { ICON_RADIUS } from "../../utils/icons";
 
 type Props = {
     action: Action,

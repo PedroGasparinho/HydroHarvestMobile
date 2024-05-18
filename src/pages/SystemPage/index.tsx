@@ -1,8 +1,9 @@
 import { homeNavigationStackProp } from "../../routes/homeStack";
 import TitleBarComponent from "../../components/TitleBarComponent";
-import { Action, editIcon, goBackIcon } from "../../utils";
+import { Action } from "../../utils";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import StatusPanelComponent from "../../components/StatusPanelComponent";
+import { editIcon, goBackIcon } from "../../utils/icons";
 
 type NavProps = NativeStackScreenProps<homeNavigationStackProp, 'SystemPage'>;
 

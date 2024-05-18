@@ -1,10 +1,14 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { BORDER_COLOR, Crop, ITEM_ICON_SIZE, ITEM_BACK_COLOR, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR, wateringCanIcon, deleteIcon, Action, getSpaceIfNoAction, getCropStatus, ITEM_RADIUS } from "../../utils";
+import { Action, getSpaceIfNoAction } from "../../utils";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { CROP_PAGE, SCHEDULE_PAGE, homeStackProp } from "../../routes/homeStack";
 import StatusComponent from "../StatusComponent";
 import ActionWithIconComponent from "../ActionWithIconComponent";
+import { Crop } from "../../utils/domain";
+import { deleteIcon, wateringCanIcon } from "../../utils/icons";
+import { BORDER_COLOR, ITEM_BACK_COLOR, ITEM_ICON_SIZE, ITEM_RADIUS, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
+import { getCropStatus } from "../../utils/status";
 
 type Props = {
     crop: Crop

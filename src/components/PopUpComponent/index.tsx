@@ -1,9 +1,9 @@
 import { ReactNode } from "react";
 import { StyleSheet, View, Modal, TouchableWithoutFeedback } from "react-native";
-import { ITEM_RADIUS } from "../../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { setVisible } from "../../store/modal.reducer";
+import { ITEM_RADIUS } from "../../utils/styles";
 
 interface PopUpProps {
     body: ReactNode;

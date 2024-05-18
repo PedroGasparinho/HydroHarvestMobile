@@ -8,7 +8,7 @@ const initialState: ModalState = {
     isVisible: false
 }
 
-const pantrySlice = createSlice({
+const modelSlice = createSlice({
     name: "modal",
     initialState,
     reducers: {
@@ -18,6 +18,6 @@ const pantrySlice = createSlice({
     }
 });
 
-export const {setVisible} = pantrySlice.actions
+export const {setVisible} = modelSlice.actions
 
-export default pantrySlice.reducer
+export default modelSlice.reducer

@@ -10,7 +10,9 @@ import { persistStore } from 'redux-persist';
 
 let persistor = persistStore(store);
 
-function App(): React.JSX.Element {
+function App(): JSX.Element {
+
+	//persistor.purge();
 
 	return (
 		<ApplicationProvider {...eva} theme={eva.light}>

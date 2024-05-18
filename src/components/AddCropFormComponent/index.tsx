@@ -1,11 +1,13 @@
-import { PermissionsAndroid, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { ALT_TEXT_COLOR, BORDER_COLOR, CONFIRM_ICON_MAIN_COLOR, ERROR_TEXT_COLOR, ITEM_RADIUS, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR, availableCrops, isStringEmpty } from "../../utils";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { isStringEmpty } from "../../utils";
+import { useEffect, useState } from "react";
 import SelectComponent from "../SelectComponent";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
+import { useDispatch } from "react-redux";
 import { setVisible } from "../../store/modal.reducer";
 import Geolocation from "@react-native-community/geolocation";
+import { availableCrops } from "../../utils/staticData";
+import { ALT_TEXT_COLOR, BORDER_COLOR, ERROR_TEXT_COLOR, ITEM_RADIUS, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
+import { CONFIRM_ICON_MAIN_COLOR } from "../../utils/icons";
 
 function AddCropForm() {
 
@@ -17,7 +19,6 @@ function AddCropForm() {
     const [error, setError] = useState<boolean>(false);
     const [selectValue, setSelectValue] = useState<string>(availableCrops[0]);
 
-    //const modalVisible = useSelector((state: RootState) => state.persistedReducer.modalState.isVisible);
     const dispatcher = useDispatch();
 
     function onSubmit() {
@@ -28,36 +29,12 @@ function AddCropForm() {
         }
     }
 
-    /*const getPermission = async () => {
-        try {
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-                {
-                    title: 'Hydroharvest Location Permission',
-                    message:
-                    'Hydroharvest needs access to your location to add a new crop',
-                    buttonNeutral: 'Ask Me Later',
-                    buttonNegative: 'Cancel',
-                    buttonPositive: 'OK',
-                },
-            );
-            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                console.log('You can use the location');
-            } else {
-                console.log('Location permission denied');
-            }
-        } catch (err) {
-            console.warn(err);
-        }
-    };*/
-
     const [location, setLocation] = useState<{lat: number, lon: number}>({lat: -1000, lon: -1000});
     const getCurrentLocation = () => {
         Geolocation.getCurrentPosition(
             position => {
                 const {latitude, longitude} = position.coords;
                 setLocation({lat: latitude, lon: longitude})
-                console.log("Lat: " + latitude + " Lon: " + longitude);
             },
             error => {
                 console.log("Error: " + error.message);

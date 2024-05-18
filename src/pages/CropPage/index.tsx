@@ -1,10 +1,13 @@
 import { SCHEDULE_PAGE, homeNavigationStackProp } from "../../routes/homeStack";
 import TitleBarComponent from "../../components/TitleBarComponent";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { ALT_TEXT_COLOR, Action, ITEM_RADIUS, ITEM_TITLE_SIZE, PAGE_SUBTITLE_SIZE, TEXT_COLOR, WATER_ICON_MAIN_COLOR, editIcon, goBackIcon, wateringCanIcon } from "../../utils";
+import { Action } from "../../utils";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import SystemComponent from "../../components/SystemComponent";
 import StatusPanelComponent from "../../components/StatusPanelComponent";
+import { goBackIcon, editIcon, WATER_ICON_MAIN_COLOR } from "../../utils/icons";
+import { PAGE_SUBTITLE_SIZE, TEXT_COLOR, ITEM_RADIUS, ALT_TEXT_COLOR, ITEM_TITLE_SIZE } from "../../utils/styles";
+import { System } from "../../utils/domain";
 
 type NavProps = NativeStackScreenProps<homeNavigationStackProp, 'CropPage'>;
 
@@ -42,7 +45,7 @@ function CropPage({navigation, route}: NavProps) {
             <ScrollView style={styles.systemsListView} contentContainerStyle={{flexDirection: 'row', flexWrap: 'wrap'}}>
                 <>
                     {
-                        crop.systems.map(s => 
+                        crop.systems.map((s: System) => 
                             <View key={i++} style={styles.systemsItemView}>
                                 <SystemComponent system={s}/>
                             </View>

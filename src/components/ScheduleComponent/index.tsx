@@ -1,5 +1,9 @@
 import { StyleSheet, Text, View } from "react-native";
-import { Action, BORDER_COLOR, ITEM_BACK_COLOR, ITEM_ICON_SIZE, ITEM_RADIUS, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, SUGGESTION_BACK_COLOR, Schedule, TEXT_COLOR, WATERING_BACK_COLOR, confirmIcon, dayDifference, deleteIcon, editIcon, getHourFormatted, getScheduleFormatted, getSpaceIfNoAction, hourDifference, isInBetweenDates } from "../../utils";
+import { Action, getSpaceIfNoAction} from "../../utils";
+import { Schedule } from "../../utils/domain";
+import { isInBetweenDates, getScheduleFormatted, dayDifference, hourDifference, getHourFormatted } from "../../utils/date";
+import { deleteIcon, editIcon, confirmIcon } from "../../utils/icons";
+import { SUGGESTION_BACK_COLOR, WATERING_BACK_COLOR, ITEM_BACK_COLOR, ITEM_ICON_SIZE, BORDER_COLOR, ITEM_RADIUS, ITEM_TITLE_SIZE, TEXT_COLOR, ITEM_TEXT_SIZE } from "../../utils/styles";
 
 type Props = {
     schedule: Schedule,

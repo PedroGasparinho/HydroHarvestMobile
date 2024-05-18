@@ -3,8 +3,14 @@ import { StyleSheet, Text, View } from "react-native";
 import StatusComponent from "../StatusComponent";
 import ActionWithIconComponent from "../ActionWithIconComponent";
 import PropertyComponent from "../PropertyComponent";
-import { Action, Crop, Dimension, ITEM_ICON_SIZE, ITEM_TEXT_SIZE, PAGE_SUBTITLE_SIZE, Property, System, TEXT_COLOR, getAverage, getCropStatus, getLastCropUpdate, getLastReadFormatted, reloadIcon } from "../../utils";
+import { Action, Dimension} from "../../utils";
 import SpaceComponent from "../SpaceComponent";
+import { getLastReadFormatted } from "../../utils/date";
+import { Crop, System, getLastCropUpdate } from "../../utils/domain";
+import { reloadIcon } from "../../utils/icons";
+import { Property, getPropertyAverage } from "../../utils/property";
+import { getCropStatus } from "../../utils/status";
+import { PAGE_SUBTITLE_SIZE, ITEM_ICON_SIZE, TEXT_COLOR, ITEM_TEXT_SIZE } from "../../utils/styles";
 
 type Props = {
     item: Crop | System,
@@ -26,10 +32,10 @@ function StatusPanelComponent(props: Props) {
     const isCrop = isCropFun(item); 
 
     const status = isCrop ? getCropStatus(item) : item.status;
-    const humidity = isCrop ? getAverage(item, Property.Humidity) : item.humidity;
-    const tankLevel = isCrop ? getAverage(item, Property.TankLevel) : item.tankLevel;
-    const temperature = isCrop ? getAverage(item, Property.Temperature) : item.temperature;
-    const light = isCrop ? getAverage(item, Property.Light) : item.light;
+    const humidity = isCrop ? getPropertyAverage(item, Property.Humidity) : item.humidity;
+    const tankLevel = isCrop ? getPropertyAverage(item, Property.TankLevel) : item.tankLevel;
+    const temperature = isCrop ? getPropertyAverage(item, Property.Temperature) : item.temperature;
+    const light = isCrop ? getPropertyAverage(item, Property.Light) : item.light;
     const lastUpdated = "Last Updated: " + getLastReadFormatted(isCrop ? getLastCropUpdate(item) : item.lastRead);
 
     return(

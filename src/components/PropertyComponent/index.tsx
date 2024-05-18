@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View } from "react-native";
-import { Action, BORDER_COLOR, ITEM_BACK_COLOR, ITEM_RADIUS, ITEM_TITLE_SIZE, PROPERTY_ICON_SIZE, Property, TEXT_COLOR, getPropertyIcon, reloadIcon, wateringCanIcon } from "../../utils";
 import IconComponent from "../IconComponent";
+import { Property, getPropertyIcon } from "../../utils/property";
+import { PROPERTY_ICON_SIZE } from "../../utils/icons";
+import { BORDER_COLOR, ITEM_RADIUS, ITEM_BACK_COLOR, TEXT_COLOR, ITEM_TITLE_SIZE } from "../../utils/styles";
 
 type Props = {
     property: Property,

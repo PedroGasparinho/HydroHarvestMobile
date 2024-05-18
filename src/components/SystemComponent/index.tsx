@@ -1,7 +1,8 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { BORDER_COLOR, ITEM_BACK_COLOR, ITEM_RADIUS, ITEM_TEXT_SIZE, System, TEXT_COLOR } from "../../utils";
 import { useNavigation } from "@react-navigation/native";
 import { SYSTEM_PAGE, homeStackProp } from "../../routes/homeStack";
+import { System } from "../../utils/domain";
+import { BORDER_COLOR, ITEM_BACK_COLOR, ITEM_RADIUS, TEXT_COLOR, ITEM_TEXT_SIZE } from "../../utils/styles";
 
 type Props = {
     system: System

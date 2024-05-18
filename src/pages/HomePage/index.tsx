@@ -1,5 +1,5 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { Action, Crop, addNewIcon, compareCrops, crops, goBackIcon } from "../../utils";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { Action } from "../../utils";
 import CropComponent from "../../components/CropComponent";
 import TitleBarComponent from "../../components/TitleBarComponent";
 import { mainStackProp } from "../../routes/stack";
@@ -8,6 +8,9 @@ import PopUpComponent from "../../components/PopUpComponent";
 import AddCropForm from "../../components/AddCropFormComponent";
 import { useDispatch } from "react-redux";
 import { setVisible } from "../../store/modal.reducer";
+import { Crop, compareCrops } from "../../utils/domain";
+import { goBackIcon, addNewIcon } from "../../utils/icons";
+import { crops } from "../../utils/staticData";
 
 function HomePage() {
 

@@ -4,7 +4,7 @@ import React from 'react';
 import WeatherPage from '../../pages/WeatherPage';
 import SettingsPage from '../../pages/SettingsPage';
 import HomeStack from '../homeStack';
-import { BOTTOM_BAR_ICON_SIZE, BOTTOM_BAR_FONT_SIZE, BOTTOM_BAR_ACTIVE_COLOR, BOTTOM_BAR_INACTIVE_COLOR } from '../../utils';
+import { BOTTOM_BAR_ACTIVE_COLOR, BOTTOM_BAR_INACTIVE_COLOR, BOTTOM_BAR_ICON_SIZE, BOTTOM_BAR_FONT_SIZE } from '../../utils/styles';
 
 const Tab = createBottomTabNavigator();
 

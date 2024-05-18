@@ -20,6 +20,7 @@ const persistedReducer = persistReducer(persistConfig, reducer);
 export const store = configureStore({
     reducer: {
         persistedReducer,
+        //modalState: modalReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware(
         {

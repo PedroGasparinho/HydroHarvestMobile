@@ -1,6 +1,7 @@
-import { DimensionValue, StyleSheet, View } from "react-native";
-import { ICON_RADIUS, Icon, valueToDimension } from "../../utils";
+import { StyleSheet, View } from "react-native";
+import { valueToDimension } from "../../utils";
 import MCIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { Icon } from "../../utils/icons";
 
 type Props = {
     icon: Icon

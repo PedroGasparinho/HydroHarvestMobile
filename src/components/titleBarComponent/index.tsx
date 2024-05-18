@@ -1,5 +1,7 @@
 import { DimensionValue, StyleSheet, Text, View } from "react-native";
-import { Action, ICON_BACK_COLOR, ICON_RADIUS, PAGE_ICON_SIZE, PAGE_SUBTITLE_SIZE, PAGE_TITLE_SIZE, TEXT_COLOR, getEmptyIfNoAction, valueToDimension } from "../../utils";
+import { Action, getEmptyIfNoAction, valueToDimension } from "../../utils";
+import { PAGE_ICON_SIZE, PAGE_SUBTITLE_SIZE, PAGE_TITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
+import { ICON_BACK_COLOR, ICON_RADIUS } from "../../utils/icons";
 
 type Props = {
     title: string,
