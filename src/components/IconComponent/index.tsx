@@ -30,10 +30,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
 
-    iconRadius: {
-        borderRadius: ICON_RADIUS,
-    },
-
 });
 
 export default IconComponent;

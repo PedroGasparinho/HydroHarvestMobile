@@ -95,6 +95,7 @@ export const BOTTOM_BAR_INACTIVE_COLOR = "#000000";
 //Global text-related constants
 export const TEXT_COLOR = "#000000";
 export const ALT_TEXT_COLOR = "#ffffff";
+export const ERROR_TEXT_COLOR = "#ff0000";
 
 //Global border-related constants
 export const BORDER_COLOR = "#444444"; 
@@ -112,7 +113,7 @@ export const DELETE_ICON_BACK_COLOR = "#FFB0B0";
 export const CONFIRM_ICON_MAIN_COLOR = "#039c21";
 export const CONFIRM_ICON_BACK_COLOR = "#9ff28f";
 
-export const ICON_RADIUS = 1000;
+export const ICON_RADIUS = 100;
 export const PROPERTY_ICON_SIZE = 50;
 
 
@@ -303,6 +304,10 @@ export function isInBetweenDates(a: Date, b: Date, c: Date) {
     const utc3 = Date.UTC(c.getFullYear(), c.getMonth(), c.getDate(), c.getHours(), c.getMinutes(), c.getSeconds());
 
     return utc2 <= utc1 && utc1 < utc3;
+}
+
+export function isStringEmpty(s: string) : boolean {
+    return s == null || s.trim() === ''
 }
 
 
@@ -654,3 +659,6 @@ export const crops : Crop[] = [
     {name: "Front porch Corn", cropName: "Corn", distance: 200, isWatering: false, systems: systems3},
     {name: "Potatoes", cropName: "Potato", distance: 2000, isWatering: true, systems: systems4},
 ];
+
+export const availableCrops = ["Agave", "Alpine Currant", "Aster", "Bald Cypress", "Barberry", "Begonia Coneflower", "Birch",
+"Bleeding Heart", "Butterfly Weed", "Corn", "Carob", "Strawberries", "Potatoes"]

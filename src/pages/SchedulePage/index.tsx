@@ -22,15 +22,15 @@ function SchedulePage({navigation, route}: NavProps) {
     }
 
     const s1 : Schedule = {
-        startDate: new Date("2024-05-11T22:00:00.000+01:00"),
-        endDate: new Date("2024-05-11T23:00:00.000+01:00"),
+        startDate: new Date("2024-05-13T22:00:00.000+01:00"),
+        endDate: new Date("2024-05-13T23:00:00.000+01:00"),
         isSuggestion: false,
         systems: []
     }
 
     const s2 : Schedule = {
-        startDate: new Date("2024-05-12T06:00:00.000+01:00"),
-        endDate: new Date("2024-05-12T07:00:00.000+01:00"),
+        startDate: new Date("2024-05-12T18:00:00.000+01:00"),
+        endDate: new Date("2024-05-12T19:00:00.000+01:00"),
         isSuggestion: true,
         systems: []
     }

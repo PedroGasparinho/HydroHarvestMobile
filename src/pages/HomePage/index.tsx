@@ -1,9 +1,13 @@
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { Action, Crop, addNewIcon, compareCrops, crops, goBackIcon } from "../../utils";
 import CropComponent from "../../components/CropComponent";
 import TitleBarComponent from "../../components/TitleBarComponent";
 import { mainStackProp } from "../../routes/stack";
 import { useNavigation } from "@react-navigation/native";
+import PopUpComponent from "../../components/PopUpComponent";
+import AddCropForm from "../../components/AddCropFormComponent";
+import { useDispatch } from "react-redux";
+import { setVisible } from "../../store/modal.reducer";
 
 function HomePage() {
 
@@ -12,6 +16,7 @@ function HomePage() {
     }
 
     const mainNav = useNavigation<mainStackProp>();
+    const dispatcher = useDispatch();
 
     const title = "Crops";
     const subtitle = "You have " + crops.length + " crops";
@@ -22,7 +27,7 @@ function HomePage() {
     }
     const rightAction : Action = {
         icon: addNewIcon,
-        action: () => {},
+        action: () => dispatcher(setVisible(true))
     }
 
     let i = 0;
@@ -44,6 +49,9 @@ function HomePage() {
                     }
                 </>
             </ScrollView>
+            <PopUpComponent
+                body={<AddCropForm/>}
+            />
         </>
     );
 }

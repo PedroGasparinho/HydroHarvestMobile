@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import { Action, BORDER_COLOR, Crop, ITEM_BACK_COLOR, ITEM_RADIUS, ITEM_TITLE_SIZE, PROPERTY_ICON_SIZE, Property, TEXT_COLOR, getAverage, getPropertyIcon, reloadIcon, wateringCanIcon } from "../../utils";
+import { Action, BORDER_COLOR, ITEM_BACK_COLOR, ITEM_RADIUS, ITEM_TITLE_SIZE, PROPERTY_ICON_SIZE, Property, TEXT_COLOR, getPropertyIcon, reloadIcon, wateringCanIcon } from "../../utils";
 import IconComponent from "../IconComponent";
 
 type Props = {
@@ -8,11 +8,6 @@ type Props = {
 }
 
 function PropertyComponent(props: Props) {
-
-    const reloadAction : Action = {
-        icon: reloadIcon,
-        action: () => {},
-    }
 
     const v = props.value;
     const p = props.property;
