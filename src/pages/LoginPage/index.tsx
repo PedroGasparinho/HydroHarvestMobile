@@ -1,15 +1,14 @@
-import { Button, Text } from "react-native";
+import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { APP_SCREEN, mainStackProp } from "../../routes/stack";
 import { useNavigation } from "@react-navigation/native";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useEffect } from "react";
 import auth from '@react-native-firebase/auth';
+import { ALT_TEXT_COLOR, ITEM_RADIUS, PAGE_SUBTITLE_SIZE, PAGE_TITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
 
 function LoginPage() {
 
     const mainNav = useNavigation<mainStackProp>();
-
-    const login = () => mainNav.navigate(APP_SCREEN);
 
     async function onGoogleButtonPress() {
         try {
@@ -41,7 +40,7 @@ function LoginPage() {
           });
     }, [])
 
-    return (
+    /*return (
         <>
             <Text>Login Page</Text>
             <Button
@@ -51,7 +50,102 @@ function LoginPage() {
                 accessibilityLabel="Learn more about this purple button"
             />
         </>
-    );
-  }
+    );*/
+
+    return(
+        <>
+            <View style={styles.imageView}>
+                <Image style={styles.imageStyle} source={require("../../assets/hydroHarvest.png")}/>
+            </View>
+            <View style={styles.bodyView}>
+                <View style={styles.titleView}>
+                    <Text style={styles.titleStyle}>Welcome</Text>
+                </View>
+                <View style={styles.helpView}>
+                    <Text style={styles.helpStyle}>Please sign-in with Google</Text>
+                </View>
+                <View style={styles.emptyView}/>
+                <View style={styles.buttonView}>
+                    <TouchableOpacity style={styles.buttonStyle} onPress={onGoogleButtonPress}>
+                        <Text style={styles.buttonTextStyle}>Login</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </>
+    )
+}
+
+const styles = StyleSheet.create({
+
+    imageView: {
+        height: "30%",
+        width: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+
+    imageStyle: {
+        width: "100%",
+        height: "100%"
+    },
+
+    bodyView: {
+        height: "70%",
+        width: "100%",
+    },
+
+    titleView: {
+        height: "20%",
+        width: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+
+    titleStyle: {
+        fontSize: PAGE_TITLE_SIZE,
+        fontWeight: "bold",
+        color: TEXT_COLOR,
+    },
+
+    helpView: {
+        height: "20%",
+        width: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+
+    helpStyle: {
+        fontSize: PAGE_SUBTITLE_SIZE,
+        color: TEXT_COLOR,
+    },
+
+    emptyView: {
+        height: "40%",
+        width: "100%",
+    },
+
+    buttonView: {
+        height: "20%",
+        width: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+
+    buttonStyle: {
+        height: "50%",
+        width: "80%",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#000000",
+        borderRadius: ITEM_RADIUS,
+    },
+
+    buttonTextStyle: {
+        fontSize: PAGE_SUBTITLE_SIZE,
+        color: ALT_TEXT_COLOR,
+    },
+
+
+});
   
-  export default LoginPage;
+export default LoginPage;
