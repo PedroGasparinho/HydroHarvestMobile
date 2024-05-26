@@ -2,13 +2,16 @@ import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from "react-n
 import { APP_SCREEN, mainStackProp } from "../../routes/stack";
 import { useNavigation } from "@react-navigation/native";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import auth from '@react-native-firebase/auth';
 import { ALT_TEXT_COLOR, ITEM_RADIUS, PAGE_SUBTITLE_SIZE, PAGE_TITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
+import { PROXY, hashCode } from "../../utils";
 
 function LoginPage() {
 
     const mainNav = useNavigation<mainStackProp>();
+
+    const [user, setUser] = useState<any>(null);
 
     async function onGoogleButtonPress() {
         try {
@@ -17,8 +20,7 @@ function LoginPage() {
             // Get the users ID token
             const { idToken, user } = await GoogleSignin.signIn();
 
-            console.log(idToken);
-            console.log(user);
+            setUser(user);
         
             // Create a Google credential with the token
             const googleCredential = auth.GoogleAuthProvider.credential(idToken);
@@ -26,31 +28,65 @@ function LoginPage() {
             // Sign-in the user with the credential
             const res = auth().signInWithCredential(googleCredential);
             
-            mainNav.navigate(APP_SCREEN);
+            loginRequest();
 
             return res;
         } catch(error) {
             console.log(error);
         }
-      }
+    }
+
+    async function loginRequest() {
+        const response = await fetch(PROXY + "/addClient", {
+            method: "POST",
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify({
+                name: user.name,
+                id: user.id,
+                mail: user.email,
+                password: hashCode(user.name),
+            })
+        });
+
+        if(response.ok) {
+            mainNav.navigate(APP_SCREEN);
+        } else {
+            console.error(response.status);
+        }
+    }
+
+    /*
+
+async function registerDoctor() {
+        const response = await fetch(PROXY + "/doctors/" + number.toString(), {
+            method: "POST",
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify({
+                name: name,
+                healthNumber: number,
+                password: pwd,
+                speciality: speciality
+            })
+        });
+
+        if(response.ok) {
+            setName("");
+            setNumber(HEALTH_NUM_MIN);
+            setPwd("");
+            setSpeciality(specialities[0]);
+            alert("Registration successful");
+        } else if(response.status === HTTP_CONFLICT) {
+            alert("Health number already registered");
+        }
+    }
+
+    */
 
     useEffect(() => {
         GoogleSignin.configure({
             webClientId: '281044714062-f001ruuci5s774op1fpmutu2tskla4t4.apps.googleusercontent.com',
-          });
-    }, [])
-
-    /*return (
-        <>
-            <Text>Login Page</Text>
-            <Button
-                onPress={onGoogleButtonPress}
-                title="Login"
-                color="#841584"
-                accessibilityLabel="Learn more about this purple button"
-            />
-        </>
-    );*/
+        });
+    }, []);
 
     return(
         <>
