@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { Action, getSpaceIfNoAction} from "../../utils";
 import { Schedule } from "../../utils/domain";
 import { isInBetweenDates, getScheduleFormatted, dayDifference, hourDifference, getHourFormatted } from "../../utils/date";
-import { deleteIcon, editIcon, confirmIcon } from "../../utils/icons";
+import { confirmIcon, cancelIcon } from "../../utils/icons";
 import { SUGGESTION_BACK_COLOR, WATERING_BACK_COLOR, ITEM_BACK_COLOR, ITEM_ICON_SIZE, BORDER_COLOR, ITEM_RADIUS, ITEM_TITLE_SIZE, TEXT_COLOR, ITEM_TEXT_SIZE } from "../../utils/styles";
 
 type Props = {
@@ -13,18 +13,8 @@ function ScheduleComponent(props: Props) {
 
     const s = props.schedule;
 
-    const deleteAction : Action = {
-        icon: deleteIcon,
-        action: () => {},
-    }
-
     const cancelAction : Action = {
-        icon: deleteIcon,
-        action: () => {},
-    }
-
-    const editAction : Action = {
-        icon: editIcon,
+        icon: cancelIcon,
         action: () => {},
     }
 
@@ -46,24 +36,16 @@ function ScheduleComponent(props: Props) {
     }
 
     function getTopAction() {
-        if(isWatering) {
+        if(s.isSuggestion) {
+            return confirmAction
+        } else if(isWatering) {
             return cancelAction;
         } else {
-            return deleteAction;
-        }
-    }
-
-    function getBottomAction() {
-        if(isWatering) {
             return undefined;
-        } else if(s.isSuggestion) {
-            return confirmAction;
-        } else {
-            return editAction;
         }
     }
 
-    const background = {backgroundColor: getBackgroundColor()}
+    const background = { backgroundColor: getBackgroundColor() }
 
     function getTitle() {
         if(isWatering) {
@@ -88,26 +70,14 @@ function ScheduleComponent(props: Props) {
 
     return(
         <View style={[styles.outerView, background]}>
-            <View style={styles.layerView}>
-                <View style={styles.textView}>
-                    <Text style={styles.titleText}>{getTitle()}</Text>
-                </View>
-                <>
-                    {
-                        getSpaceIfNoAction(getTopAction(), 10, ITEM_ICON_SIZE)
-                    }
-                </>
+            <View style={styles.topTextView}>
+                <Text style={styles.titleText}>{getTitle()}</Text>
             </View>
-            <View style={styles.layerView}>
-                <View style={styles.textView}>
-                    <Text style={styles.itemText}>Description</Text>
-                </View>
-                <>
-                    {
-                        getSpaceIfNoAction(getBottomAction(), 10, ITEM_ICON_SIZE)
-                    }
-                </>
-            </View>
+            <>
+                {
+                    getSpaceIfNoAction(getTopAction(), 10, ITEM_ICON_SIZE)
+                }
+            </>
         </View>
     )
 }
@@ -118,18 +88,18 @@ const styles = StyleSheet.create({
         borderColor: BORDER_COLOR,
         borderRadius: ITEM_RADIUS,
         borderWidth: 3,
-        height: 120,
+        height: 50,
         margin: 10,
-    },
-
-    layerView: {
-        height: "50%",
         flexDirection: "row",
+        alignItems: "center"
     },
 
-    textView: {
+    topTextView: {
         width: "90%",
-        justifyContent: "center",
+        paddingLeft: 5,
+    },
+
+    bottomTextView: {
         paddingLeft: 5,
     },
 

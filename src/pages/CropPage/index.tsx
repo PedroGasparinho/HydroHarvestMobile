@@ -1,19 +1,28 @@
-import { SCHEDULE_PAGE, homeNavigationStackProp } from "../../routes/homeStack";
+import { homeNavigationStackProp } from "../../routes/homeStack";
 import TitleBarComponent from "../../components/TitleBarComponent";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Action } from "../../utils";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Action, Dimension } from "../../utils";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import SystemComponent from "../../components/SystemComponent";
 import StatusPanelComponent from "../../components/StatusPanelComponent";
-import { goBackIcon, editIcon, WATER_ICON_MAIN_COLOR } from "../../utils/icons";
-import { PAGE_SUBTITLE_SIZE, TEXT_COLOR, ITEM_RADIUS, ALT_TEXT_COLOR, ITEM_TITLE_SIZE } from "../../utils/styles";
+import { goBackIcon, editIcon, addNewIcon } from "../../utils/icons";
+import { PAGE_SUBTITLE_SIZE, TEXT_COLOR, ITEM_ICON_SIZE } from "../../utils/styles";
 import { System } from "../../utils/domain";
+import { useDispatch } from "react-redux";
+import PopUpComponent from "../../components/PopUpComponent";
+import AddSystemForm from "../../components/AddSystemFormComponent";
+import { setVisible } from "../../store/modal.reducer";
+import SpaceComponent from "../../components/SpaceComponent";
+import ActionWithIconComponent from "../../components/ActionWithIconComponent";
 
 type NavProps = NativeStackScreenProps<homeNavigationStackProp, 'CropPage'>;
 
 function CropPage({navigation, route}: NavProps) {
 
     const crop = route.params;
+    //const loggedUser = useSelector((state: State) => state.persistedReducer.userReducer.user);
+    //const loc = useSelector((state: State) => state.persistedReducer.locationReducer.location);
+    const dispatcher = useDispatch();
 
     const leftAction : Action = {
         icon: goBackIcon,
@@ -26,38 +35,43 @@ function CropPage({navigation, route}: NavProps) {
     }
 
     function getRightAction() {
-        return crop.isWatering? rightAction : undefined; 
+        return rightAction; //crop.isWatering? rightAction : undefined; 
     }
 
-    function goToSchedule() {
-        navigation.navigate(SCHEDULE_PAGE, crop);
+    const addAction : Action = {
+        icon: addNewIcon,
+        action: () => dispatcher(setVisible(true))
     }
 
     let i = 0;
+
+    console.log(crop);
 
     return(
         <>
             <TitleBarComponent title={crop.name} leftAction={leftAction} rightAction={getRightAction()}/>
             <StatusPanelComponent item={crop}/>
             <View style={styles.systemsTitleView}>
-                <Text style={styles.systemsTitleText}>List of systems</Text>
+                <SpaceComponent value={15} dimension={Dimension.Width}/>
+                <View style={styles.systemsTitleCenter}>
+                    <Text style={styles.systemsTitleText}>List of systems</Text>
+                </View>
+                <ActionWithIconComponent action={addAction} size={ITEM_ICON_SIZE} width={15}/>
             </View>
             <ScrollView style={styles.systemsListView} contentContainerStyle={{flexDirection: 'row', flexWrap: 'wrap'}}>
                 <>
                     {
-                        crop.systems.map((s: System) => 
+                        crop.systemsDetails.map((s: System) => 
                             <View key={i++} style={styles.systemsItemView}>
-                                <SystemComponent system={s}/>
+                                <SystemComponent system={s} crop={crop}/>
                             </View>
                         )
                     }
                 </>
             </ScrollView>
-            <View style={styles.scheduleButtonView}>
-                <TouchableOpacity style={styles.scheduleButtonStyle}>
-                    <Text style={styles.scheduleButtonText} onPress={goToSchedule}>See schedule</Text>
-                </TouchableOpacity>
-            </View>
+            <PopUpComponent
+                body={<AddSystemForm crop={crop}/>}
+            />
         </>
     );
 
@@ -67,6 +81,17 @@ const styles = StyleSheet.create({
 
     systemsTitleView: {
         height: "7.5%",
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "row",
+    },
+
+    systemsTitleCenter: {
+        height: "100%",
+        width: "70%",
+        display: "flex",
         justifyContent: "center",
         alignItems: "center",
     },
@@ -84,26 +109,6 @@ const styles = StyleSheet.create({
         width : '50%',
         flexDirection : "row"
     },
-
-    scheduleButtonView: {
-        height: "7.5%",
-        padding: 10,
-    },
-
-    scheduleButtonStyle: {
-        width: "100%",
-        height: "100%",
-        backgroundColor: WATER_ICON_MAIN_COLOR,
-        borderRadius: ITEM_RADIUS,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-
-    scheduleButtonText: {
-        color: ALT_TEXT_COLOR,
-        fontSize: ITEM_TITLE_SIZE,
-        fontWeight: "bold"
-    }
 
 });
   

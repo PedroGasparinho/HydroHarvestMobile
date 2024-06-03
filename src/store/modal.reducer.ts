@@ -18,6 +18,6 @@ const modelSlice = createSlice({
     }
 });
 
-export const {setVisible} = modelSlice.actions
+export const { setVisible } = modelSlice.actions
 
 export default modelSlice.reducer

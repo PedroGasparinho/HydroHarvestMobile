@@ -3,7 +3,7 @@ import { Crop } from "../domain";
 export enum Status {
     Great = "Great",
     Good = "Good",
-    Okay = "Okay",
+    Okay = "Ok",
     Bad = "Bad",
     Critical = "Critical",
 }
@@ -16,7 +16,7 @@ export enum StatusColor {
     Critical = "#A94438",
 }
 
-export function cropStatusToColor(status: Status) {
+export function cropStatusToColor(status: string) {
     switch(status) {
         case Status.Great:
             return StatusColor.Great;

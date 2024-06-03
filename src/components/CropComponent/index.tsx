@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Action, getSpaceIfNoAction } from "../../utils";
+import { Action, Dimension, getSpaceIfNoAction } from "../../utils";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { CROP_PAGE, SCHEDULE_PAGE, homeStackProp } from "../../routes/homeStack";
@@ -8,7 +8,7 @@ import ActionWithIconComponent from "../ActionWithIconComponent";
 import { Crop } from "../../utils/domain";
 import { deleteIcon, wateringCanIcon } from "../../utils/icons";
 import { BORDER_COLOR, ITEM_BACK_COLOR, ITEM_ICON_SIZE, ITEM_RADIUS, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
-import { getCropStatus } from "../../utils/status";
+import SpaceComponent from "../SpaceComponent";
 
 type Props = {
     crop: Crop
@@ -28,22 +28,13 @@ function CropComponent(prop: Props) {
         homeNav.navigate(SCHEDULE_PAGE, crop);
     }
 
-    function onPressDelete() {
-        //TODO
-    }
-
     const wateringAction : Action = {
         icon: wateringCanIcon,
         action: onPressWater,
     }
 
-    const deleteAction : Action = {
-        icon: deleteIcon,
-        action: onPressDelete,
-    }
-
     function getWateringAction() {
-        return crop.isWatering? wateringAction : undefined; 
+        return undefined;
     }
 
     return (
@@ -56,16 +47,16 @@ function CropComponent(prop: Props) {
                 </>
                 <View style={styles.topMiddleView}>
                     <Text style={styles.cropNameText}>{crop.name}</Text>
-                    <Text style={styles.cropDistanceText}>{crop.distance + "m"}</Text>
+                    <Text style={styles.cropDistanceText}>{crop.location}</Text>
                 </View>
-                <ActionWithIconComponent action={deleteAction} width={15} size={ITEM_ICON_SIZE}/>
+                <SpaceComponent value={15} dimension={Dimension.Width}/>
             </View>
             <View style={styles.middleView}>
                 <View style={styles.imageView}>
-                    <Text>{"Image of " + crop.cropName}</Text>
+                    <Text>{"Image of " + crop.crop}</Text>
                 </View>
             </View>
-            <StatusComponent status={getCropStatus(crop)} fontSize={ITEM_TEXT_SIZE} height={15} isCrop={true}/>
+            <StatusComponent status={crop.cropStatus} fontSize={ITEM_TEXT_SIZE} height={15} isCrop={true}/>
         </TouchableOpacity>
     );
 }

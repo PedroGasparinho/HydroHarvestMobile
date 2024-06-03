@@ -4,7 +4,7 @@ import { Status, cropStatusToColor } from "../../utils/status";
 import { TEXT_COLOR } from "../../utils/styles";
 
 type Props = {
-    status: Status,
+    status: string,
     fontSize: number,
     height: number,
     isCrop: boolean,

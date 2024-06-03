@@ -14,7 +14,7 @@ function SelectComponent(props: Props) {
 
     const data = props.data;
     const selectValue = props.selectValue;
-    const setSelectValue = props.setSelectValue
+    const setSelectValue = props.setSelectValue;
 
     const [selectedIndex, setSelectedIndex] = useState<IndexPath>(new IndexPath(0));
 

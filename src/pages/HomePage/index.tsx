@@ -6,11 +6,13 @@ import { mainStackProp } from "../../routes/stack";
 import { useNavigation } from "@react-navigation/native";
 import PopUpComponent from "../../components/PopUpComponent";
 import AddCropForm from "../../components/AddCropFormComponent";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setVisible } from "../../store/modal.reducer";
 import { Crop, compareCrops } from "../../utils/domain";
 import { goBackIcon, addNewIcon } from "../../utils/icons";
-import { crops } from "../../utils/staticData";
+import { useEffect, useState } from "react";
+import { State } from "../../store";
+import { getAllCrops } from "../../utils/api";
 
 function HomePage() {
 
@@ -19,7 +21,10 @@ function HomePage() {
     }
 
     const mainNav = useNavigation<mainStackProp>();
+    const loggedUser = useSelector((state: State) => state.persistedReducer.userReducer.user);
     const dispatcher = useDispatch();
+
+    const [crops, setCrops] = useState<Crop[]>([]);
 
     const title = "Crops";
     const subtitle = "You have " + crops.length + " crops";
@@ -34,6 +39,27 @@ function HomePage() {
     }
 
     let i = 0;
+
+    useEffect(() =>  {
+        async function getAll() {
+            if(loggedUser !== null) {
+                const response = await getAllCrops(loggedUser);
+                console.log(response);
+                if(response.ok) {
+                    const crops = await response.json();
+                    for(let i = 0; i < crops.crops.length; i++) {
+                        if(crops.crops[i].systems === null) {
+                            crops.crops[i].systems = []
+                        }
+                    }
+                    setCrops(crops.crops);
+                } else {
+                    console.log("Error: " + response.status);
+                }
+            }
+        }
+        getAll();
+    }, [])
 
     return (
         <>

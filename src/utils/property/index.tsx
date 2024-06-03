@@ -24,18 +24,18 @@ export function getPropertyIcon(p: Property) {
 export function getPropertyValue(s: System, p: Property) : number {
     switch(p) {
         case Property.Humidity:
-            return s.humidity;
+            return s.humidityLevel;
         case Property.TankLevel:
             return s.tankLevel;
         case Property.Temperature:
-            return s.temperature;
+            return s.temperatureLevel;
         case Property.Light:
-            return s.light;
+            return s.lightLevel;
     }
 }
 
 export function getPropertyAverage(c: Crop, p: Property) : number {
-    const systems = c.systems;
+    const systems = c.systemsDetails;
     let sum = 0;
     systems.forEach(s => sum += getPropertyValue(s, p));
     return sum / systems.length;

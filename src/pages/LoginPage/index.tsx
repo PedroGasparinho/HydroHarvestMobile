@@ -2,33 +2,41 @@ import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from "react-n
 import { APP_SCREEN, mainStackProp } from "../../routes/stack";
 import { useNavigation } from "@react-navigation/native";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import auth from '@react-native-firebase/auth';
 import { ALT_TEXT_COLOR, ITEM_RADIUS, PAGE_SUBTITLE_SIZE, PAGE_TITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
-import { PROXY, hashCode } from "../../utils";
+import { hashCode } from "../../utils";
+import { useDispatch } from "react-redux";
+import { User, setUser } from "../../store/user.reducer";
+import { addClient, userExists } from "../../utils/api";
 
 function LoginPage() {
 
     const mainNav = useNavigation<mainStackProp>();
 
-    const [user, setUser] = useState<any>(null);
+    //const loggedUser = useSelector((state: State) => state.user);
+    const dispatcher = useDispatch();
 
     async function onGoogleButtonPress() {
         try {
-            // Check if your device supports Google Play
             await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-            // Get the users ID token
             const { idToken, user } = await GoogleSignin.signIn();
 
-            setUser(user);
+            const name = (user.name !== null ? user.name : "Guest");
+            const hydroUser = {
+                id: user.id,
+                name: name,
+                email: user.email,
+                photo: "/src/assets/defaultUserLogo.png",
+                password: hashCode(name).toString(),
+            }
+
+            dispatcher(setUser(hydroUser));
         
-            // Create a Google credential with the token
             const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-        
-            // Sign-in the user with the credential
             const res = auth().signInWithCredential(googleCredential);
             
-            loginRequest();
+            loginRequest(hydroUser);
 
             return res;
         } catch(error) {
@@ -36,51 +44,24 @@ function LoginPage() {
         }
     }
 
-    async function loginRequest() {
-        const response = await fetch(PROXY + "/addClient", {
-            method: "POST",
-            headers: {"Content-Type":"application/json"},
-            body: JSON.stringify({
-                name: user.name,
-                id: user.id,
-                mail: user.email,
-                password: hashCode(user.name),
-            })
-        });
-
+    async function loginRequest(user: User) {
+        const response = await userExists(user.id);
         if(response.ok) {
-            mainNav.navigate(APP_SCREEN);
+            const hasUser = await response.json();
+            if(hasUser) {
+                mainNav.navigate(APP_SCREEN);
+            } else {
+                const resAddClient = await addClient(user);
+                if(resAddClient.ok) {
+                    mainNav.navigate(APP_SCREEN);
+                } else {
+                    console.error(resAddClient.status);
+                }
+            }
         } else {
-            console.error(response.status);
+            console.log(response.status);
         }
     }
-
-    /*
-
-async function registerDoctor() {
-        const response = await fetch(PROXY + "/doctors/" + number.toString(), {
-            method: "POST",
-            headers: {"Content-Type":"application/json"},
-            body: JSON.stringify({
-                name: name,
-                healthNumber: number,
-                password: pwd,
-                speciality: speciality
-            })
-        });
-
-        if(response.ok) {
-            setName("");
-            setNumber(HEALTH_NUM_MIN);
-            setPwd("");
-            setSpeciality(specialities[0]);
-            alert("Registration successful");
-        } else if(response.status === HTTP_CONFLICT) {
-            alert("Health number already registered");
-        }
-    }
-
-    */
 
     useEffect(() => {
         GoogleSignin.configure({

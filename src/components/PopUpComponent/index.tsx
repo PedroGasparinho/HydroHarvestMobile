@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { StyleSheet, View, Modal, TouchableWithoutFeedback } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
+import { State } from "../../store";
 import { setVisible } from "../../store/modal.reducer";
 import { ITEM_RADIUS } from "../../utils/styles";
 
@@ -13,7 +13,7 @@ function PopUpComponent(props: PopUpProps) : JSX.Element {
 
     const { body } = props;
 
-    const modalVisible = useSelector((state: RootState) => state.persistedReducer.modalState.isVisible);
+    const modalVisible = useSelector((state: State) => state.persistedReducer.modalState.isVisible);
     const dispatcher = useDispatch();
   
     return(
@@ -51,12 +51,12 @@ const styles = StyleSheet.create({
     },
     
     modalView: {
-        height: '50%',
+        height: '60%',
         width: '80%',
-        margin: 20,
+        margin: 5,
         backgroundColor: 'white',
         borderRadius: ITEM_RADIUS,
-        padding: 35,
+        padding: 15,
         alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: {

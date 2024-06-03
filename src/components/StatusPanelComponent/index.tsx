@@ -26,17 +26,17 @@ function StatusPanelComponent(props: Props) {
     }
 
     function isCropFun(item: Crop | System): item is Crop {
-        return (item as Crop).cropName !== undefined;
+        return (item as Crop).crop !== undefined;
     }
 
     const isCrop = isCropFun(item); 
 
-    const status = isCrop ? getCropStatus(item) : item.status;
-    const humidity = isCrop ? getPropertyAverage(item, Property.Humidity) : item.humidity;
+    const status = isCrop ? item.cropStatus : item.status;
+    const humidity = isCrop ? getPropertyAverage(item, Property.Humidity) : item.humidityLevel;
     const tankLevel = isCrop ? getPropertyAverage(item, Property.TankLevel) : item.tankLevel;
-    const temperature = isCrop ? getPropertyAverage(item, Property.Temperature) : item.temperature;
-    const light = isCrop ? getPropertyAverage(item, Property.Light) : item.light;
-    const lastUpdated = "Last Updated: " + getLastReadFormatted(isCrop ? getLastCropUpdate(item) : item.lastRead);
+    const temperature = isCrop ? getPropertyAverage(item, Property.Temperature) : item.temperatureLevel;
+    const light = isCrop ? getPropertyAverage(item, Property.Light) : item.lightLevel;
+    const lastUpdated = "Last Updated: " //+ getLastReadFormatted(isCrop ? getLastCropUpdate(item) : item.lastRead);
 
     return(
         <View style={styles.statusView}>

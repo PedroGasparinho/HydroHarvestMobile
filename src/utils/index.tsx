@@ -48,6 +48,3 @@ export function hashCode(s: string) {
     }
     return hash;
 }
-
-export const PROXY : string = "http://4.157.98.148:8080/mobile";
-
