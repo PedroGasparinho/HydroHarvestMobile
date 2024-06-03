@@ -8,6 +8,28 @@ const POST = "POST";
 const PUT = "PUT";
 
 export const PROXY : string = "http://98.67.195.96:8080/mobile";
+export const BOARD : string = "http://192.168.1.125";
+
+export async function getDataBoard() {
+    return await fetch(BOARD + "/getValue", {
+        method: GET,
+        headers: {"Content-Type":"application/json"},
+    });
+}
+
+export async function setStartWatering() {
+    return await fetch(BOARD + "/setStartWatering", {
+        method: POST,
+        headers: {"Content-Type":"application/json"},
+    });
+}
+
+export async function setStoptWatering() {
+    return await fetch(BOARD + "/setStoptWatering", {
+        method: POST,
+        headers: {"Content-Type":"application/json"},
+    });
+}
 
 //DONE
 export async function userExists(userId: string) {

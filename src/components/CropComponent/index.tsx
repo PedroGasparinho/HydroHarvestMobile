@@ -2,7 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Action, Dimension, getSpaceIfNoAction } from "../../utils";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
-import { CROP_PAGE, SCHEDULE_PAGE, homeStackProp } from "../../routes/homeStack";
+import { CROP_PAGE, homeStackProp } from "../../routes/homeStack";
 import StatusComponent from "../StatusComponent";
 import ActionWithIconComponent from "../ActionWithIconComponent";
 import { Crop } from "../../utils/domain";
@@ -25,7 +25,7 @@ function CropComponent(prop: Props) {
     }
 
     function onPressWater() {
-        homeNav.navigate(SCHEDULE_PAGE, crop);
+        //homeNav.navigate(SCHEDULE_PAGE, crop);
     }
 
     const wateringAction : Action = {

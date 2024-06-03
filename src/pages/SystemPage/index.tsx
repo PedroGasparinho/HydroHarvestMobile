@@ -11,7 +11,7 @@ import { Schedule } from "../../utils/domain";
 import SpaceComponent from "../../components/SpaceComponent";
 import ActionWithIconComponent from "../../components/ActionWithIconComponent";
 import { useEffect } from "react";
-import { getWater, getWateringForecast } from "../../utils/api";
+import { getWater, getWateringForecast, setStartWatering } from "../../utils/api";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../store";
 import PopUpComponent from "../../components/PopUpComponent";
@@ -31,9 +31,19 @@ function SystemPage({navigation, route}: NavProps) {
         action: () => navigation.goBack(),
     }
 
+    async function birra(){
+        console.log("BIRRA");
+        const response = await setStartWatering();
+        if(response.ok){
+            console.log(await response.json());
+        }else{
+            console.log(response.status);
+        }
+    }
+
     const rightAction : Action = {
         icon: editIcon,
-        action: () => {},
+        action: async () => await birra(),
     }
 
     const addAction : Action = {
