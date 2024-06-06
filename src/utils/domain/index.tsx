@@ -59,6 +59,16 @@ export type Schedule = {
     done: boolean,
 }
 
+export type Weather = {
+    weatherType: string,
+    predWindDir: string, 
+    windSpeed: string,
+    rainIntensity: string,
+    precipitaProb: number,
+    tMax: number,
+    tMin: number, 
+}
+
 export type ScheduleDTO = {
     startDate: string,
     endDate: string,

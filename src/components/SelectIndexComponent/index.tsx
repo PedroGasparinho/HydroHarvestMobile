@@ -5,11 +5,11 @@ import { valueToDimension } from "../../utils";
 type Props = {
     data: string[];
     width: number;
-    selectValue: string;
-    setSelectValue: Dispatch<SetStateAction<string>>;
+    selectValue: number;
+    setSelectValue: Dispatch<SetStateAction<number>>;
 }
 
-function SelectComponent(props: Props) {
+function SelectIndexComponent(props: Props) {
 
     const data = props.data;
     const selectValue = props.selectValue;
@@ -20,7 +20,7 @@ function SelectComponent(props: Props) {
     let i = 0;
 
     useEffect(() => {
-        setSelectValue(data[selectedIndex.row])
+        setSelectValue(selectedIndex.row)
     }, [selectedIndex]);
 
     const width = {width: valueToDimension(props.width)};
@@ -34,7 +34,7 @@ function SelectComponent(props: Props) {
                 <Select
                     selectedIndex={selectedIndex}
                     onSelect={(index) => {setSelectedIndex(index as IndexPath)}}
-                    value={selectValue}
+                    value={data[selectValue]}
                 >
                     <>
                         {
@@ -47,4 +47,4 @@ function SelectComponent(props: Props) {
     )
 }
 
-export default SelectComponent;
+export default SelectIndexComponent;

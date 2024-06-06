@@ -7,7 +7,7 @@ import Geolocation from "@react-native-community/geolocation";
 import { availableCrops } from "../../utils/domain";
 import { ALT_TEXT_COLOR, BORDER_COLOR, ERROR_TEXT_COLOR, ITEM_RADIUS, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
 import { CONFIRM_ICON_MAIN_COLOR } from "../../utils/icons";
-import { getClosestRegion } from "../../utils/regions";
+import { getClosestRegionName } from "../../utils/regions";
 import { addCrop } from "../../utils/api";
 import { State } from "../../store";
 import { setLocationReducer } from "../../store/location.reducer";
@@ -71,7 +71,7 @@ function AddCropForm(props: Props) {
 
     useEffect(() => {
         getCurrentLocation();
-        setRegion(getClosestRegion(lat, lon));
+        setRegion(getClosestRegionName(lat, lon));
         dispatcher(setLocationReducer({lat: lat, lon: lon}));
     }, []);
 

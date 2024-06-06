@@ -69,7 +69,7 @@ export function distBetweenEarthPoints(lat1: number, lon1: number, lat2: number,
     return earthRadiusKm * c;
 }
 
-export function getClosestRegion(lat: number, lon: number) {
+export function getClosestRegionName(lat: number, lon: number) {
     let min = Number.MAX_VALUE;
     let region = "";
     regions.forEach(r => {
@@ -78,4 +78,16 @@ export function getClosestRegion(lat: number, lon: number) {
         }
     })
     return region;
+}
+
+export function getClosestRegionIdx(lat: number, lon: number) {
+    let min = Number.MAX_VALUE;
+    let idx = -1;
+    for(let i = 0; i < regions.length; i++) {
+        let r = regions[i];
+        if(min > distBetweenEarthPoints(lat, lon, r.lat, r.lon)) {
+            idx = i;
+        }
+    }
+    return idx;
 }

@@ -98,16 +98,6 @@ export async function addSystem(cropId: string, user: User, lat: number, lon: nu
     });
 }
 
-//http://localhost:8080/mobile/addUserCrop/SVbNWWOiNVUhnUGyZyHk?userIdToAdd=59731&userId=60580&password=Gaspi      PUT
-//TODO - low / difícil fazer, é preciso saber o id do outro user
-export async function addUserCrop(crop: any, userToAdd: any, userInCrop: any) {
-    return await fetch(PROXY + "/addUserCrop/" +  crop.id + "?userIdToAdd=" + userToAdd.id + 
-                        "&userId=" + userInCrop.id + "&password=" + userInCrop.password, {
-        method: PUT,
-        headers: {"Content-Type":"application/json"},
-    });
-}
-
 //http://localhost:8080/mobile/changeName/SVbNWWOiNVUhnUGyZyHk?userId=59731&password=didi&name=QuintadoRoger    PUT
 export async function changeName(crop: Crop, user: User, name: string) {
     return await fetch(PROXY + "/changeName/" +  crop.id + "?userId=" + user.id + 
@@ -141,6 +131,45 @@ export async function addWater(crop: Crop, user: User, system: System, startDate
     });
 }
 
+//http://localhost:8080/mobile/getWater/SVbNWWOiNVUhnUGyZyHk?userId=59731&password=didi&systemIp=192.168.1.100 GET
+export async function getWater(crop: Crop, user: User, system: System) {
+    return await fetch(PROXY + "/getWater/" +  crop.id + "?userId=" + user.id + 
+                        "&password=" + user.password + "&systemIp=" + system.ip, {
+        method: GET,
+        headers: {"Content-Type":"application/json"},
+    });
+}
+
+//http://localhost:8080/mobile/wateringForecast/SVbNWWOiNVUhnUGyZyHk?userId=59731&password=didi&systemIp=192.168.1.100  GET
+export async function getWateringForecast(crop: Crop, user: User, system: System) {
+    return await fetch(PROXY + "/wateringForecast/" +  crop.id + "?userId=" + user.id + 
+                        "&password=" + user.password + "&systemIp=" + system.ip, {
+        method: GET,
+        headers: {"Content-Type":"application/json"},
+    });
+}
+
+//http://4.157.98.148:8080/mobile/getWeather?region=Setúbal     GET
+export async function getWeather(region: Region) {
+    return await fetch(PROXY + "/getWeather?region=" + region.name, {
+        method: GET,
+        headers: {"Content-Type":"application/json"},
+    });
+}
+
+
+
+
+//http://localhost:8080/mobile/addUserCrop/SVbNWWOiNVUhnUGyZyHk?userIdToAdd=59731&userId=60580&password=Gaspi      PUT
+//TODO - low / difícil fazer, é preciso saber o id do outro user
+export async function addUserCrop(crop: any, userToAdd: any, userInCrop: any) {
+    return await fetch(PROXY + "/addUserCrop/" +  crop.id + "?userIdToAdd=" + userToAdd.id + 
+                        "&userId=" + userInCrop.id + "&password=" + userInCrop.password, {
+        method: PUT,
+        headers: {"Content-Type":"application/json"},
+    });
+}
+
 //http://localhost:8080/mobile/getInformation?plant=Begonia_Coneflower&userId=59731&password=didi GET
 //TODO - mid
 export async function getInformation(user: any, plant: any) {
@@ -155,37 +184,3 @@ export async function getInformation(user: any, plant: any) {
         })
     });
 }
-
-//http://localhost:8080/mobile/getWater/SVbNWWOiNVUhnUGyZyHk?userId=59731&password=didi&systemIp=192.168.1.100 GET
-//TODO - high
-export async function getWater(crop: Crop, user: User, system: System) {
-    return await fetch(PROXY + "/getWater/" +  crop.id + "?userId=" + user.id + 
-                        "&password=" + user.password + "&systemIp=" + system.ip, {
-        method: GET,
-        headers: {"Content-Type":"application/json"},
-    });
-}
-
-//http://localhost:8080/mobile/wateringForecast/SVbNWWOiNVUhnUGyZyHk?userId=59731&password=didi&systemIp=192.168.1.100  GET
-//TODO - high
-export async function getWateringForecast(crop: Crop, user: User, system: System) {
-    return await fetch(PROXY + "/wateringForecast/" +  crop.id + "?userId=" + user.id + 
-                        "&password=" + user.password + "&systemIp=" + system.ip, {
-        method: GET,
-        headers: {"Content-Type":"application/json"},
-    });
-}
-
-//http://4.157.98.148:8080/mobile/getWeather?region=Setúbal     GET
-//TODO - high
-export async function getWeather(region: Region) {
-    return await fetch(PROXY + "/getWeather?region=" + region.name, {
-        method: GET,
-        headers: {"Content-Type":"application/json"},
-    });
-}
-
-
-
-
-
