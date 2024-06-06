@@ -7,7 +7,6 @@ import { useNavigation } from "@react-navigation/native";
 import PopUpComponent from "../../components/PopUpComponent";
 import AddCropForm from "../../components/AddCropFormComponent";
 import { useDispatch, useSelector } from "react-redux";
-import { setVisible } from "../../store/modal.reducer";
 import { Crop, compareCrops } from "../../utils/domain";
 import { goBackIcon, addNewIcon } from "../../utils/icons";
 import { useEffect, useState } from "react";
@@ -25,6 +24,7 @@ function HomePage() {
     const dispatcher = useDispatch();
 
     const [crops, setCrops] = useState<Crop[]>([]);
+    const [modalVisible, setModalVisible] = useState<boolean>(false); 
 
     const title = "Crops";
     const subtitle = "You have " + crops.length + " crops";
@@ -35,7 +35,7 @@ function HomePage() {
     }
     const rightAction : Action = {
         icon: addNewIcon,
-        action: () => dispatcher(setVisible(true))
+        action: () => setModalVisible(true)
     }
 
     let i = 0;
@@ -44,7 +44,6 @@ function HomePage() {
         async function getAll() {
             if(loggedUser !== null) {
                 const response = await getAllCrops(loggedUser);
-                console.log(response);
                 if(response.ok) {
                     const crops = await response.json();
                     for(let i = 0; i < crops.crops.length; i++) {
@@ -79,7 +78,10 @@ function HomePage() {
                 </>
             </ScrollView>
             <PopUpComponent
-                body={<AddCropForm/>}
+                body={<AddCropForm setModalVisible={setModalVisible}/>}
+                height={60}
+                modalVisible={modalVisible}
+                setModalVisible={setModalVisible}
             />
         </>
     );

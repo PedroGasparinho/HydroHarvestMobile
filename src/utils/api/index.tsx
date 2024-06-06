@@ -99,7 +99,7 @@ export async function addSystem(cropId: string, user: User, lat: number, lon: nu
 }
 
 //http://localhost:8080/mobile/addUserCrop/SVbNWWOiNVUhnUGyZyHk?userIdToAdd=59731&userId=60580&password=Gaspi      PUT
-//TODO - low
+//TODO - low / difícil fazer, é preciso saber o id do outro user
 export async function addUserCrop(crop: any, userToAdd: any, userInCrop: any) {
     return await fetch(PROXY + "/addUserCrop/" +  crop.id + "?userIdToAdd=" + userToAdd.id + 
                         "&userId=" + userInCrop.id + "&password=" + userInCrop.password, {
@@ -109,8 +109,7 @@ export async function addUserCrop(crop: any, userToAdd: any, userInCrop: any) {
 }
 
 //http://localhost:8080/mobile/changeName/SVbNWWOiNVUhnUGyZyHk?userId=59731&password=didi&name=QuintadoRoger    PUT
-//TODO - low
-export async function changeName(crop: any, user: any, name: string) {
+export async function changeName(crop: Crop, user: User, name: string) {
     return await fetch(PROXY + "/changeName/" +  crop.id + "?userId=" + user.id + 
                         "&password=" + user.password + "&name=" + name, {
         method: PUT,
@@ -119,8 +118,7 @@ export async function changeName(crop: any, user: any, name: string) {
 }
 
 //http://localhost:8080/mobile/changeSystemName/SVbNWWOiNVUhnUGyZyHk?userId=59731&password=didi&systemIp=192.168.1.100&name=norte   PUT
-//TODO - low
-export async function changeSystemName(crop: any, user: any, system: any, name: string) {
+export async function changeSystemName(crop: Crop, user: User, system: System, name: string) {
     return await fetch(PROXY + "/changeSystemName/" +  crop.id + "?userId=" + user.id + 
                         "&password=" + user.password + "&systemIp=" + system.ip + "&name=" + name, {
         method: PUT,
@@ -130,7 +128,6 @@ export async function changeSystemName(crop: any, user: any, system: any, name: 
 
 
 //http://localhost:8080/mobile/addWater/SVbNWWOiNVUhnUGyZyHk?userId=59731&password=didi          POST
-//TODO - high
 export async function addWater(crop: Crop, user: User, system: System, startDate: Date, endDate: Date) {
     return await fetch(PROXY + "/addWater/" +  crop.id + "?userId=" + user.id + 
                         "&password=" + user.password, {

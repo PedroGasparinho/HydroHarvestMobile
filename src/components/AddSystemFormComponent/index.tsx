@@ -3,7 +3,6 @@ import { isStringEmpty } from "../../utils";
 import { useEffect, useState } from "react";
 import SelectComponent from "../SelectComponent";
 import { useDispatch, useSelector } from "react-redux";
-import { setVisible } from "../../store/modal.reducer";
 import Geolocation from "@react-native-community/geolocation";
 import { Crop, availableCrops } from "../../utils/domain";
 import { ALT_TEXT_COLOR, BORDER_COLOR, ERROR_TEXT_COLOR, ITEM_RADIUS, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
@@ -15,6 +14,7 @@ import { setLocationReducer } from "../../store/location.reducer";
 
 type Props = {
     crop: Crop;
+    setModalVisible: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 function AddSystemForm(props: Props) {
@@ -37,7 +37,7 @@ function AddSystemForm(props: Props) {
             if(loggedUser !== null) {
                 const response = await addSystem(props.crop.id, loggedUser, lat, lon, ip, systemName);
                 if(response.ok) {
-                    dispatcher(setVisible(false));
+                    props.setModalVisible(false);
                 } else {
                     setError("Error: " + response.status);
                 }

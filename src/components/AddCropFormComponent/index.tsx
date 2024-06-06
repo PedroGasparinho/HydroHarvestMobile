@@ -3,7 +3,6 @@ import { isStringEmpty } from "../../utils";
 import { useEffect, useState } from "react";
 import SelectComponent from "../SelectComponent";
 import { useDispatch, useSelector } from "react-redux";
-import { setVisible } from "../../store/modal.reducer";
 import Geolocation from "@react-native-community/geolocation";
 import { availableCrops } from "../../utils/domain";
 import { ALT_TEXT_COLOR, BORDER_COLOR, ERROR_TEXT_COLOR, ITEM_RADIUS, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
@@ -13,7 +12,11 @@ import { addCrop } from "../../utils/api";
 import { State } from "../../store";
 import { setLocationReducer } from "../../store/location.reducer";
 
-function AddCropForm() {
+type Props = {
+    setModalVisible: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+function AddCropForm(props: Props) {
 
     //para determinar a localizacao vamos buscar as coordenadas do user
     //cada localidade vai ter as suas coordenadas
@@ -41,7 +44,7 @@ function AddCropForm() {
             if(loggedUser !== null) {
                 const response = await addCrop(name, region, selectValue, loggedUser, lat, lon, ip, systemName);
                 if(response.ok) {
-                    dispatcher(setVisible(false));
+                    props.setModalVisible(false);
                 } else {
                     setError("Error: " + response.status);
                 }

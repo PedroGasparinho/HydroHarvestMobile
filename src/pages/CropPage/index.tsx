@@ -8,21 +8,26 @@ import StatusPanelComponent from "../../components/StatusPanelComponent";
 import { goBackIcon, editIcon, addNewIcon } from "../../utils/icons";
 import { PAGE_SUBTITLE_SIZE, TEXT_COLOR, ITEM_ICON_SIZE } from "../../utils/styles";
 import { System } from "../../utils/domain";
-import { useDispatch } from "react-redux";
 import PopUpComponent from "../../components/PopUpComponent";
 import AddSystemForm from "../../components/AddSystemFormComponent";
-import { setVisible } from "../../store/modal.reducer";
 import SpaceComponent from "../../components/SpaceComponent";
 import ActionWithIconComponent from "../../components/ActionWithIconComponent";
+import { useState } from "react";
+import EditNameFormComponent from "../../components/EditNameFormComponent";
+import { changeName } from "../../utils/api";
+import { useSelector } from "react-redux";
+import { State } from "../../store";
 
 type NavProps = NativeStackScreenProps<homeNavigationStackProp, 'CropPage'>;
 
 function CropPage({navigation, route}: NavProps) {
 
     const crop = route.params;
-    //const loggedUser = useSelector((state: State) => state.persistedReducer.userReducer.user);
-    //const loc = useSelector((state: State) => state.persistedReducer.locationReducer.location);
-    const dispatcher = useDispatch();
+
+    const [systemFormVisible, setSystemFormVisible] = useState<boolean>(false); 
+    const [nameFormVisible, setNameFormVisible] = useState<boolean>(false); 
+
+    const loggedUser = useSelector((state: State) => state.persistedReducer.userReducer.user);
 
     const leftAction : Action = {
         icon: goBackIcon,
@@ -31,8 +36,22 @@ function CropPage({navigation, route}: NavProps) {
 
     const rightAction : Action = {
         icon: editIcon,
-        action: () => {},
+        action: () => setNameFormVisible(true),
     }
+
+    async function onNameChange(name: string) {
+        if(loggedUser !== null) {
+            const response = await changeName(crop, loggedUser, name);
+            if(response.ok) {
+                return "";
+            } else {
+                return response.status.toString();
+            }
+        } else {
+            return "Not logged in";
+        }
+    }
+
 
     function getRightAction() {
         return rightAction; //crop.isWatering? rightAction : undefined; 
@@ -40,12 +59,10 @@ function CropPage({navigation, route}: NavProps) {
 
     const addAction : Action = {
         icon: addNewIcon,
-        action: () => dispatcher(setVisible(true))
+        action: () => setSystemFormVisible(true)
     }
 
     let i = 0;
-
-    console.log(crop);
 
     return(
         <>
@@ -70,7 +87,16 @@ function CropPage({navigation, route}: NavProps) {
                 </>
             </ScrollView>
             <PopUpComponent
-                body={<AddSystemForm crop={crop}/>}
+                body={<AddSystemForm crop={crop} setModalVisible={setSystemFormVisible}/>}
+                height={60}
+                modalVisible={systemFormVisible}
+                setModalVisible={setSystemFormVisible}
+            />
+            <PopUpComponent
+                body={<EditNameFormComponent setModalVisible={setNameFormVisible} callback={onNameChange}/>}
+                height={30}
+                modalVisible={nameFormVisible}
+                setModalVisible={setNameFormVisible}
             />
         </>
     );

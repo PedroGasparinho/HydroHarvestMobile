@@ -13,13 +13,8 @@ export function getScheduleFormatted(date: Date) {
            getHourFormatted(date);
 }
 
-export function isDSTDate(date: Date) {
-    const month = date.getMonth() + 1;
-    return 4 <= month && month <= 10;
-}
-
 export function getHourFormatted(date: Date) {
-    return (date.getHours() + (isDSTDate(date)? 1 : 0)).toString().padStart(2, "0") + ":" +
+    return date.getHours().toString().padStart(2, "0") + ":" +
            date.getMinutes().toString().padStart(2, "0");
 }
 

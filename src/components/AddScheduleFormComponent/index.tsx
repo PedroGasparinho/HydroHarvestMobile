@@ -1,22 +1,19 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { isStringEmpty } from "../../utils";
-import { useEffect, useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setVisible } from "../../store/modal.reducer";
-import Geolocation from "@react-native-community/geolocation";
-import { Crop, availableCrops } from "../../utils/domain";
-import { ALT_TEXT_COLOR, BORDER_COLOR, ERROR_TEXT_COLOR, ITEM_RADIUS, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
+import { Crop, System } from "../../utils/domain";
+import { ALT_TEXT_COLOR, ERROR_TEXT_COLOR, ITEM_RADIUS, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
 import { CONFIRM_ICON_MAIN_COLOR } from "../../utils/icons";
-import { getClosestRegion } from "../../utils/regions";
-import { addCrop, addSystem } from "../../utils/api";
+import { addWater } from "../../utils/api";
 import { State } from "../../store";
-import { setLocationReducer } from "../../store/location.reducer";
 import { Datepicker } from "@ui-kitten/components";
 import SelectComponent from "../SelectComponent";
 import { hours, minutes } from "../../utils/staticData";
 
 type Props = {
     crop: Crop;
+    system: System;
+    setModalVisible: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 function AddScheduleForm(props: Props) {
@@ -31,22 +28,28 @@ function AddScheduleForm(props: Props) {
     const [endHour, setEndHour] = useState(hours[1]);
     const [endMinutes, setEndMinutes] = useState(minutes[0]);
 
+    const system = props.system;
+    const crop = props.crop;
+
     const dispatcher = useDispatch();
     const loggedUser = useSelector((state: State) => state.persistedReducer.userReducer.user);
 
     async function onSubmit() {
         setError("");
-        if(true) {
-            //TODO
+        if(startDate > endDate || (startDate == endDate && Number(startHour) > Number(endHour)) || 
+        (startDate == endDate && Number(startHour) == Number(endHour) && Number(startMinutes) > Number(endMinutes))) {
+            setError("Start Date cannot occur after End Date");
         } else {
-            /*if(loggedUser !== null) {
-                const response = await addSystem(props.crop.id, loggedUser, lat, lon, ip, systemName);
+            if(loggedUser !== null) {
+                const start = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), Number(startHour), Number(startMinutes));
+                const end = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(), Number(endHour), Number(endMinutes));
+                const response = await addWater(crop, loggedUser, system, start, end);
                 if(response.ok) {
-                    dispatcher(setVisible(false));
+                    props.setModalVisible(false);
                 } else {
                     setError("Error: " + response.status);
                 }
-            }*/
+            }
         }
     }
 
@@ -68,7 +71,7 @@ function AddScheduleForm(props: Props) {
             </View>
             <View style={styles.nameView}>
                 <Text style={styles.nameText}>End Day:</Text>
-                <Datepicker date={startDate} onSelect={nextDate => setStartDate(nextDate)} style={{width: "80%"}}/>
+                <Datepicker date={endDate} onSelect={nextDate => setEndDate(nextDate)} style={{width: "80%"}}/>
             </View>
             <View style={styles.nameView}>
                 <Text style={styles.nameText}>End time:</Text>

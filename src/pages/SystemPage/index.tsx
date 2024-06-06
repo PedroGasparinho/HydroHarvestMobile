@@ -3,20 +3,20 @@ import TitleBarComponent from "../../components/TitleBarComponent";
 import { Action, Dimension } from "../../utils";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import StatusPanelComponent from "../../components/StatusPanelComponent";
-import { WATER_ICON_MAIN_COLOR, addNewIcon, editIcon, goBackIcon } from "../../utils/icons";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { ALT_TEXT_COLOR, ITEM_ICON_SIZE, ITEM_RADIUS, ITEM_TITLE_SIZE, PAGE_SUBTITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
+import { addNewIcon, editIcon, goBackIcon } from "../../utils/icons";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ITEM_ICON_SIZE, PAGE_SUBTITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
 import ScheduleComponent from "../../components/ScheduleComponent";
-import { Schedule } from "../../utils/domain";
+import { Schedule, ScheduleDTO } from "../../utils/domain";
 import SpaceComponent from "../../components/SpaceComponent";
 import ActionWithIconComponent from "../../components/ActionWithIconComponent";
-import { useEffect } from "react";
-import { getWater, getWateringForecast, setStartWatering } from "../../utils/api";
+import { useEffect, useState } from "react";
+import { changeSystemName, getWater, getWateringForecast } from "../../utils/api";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../store";
 import PopUpComponent from "../../components/PopUpComponent";
 import AddScheduleForm from "../../components/AddScheduleFormComponent";
-import { setVisible } from "../../store/modal.reducer";
+import EditNameFormComponent from "../../components/EditNameFormComponent";
 
 type NavProps = NativeStackScreenProps<homeNavigationStackProp, 'SystemPage'>;
 
@@ -24,59 +24,58 @@ function SystemPage({navigation, route}: NavProps) {
 
     const { crop, system } = route.params;
     const loggedUser = useSelector((state: State) => state.persistedReducer.userReducer.user);
-    const dispatcher = useDispatch();
 
+    const [schedules, SetSchedules] = useState<Schedule[]>([]);
+    const [scheduleFormVisible, setScheduleFormVisible] = useState<boolean>(false); 
+    const [nameFormVisible, setNameFormVisible] = useState<boolean>(false); 
+   
     const leftAction : Action = {
         icon: goBackIcon,
         action: () => navigation.goBack(),
     }
 
-    async function birra(){
-        console.log("BIRRA");
+    /*async function birra(){
         const response = await setStartWatering();
-        if(response.ok){
+        if(response.ok) {
             console.log(await response.json());
         }else{
             console.log(response.status);
+        }
+    }*/
+
+    async function onNameChange(name: string) {
+        if(loggedUser !== null) {
+            const response = await changeSystemName(crop, loggedUser, system, name);
+            if(response.ok) {
+                return "";
+            } else {
+                return response.status.toString();
+            }
+        } else {
+            return "Not logged in";
         }
     }
 
     const rightAction : Action = {
         icon: editIcon,
-        action: async () => await birra(),
+        action: async () => setNameFormVisible(true),
     }
 
     const addAction : Action = {
         icon: addNewIcon,
-        action: () => dispatcher(setVisible(true))
+        action: () => setScheduleFormVisible(true)
     }
 
     useEffect(() =>  {
-        /*async function getAll() {
-            if(loggedUser !== null) {
-                const response = await getAllCrops(loggedUser);
-                console.log(response);
-                if(response.ok) {
-                    const crops = await response.json();
-                    for(let i = 0; i < crops.crops.length; i++) {
-                        if(crops.crops[i].systems === null) {
-                            crops.crops[i].systems = []
-                        }
-                    }
-                    setCrops(crops.crops);
-                } else {
-                    console.log("Error: " + response.status);
-                }
-            }
-        }
-        getAll();*/
-
         async function getSchedules() {
             if(loggedUser !== null) {
                 const response = await getWater(crop, loggedUser, system);
-                console.log(response);
-                const schedules = await response.json();
-                console.log(schedules);
+                const sch = await response.json();
+                SetSchedules(sch.map((s: ScheduleDTO) => {
+                    return { startDate: new Date(s.startDate), endDate: new Date(s.endDate), done: s.done };
+                }));
+                
+                //only god knows
                 const res = await getWateringForecast(crop, loggedUser, system);
                 console.log(res);
                 const predictions = await res.json();
@@ -87,24 +86,6 @@ function SystemPage({navigation, route}: NavProps) {
         getSchedules();
 
     }, [])
-
-    const schedules : Schedule[] = [
-        {
-            startDate: new Date("2024-06-03T10:0:00.000Z"),
-            endDate: new Date("2024-06-03T11:00:00.000Z"),
-            isSuggestion: false,
-        },
-        {
-            startDate: new Date("2024-06-03T12:0:00.000Z"),
-            endDate: new Date("2024-06-03T13:00:00.000Z"),
-            isSuggestion: true,
-        },
-        {
-            startDate: new Date("2024-06-03T15:0:00.000Z"),
-            endDate: new Date("2024-06-03T16:00:00.000Z"),
-            isSuggestion: false,
-        }
-    ];
 
     let i = 0;
 
@@ -128,7 +109,16 @@ function SystemPage({navigation, route}: NavProps) {
             </>
             </ScrollView>
             <PopUpComponent
-                body={<AddScheduleForm crop={crop}/>}
+                body={<AddScheduleForm crop={crop} system={system} setModalVisible={setScheduleFormVisible}/>}
+                height={60}
+                modalVisible={scheduleFormVisible}
+                setModalVisible={setScheduleFormVisible}
+            />
+            <PopUpComponent
+                body={<EditNameFormComponent setModalVisible={setNameFormVisible} callback={onNameChange}/>}
+                height={30}
+                modalVisible={nameFormVisible}
+                setModalVisible={setNameFormVisible}
             />
         </>
     );

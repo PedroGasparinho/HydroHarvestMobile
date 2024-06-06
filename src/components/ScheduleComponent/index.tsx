@@ -26,7 +26,7 @@ function ScheduleComponent(props: Props) {
     const isWatering = isInBetweenDates(new Date(), s.startDate, s.endDate);
 
     function getBackgroundColor() {
-        if(s.isSuggestion) {
+        if(s.done) { //ERRADO
             return SUGGESTION_BACK_COLOR;
         } else if(isWatering) {
                 return WATERING_BACK_COLOR;
@@ -36,7 +36,7 @@ function ScheduleComponent(props: Props) {
     }
 
     function getTopAction() {
-        if(s.isSuggestion) {
+        if(s.done) { //ERRADO
             return confirmAction
         } else if(isWatering) {
             return cancelAction;

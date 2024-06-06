@@ -1,20 +1,18 @@
 import { ReactNode } from "react";
 import { StyleSheet, View, Modal, TouchableWithoutFeedback } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
-import { State } from "../../store";
-import { setVisible } from "../../store/modal.reducer";
 import { ITEM_RADIUS } from "../../utils/styles";
+import { valueToDimension } from "../../utils";
 
 interface PopUpProps {
     body: ReactNode;
+    height: number;
+    modalVisible: boolean,
+    setModalVisible: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 function PopUpComponent(props: PopUpProps) : JSX.Element {
 
-    const { body } = props;
-
-    const modalVisible = useSelector((state: State) => state.persistedReducer.modalState.isVisible);
-    const dispatcher = useDispatch();
+    const { body, height, modalVisible, setModalVisible } = props;
   
     return(
         <>
@@ -24,12 +22,12 @@ function PopUpComponent(props: PopUpProps) : JSX.Element {
                 visible={modalVisible}
                 statusBarTranslucent={true}
                 onRequestClose={() => {
-                    dispatcher(setVisible(false));
+                    setModalVisible(false);
                 }}>
-                <TouchableWithoutFeedback onPress={() => dispatcher(setVisible(false))}>
+                <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
                     <View style={styles.modal}>
                         <TouchableWithoutFeedback>
-                            <View style={styles.modalView}>
+                            <View style={[styles.modalView, { height: valueToDimension(height) }]}>
                                 <>{body}</>
                             </View>
                         </TouchableWithoutFeedback>
@@ -51,7 +49,6 @@ const styles = StyleSheet.create({
     },
     
     modalView: {
-        height: '60%',
         width: '80%',
         margin: 5,
         backgroundColor: 'white',

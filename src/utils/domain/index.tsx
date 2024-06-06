@@ -56,7 +56,13 @@ export type System = {
 export type Schedule = {
     startDate: Date,
     endDate: Date,
-    isSuggestion: boolean,
+    done: boolean,
+}
+
+export type ScheduleDTO = {
+    startDate: string,
+    endDate: string,
+    done: boolean,
 }
 
 export function compareCrops(a: Crop, b: Crop) {
