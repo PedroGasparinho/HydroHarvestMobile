@@ -64,6 +64,8 @@ function CropPage({navigation, route}: NavProps) {
 
     let i = 0;
 
+    console.log(crop);
+
     return(
         <>
             <TitleBarComponent title={crop.name} leftAction={leftAction} rightAction={getRightAction()}/>

@@ -7,7 +7,7 @@ const GET = "GET";
 const POST = "POST";
 const PUT = "PUT";
 
-export const PROXY : string = "http://98.67.195.96:8080/mobile";
+export const PROXY : string = "http://98.67.151.103:8080/mobile";
 export const BOARD : string = "http://192.168.1.125";
 
 export async function getDataBoard() {
@@ -154,33 +154,5 @@ export async function getWeather(region: Region) {
     return await fetch(PROXY + "/getWeather?region=" + region.name, {
         method: GET,
         headers: {"Content-Type":"application/json"},
-    });
-}
-
-
-
-
-//http://localhost:8080/mobile/addUserCrop/SVbNWWOiNVUhnUGyZyHk?userIdToAdd=59731&userId=60580&password=Gaspi      PUT
-//TODO - low / difícil fazer, é preciso saber o id do outro user
-export async function addUserCrop(crop: any, userToAdd: any, userInCrop: any) {
-    return await fetch(PROXY + "/addUserCrop/" +  crop.id + "?userIdToAdd=" + userToAdd.id + 
-                        "&userId=" + userInCrop.id + "&password=" + userInCrop.password, {
-        method: PUT,
-        headers: {"Content-Type":"application/json"},
-    });
-}
-
-//http://localhost:8080/mobile/getInformation?plant=Begonia_Coneflower&userId=59731&password=didi GET
-//TODO - mid
-export async function getInformation(user: any, plant: any) {
-    return await fetch(PROXY + "/getInformation?plant=" + plant.name + "&userId=" + user.id + 
-                        "&password=" + user.password, {
-        method: GET,
-        headers: {"Content-Type":"application/json"},
-        body: JSON.stringify({
-            startDate:"2024-05-10T00:00:00.000+00:00",
-            endDate:"2024-05-20T00:00:00.000+00:00",
-            systems: ["192.168.1.100","192.168.1.101"]
-        })
     });
 }

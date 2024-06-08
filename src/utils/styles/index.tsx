@@ -25,4 +25,5 @@ export const ALT_TEXT_COLOR = "#ffffff";
 export const ERROR_TEXT_COLOR = "#ff0000";
 
 //Global border-related constants
-export const BORDER_COLOR = "#444444"; 
+export const BORDER_COLOR = "#444444";
+export const BORDER_WIDTH = 2; 

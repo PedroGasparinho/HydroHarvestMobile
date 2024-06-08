@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Crop, System } from "../../utils/domain";
 import { ALT_TEXT_COLOR, ERROR_TEXT_COLOR, ITEM_RADIUS, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
 import { CONFIRM_ICON_MAIN_COLOR } from "../../utils/icons";
@@ -31,26 +31,50 @@ function AddScheduleForm(props: Props) {
     const system = props.system;
     const crop = props.crop;
 
-    const dispatcher = useDispatch();
     const loggedUser = useSelector((state: State) => state.persistedReducer.userReducer.user);
 
     async function onSubmit() {
         setError("");
-        if(startDate > endDate || (startDate == endDate && Number(startHour) > Number(endHour)) || 
-        (startDate == endDate && Number(startHour) == Number(endHour) && Number(startMinutes) > Number(endMinutes))) {
-            setError("Start Date cannot occur after End Date");
+        if(isSameDate()) {
+            setError("Start date cannot be equal to end date");
+        } else if(isStartBeforeEnd()) {
+            setError("Start date cannot occur after end date");
         } else {
             if(loggedUser !== null) {
                 const start = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), Number(startHour), Number(startMinutes));
                 const end = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(), Number(endHour), Number(endMinutes));
-                const response = await addWater(crop, loggedUser, system, start, end);
-                if(response.ok) {
-                    props.setModalVisible(false);
+                const now = new Date();
+                if(start < now) {
+                    setError("Start date has already passed");
+                } else if(end <= now) {
+                    setError("End date has already passed");
                 } else {
-                    setError("Error: " + response.status);
+                    const response = await addWater(crop, loggedUser, system, start, end);
+                    if(response.ok) {
+                        props.setModalVisible(false);
+                    } else {
+                        setError("Error: " + response.status);
+                    }
                 }
             }
         }
+    }
+
+    function isSameDate() {
+        const one = startDate.getTime() == endDate.getTime()
+        const two = Number(startHour) == Number(endHour)
+        const three = Number(startMinutes) == Number(endMinutes)
+        return one && two && three;
+    }
+
+    function isStartBeforeEnd() {
+        const one = startDate.getTime() > endDate.getTime()
+        const two = startDate.getTime() == endDate.getTime() 
+            && Number(startHour) > Number(endHour)
+        const three = startDate.getTime() == endDate.getTime() 
+            && Number(startHour) == Number(endHour) 
+            && Number(startMinutes) > Number(endMinutes)
+        return one || two || three;
     }
 
     return(
@@ -95,11 +119,11 @@ function AddScheduleForm(props: Props) {
 const styles = StyleSheet.create({
 
     titleView: {
-        height: "20%",
+        height: "15%",
         width: "100%",
         display: "flex",
         justifyContent: "center",
-        alignItems: "center",
+        alignItems: "center"
     },
 
     titleText: {
@@ -119,7 +143,7 @@ const styles = StyleSheet.create({
 
     nameText: {
         color: TEXT_COLOR,
-        fontSize: ITEM_TEXT_SIZE
+        fontSize: ITEM_TEXT_SIZE,
     },
 
     timeView: {
@@ -129,7 +153,7 @@ const styles = StyleSheet.create({
     },
 
     submitView: {
-        height: "20%",
+        height: "25%",
         width: "100%",
         display: "flex",
         justifyContent: "center",
@@ -139,7 +163,7 @@ const styles = StyleSheet.create({
     },
 
     submitStyle: {
-        height: "70%",
+        height: "60%",
         width: "80%",
         backgroundColor: CONFIRM_ICON_MAIN_COLOR,
         display: "flex",
@@ -149,7 +173,7 @@ const styles = StyleSheet.create({
     },
 
     submitError: {
-        height: "30%",
+        height: "15%",
         width: "100%",
         display: "flex",
         justifyContent: "center",

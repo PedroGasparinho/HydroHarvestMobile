@@ -1,12 +1,12 @@
-import { Status, cropStatusOrder, getCropStatus } from "../status";
+import { cropStatusOrder, getCropStatus } from "../status";
 
 export type Crop = {
     id: string,
     name: string,
     crop: string,
     cropStatus: string,
+    averageDistance: number,
     location: string,
-    distance: number,
     image: string,
     systemsDetails: System[],
 }
@@ -53,12 +53,6 @@ export type System = {
     longitude: number,
 }
 
-export type Schedule = {
-    startDate: Date,
-    endDate: Date,
-    done: boolean,
-}
-
 export type Weather = {
     weatherType: string,
     predWindDir: string, 
@@ -69,6 +63,19 @@ export type Weather = {
     tMin: number, 
 }
 
+export type Forecast = {
+    yesterday: Weather,
+    today: Weather,
+    tomorrow: Weather,
+}
+
+export type Schedule = {
+    startDate: Date,
+    endDate: Date,
+    done: boolean,
+    isSuggestion: boolean,
+}
+
 export type ScheduleDTO = {
     startDate: string,
     endDate: string,
@@ -76,7 +83,7 @@ export type ScheduleDTO = {
 }
 
 export function compareCrops(a: Crop, b: Crop) {
-    const firstCriterion = a.distance - b.distance;
+    const firstCriterion = a.averageDistance - b.averageDistance;
     const secondCriterion = cropStatusOrder(getCropStatus(a)) - cropStatusOrder(getCropStatus(b));
     const thirdCriterion = (a.name).localeCompare(b.name);
     if(firstCriterion !== 0) {
@@ -98,9 +105,9 @@ export function getLastCropUpdate(c: Crop) {
     }*/
 }
 
-export function systemSortByDate(a: System, b: System) {
+/*export function systemSortByDate(a: System, b: System) {
     //return a.lastRead.getTime() - b.lastRead.getTime();
-}
+}*/
 
 export function scheduleSortByDate(a: Schedule, b: Schedule) {
     const firstCriterion = a.startDate.getTime() - b.startDate.getTime();

@@ -1,23 +1,24 @@
 import { StyleSheet, Text, View } from "react-native";
-import { ITEM_RADIUS, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, PAGE_TITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
+import { BORDER_COLOR, BORDER_WIDTH, ITEM_RADIUS, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, PAGE_TITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
 import { Weather } from "../../utils/domain";
 
 type Props = {
     weather: Weather
+    day: string
 }
 
 function WeatherComponent(props: Props) {
 
-    const { weather } = props;
+    const { weather, day } = props;
 
     return(
         <View style={styles.outerStyle}>
             <View style={styles.containerStyle}>
                 <View style={styles.titleView}>
-                    <Text style={styles.titleText}>Today</Text>
+                    <Text style={styles.titleText}>{day}</Text>
                 </View>
                 <View style={styles.bodyView}>
-                    <View style={styles.sideView}>
+                    <View style={styles.leftView}>
                         <View style={styles.leftTitle}>
                             <Text style={styles.detailsText}>Cloudy</Text>
                         </View>
@@ -40,7 +41,7 @@ function WeatherComponent(props: Props) {
                             </View>
                         </View>
                     </View>
-                    <View style={styles.sideView}>
+                    <View style={styles.rightView}>
                         <Text style={styles.detailsText}>{"Wind Direction: " + weather.predWindDir}</Text>
                         <Text style={styles.detailsText}>{"Wind Speed: " + weather.windSpeed}</Text>
                         <Text style={styles.detailsText}>{"Rain Probability: " + weather.precipitaProb}</Text>
@@ -68,6 +69,8 @@ const styles = StyleSheet.create({
         alignItems: "center", 
         backgroundColor: "#cccccc",
         borderRadius: ITEM_RADIUS,
+        borderWidth: BORDER_WIDTH,
+        borderColor: BORDER_COLOR
     },
 
     titleView: {
@@ -75,6 +78,8 @@ const styles = StyleSheet.create({
         width: "100%",
         justifyContent: "center",
         alignItems: "center",
+        borderBottomWidth: BORDER_WIDTH,
+        borderBottomColor: BORDER_COLOR
     },
 
     bodyView: {
@@ -85,7 +90,7 @@ const styles = StyleSheet.create({
         alignItems: "center", 
     },
 
-    sideView: {
+    leftView: {
         height: "100%",
         width: "50%",
         justifyContent: "center",
@@ -142,7 +147,16 @@ const styles = StyleSheet.create({
     detailsText: {
         color: TEXT_COLOR,
         fontSize: ITEM_TEXT_SIZE
-    }
+    },
+
+    rightView: {
+        height: "100%",
+        width: "50%",
+        justifyContent: "center",
+        borderLeftWidth: BORDER_WIDTH,
+        borderLeftColor: BORDER_COLOR,
+        paddingLeft: 5 
+    },
 
 });
 

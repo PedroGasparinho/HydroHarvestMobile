@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { isStringEmpty } from "../../utils";
 import { useState } from "react";
-import { ALT_TEXT_COLOR, BORDER_COLOR, ERROR_TEXT_COLOR, ITEM_RADIUS, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
+import { ALT_TEXT_COLOR, BORDER_COLOR, BORDER_WIDTH, ERROR_TEXT_COLOR, ITEM_RADIUS, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
 import { CONFIRM_ICON_MAIN_COLOR } from "../../utils/icons";
 
 type Props = {
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     nameInput: {
         borderRadius: ITEM_RADIUS,
         borderColor: BORDER_COLOR,
-        borderWidth: 2,
+        borderWidth: BORDER_WIDTH,
         width: "80%",
         height: "50%",
     },

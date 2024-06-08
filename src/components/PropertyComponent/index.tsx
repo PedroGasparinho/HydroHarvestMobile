@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import IconComponent from "../IconComponent";
 import { Property, getPropertyIcon } from "../../utils/property";
 import { PROPERTY_ICON_SIZE } from "../../utils/icons";
-import { BORDER_COLOR, ITEM_RADIUS, ITEM_BACK_COLOR, TEXT_COLOR, ITEM_TITLE_SIZE } from "../../utils/styles";
+import { BORDER_COLOR, ITEM_RADIUS, ITEM_BACK_COLOR, TEXT_COLOR, ITEM_TITLE_SIZE, BORDER_WIDTH } from "../../utils/styles";
 
 type Props = {
     property: Property,
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     borderView: {
         height: "100%",
         width: "100%",
-        borderWidth: 2,
+        borderWidth: BORDER_WIDTH,
         borderColor: BORDER_COLOR,
         borderRadius: ITEM_RADIUS,
         justifyContent: "center",

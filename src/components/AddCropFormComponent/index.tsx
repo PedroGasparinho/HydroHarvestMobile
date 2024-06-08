@@ -2,15 +2,14 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-nativ
 import { isStringEmpty } from "../../utils";
 import { useEffect, useState } from "react";
 import SelectComponent from "../SelectComponent";
-import { useDispatch, useSelector } from "react-redux";
-import Geolocation from "@react-native-community/geolocation";
+import { useSelector } from "react-redux";
 import { availableCrops } from "../../utils/domain";
-import { ALT_TEXT_COLOR, BORDER_COLOR, ERROR_TEXT_COLOR, ITEM_RADIUS, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
+import { ALT_TEXT_COLOR, BORDER_COLOR, BORDER_WIDTH, ERROR_TEXT_COLOR, ITEM_RADIUS, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
 import { CONFIRM_ICON_MAIN_COLOR } from "../../utils/icons";
-import { getClosestRegionName } from "../../utils/regions";
+import { regions } from "../../utils/regions";
 import { addCrop } from "../../utils/api";
 import { State } from "../../store";
-import { setLocationReducer } from "../../store/location.reducer";
+import SelectIndexComponent from "../SelectIndexComponent";
 
 type Props = {
     setModalVisible: React.Dispatch<React.SetStateAction<boolean>>
@@ -18,19 +17,17 @@ type Props = {
 
 function AddCropForm(props: Props) {
 
-    //para determinar a localizacao vamos buscar as coordenadas do user
-    //cada localidade vai ter as suas coordenadas
-    //vamos determinar a localidade com base nas coordenadas do user
-
     const [name, setName] = useState<string>("");
     const [error, setError] = useState<string>("");
     const [selectValue, setSelectValue] = useState<string>(availableCrops[0]);
-    const [region, setRegion] = useState<string>("");
     const [systemName, setSystemName] = useState<string>("");
     const [ip, setIP] = useState<string>("");
 
-    const dispatcher = useDispatch();
     const loggedUser = useSelector((state: State) => state.persistedReducer.userReducer.user);
+    const userLoc = useSelector((state: State) => state.persistedReducer.locationReducer.location);
+    const userRegion = useSelector((state: State) => state.persistedReducer.locationReducer.closestRegionIdx);
+
+    const [regionIdx, setRegionIdx] = useState<number>(0);
 
     async function onSubmit() {
         setError("");
@@ -42,7 +39,7 @@ function AddCropForm(props: Props) {
             setError("IP cannot be empty");
         } else {
             if(loggedUser !== null) {
-                const response = await addCrop(name, region, selectValue, loggedUser, lat, lon, ip, systemName);
+                const response = await addCrop(name, regions[regionIdx].name, selectValue, loggedUser, regions[regionIdx].lat, regions[regionIdx].lon, ip, systemName);
                 if(response.ok) {
                     props.setModalVisible(false);
                 } else {
@@ -52,31 +49,12 @@ function AddCropForm(props: Props) {
         }
     }
 
-    const [location, setLocation] = useState<{lat: number, lon: number}>({lat: -1000, lon: -1000});
-    const getCurrentLocation = () => {
-        Geolocation.getCurrentPosition(
-            position => {
-                const {latitude, longitude} = position.coords;
-                setLocation({lat: latitude, lon: longitude})
-            },
-            error => {
-                console.log("Error: " + error.message);
-            },
-            {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000}
-        )
-    }
-
-    const {lat, lon} = location;
-
-
     useEffect(() => {
-        getCurrentLocation();
-        setRegion(getClosestRegionName(lat, lon));
-        dispatcher(setLocationReducer({lat: lat, lon: lon}));
-    }, []);
+        setRegionIdx(userRegion);
+    }, [])
 
-    const locText = "Location: " + region ;
-    const coordText = lat.toFixed(2) + "º latitude, " + lon.toFixed(2) + "º longitude";
+    const locText = "Closest location: " + regions[userRegion].name;
+    const coordText = userLoc.lat.toFixed(2) + "º latitude, " + userLoc.lon.toFixed(2) + "º longitude";
 
     return(
         <>
@@ -100,6 +78,8 @@ function AddCropForm(props: Props) {
                 <TextInput style={styles.nameInput} value={ip} onChangeText={setIP}/>
             </View>
             <View style={styles.locationView}>
+                <Text style={styles.nameText}>System Location:</Text>
+                <SelectIndexComponent data={regions.map(r => { return r.name; })} width={80} selectValue={regionIdx} setSelectValue={setRegionIdx}/>
                 <Text style={styles.locationText}>{locText}</Text>
                 <Text style={styles.locationText}>{coordText}</Text>
             </View>
@@ -148,13 +128,13 @@ const styles = StyleSheet.create({
     nameInput: {
         borderRadius: ITEM_RADIUS,
         borderColor: BORDER_COLOR,
-        borderWidth: 2,
+        borderWidth: BORDER_WIDTH,
         width: "80%",
         height: "50%",
     },
 
     cropView: {
-        height: "20%",
+        height: "15%",
         width: "100%",
         display: "flex",
         justifyContent: "center",
@@ -168,7 +148,7 @@ const styles = StyleSheet.create({
     },
 
     locationView: {
-        height: "10%",
+        height: "20%",
         width: "100%",
         display: "flex",
         justifyContent: "center",
@@ -181,7 +161,7 @@ const styles = StyleSheet.create({
     },
 
     submitView: {
-        height: "20%",
+        height: "15%",
         width: "100%",
         display: "flex",
         justifyContent: "center",

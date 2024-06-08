@@ -2,7 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { SYSTEM_PAGE, homeStackProp } from "../../routes/homeStack";
 import { Crop, System } from "../../utils/domain";
-import { BORDER_COLOR, ITEM_BACK_COLOR, ITEM_RADIUS, TEXT_COLOR, ITEM_TEXT_SIZE } from "../../utils/styles";
+import { BORDER_COLOR, ITEM_BACK_COLOR, ITEM_RADIUS, TEXT_COLOR, ITEM_TEXT_SIZE, BORDER_WIDTH } from "../../utils/styles";
 import { distBetweenEarthPoints } from "../../utils/regions";
 import { useSelector } from "react-redux";
 import { State } from "../../store";
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
 
     innerView: {
         flexDirection: "row",
-        borderWidth: 2,
+        borderWidth: BORDER_WIDTH,
         borderColor: BORDER_COLOR,
         backgroundColor: ITEM_BACK_COLOR,
         borderRadius: ITEM_RADIUS,

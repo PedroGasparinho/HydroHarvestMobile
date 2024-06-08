@@ -1,17 +1,26 @@
 import { StyleSheet, Text, View } from "react-native";
 import { Action, getSpaceIfNoAction} from "../../utils";
-import { Schedule } from "../../utils/domain";
+import { Crop, Schedule, System } from "../../utils/domain";
 import { isInBetweenDates, getScheduleFormatted, dayDifference, hourDifference, getHourFormatted } from "../../utils/date";
 import { confirmIcon, cancelIcon } from "../../utils/icons";
-import { SUGGESTION_BACK_COLOR, WATERING_BACK_COLOR, ITEM_BACK_COLOR, ITEM_ICON_SIZE, BORDER_COLOR, ITEM_RADIUS, ITEM_TITLE_SIZE, TEXT_COLOR, ITEM_TEXT_SIZE } from "../../utils/styles";
+import { SUGGESTION_BACK_COLOR, WATERING_BACK_COLOR, ITEM_BACK_COLOR, ITEM_ICON_SIZE, BORDER_COLOR, ITEM_RADIUS, ITEM_TITLE_SIZE, TEXT_COLOR, ITEM_TEXT_SIZE, BORDER_WIDTH } from "../../utils/styles";
+import { addWater } from "../../utils/api";
+import { useSelector } from "react-redux";
+import { State } from "../../store";
 
 type Props = {
+    crop : Crop,
+    system: System,
     schedule: Schedule,
 }
 
 function ScheduleComponent(props: Props) {
 
     const s = props.schedule;
+    const { crop, system } = props;
+
+    const loggedUser = useSelector((state: State) => state.persistedReducer.userReducer.user);
+
 
     const cancelAction : Action = {
         icon: cancelIcon,
@@ -20,13 +29,25 @@ function ScheduleComponent(props: Props) {
 
     const confirmAction : Action = {
         icon: confirmIcon,
-        action: () => {},
+        action: async () => OnConfirm(),
+    }
+
+    async function OnConfirm() {
+        if(loggedUser !== null) {
+            const response = await addWater(crop, loggedUser, system, s.startDate, s.endDate);
+            if(response.ok) {
+                //
+            } else {
+                console.log("Error: " + response.status);
+            }
+        }
+        
     }
 
     const isWatering = isInBetweenDates(new Date(), s.startDate, s.endDate);
 
     function getBackgroundColor() {
-        if(s.done) { //ERRADO
+        if(s.isSuggestion) {
             return SUGGESTION_BACK_COLOR;
         } else if(isWatering) {
                 return WATERING_BACK_COLOR;
@@ -36,7 +57,7 @@ function ScheduleComponent(props: Props) {
     }
 
     function getTopAction() {
-        if(s.done) { //ERRADO
+        if(s.isSuggestion) {
             return confirmAction
         } else if(isWatering) {
             return cancelAction;
@@ -87,7 +108,7 @@ const styles = StyleSheet.create({
     outerView: {
         borderColor: BORDER_COLOR,
         borderRadius: ITEM_RADIUS,
-        borderWidth: 3,
+        borderWidth: BORDER_WIDTH,
         height: 50,
         margin: 10,
         flexDirection: "row",

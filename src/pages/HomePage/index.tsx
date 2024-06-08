@@ -7,11 +7,14 @@ import { useNavigation } from "@react-navigation/native";
 import PopUpComponent from "../../components/PopUpComponent";
 import AddCropForm from "../../components/AddCropFormComponent";
 import { useDispatch, useSelector } from "react-redux";
-import { Crop, compareCrops } from "../../utils/domain";
+import { Crop, System, compareCrops } from "../../utils/domain";
 import { goBackIcon, addNewIcon } from "../../utils/icons";
 import { useEffect, useState } from "react";
 import { State } from "../../store";
 import { getAllCrops } from "../../utils/api";
+import Geolocation from "@react-native-community/geolocation";
+import { setLocationReducer } from "../../store/location.reducer";
+import { distBetweenEarthPoints } from "../../utils/regions";
 
 function HomePage() {
 
@@ -21,6 +24,7 @@ function HomePage() {
 
     const mainNav = useNavigation<mainStackProp>();
     const loggedUser = useSelector((state: State) => state.persistedReducer.userReducer.user);
+    const userLoc = useSelector((state: State) => state.persistedReducer.locationReducer.location);
     const dispatcher = useDispatch();
 
     const [crops, setCrops] = useState<Crop[]>([]);
@@ -40,6 +44,34 @@ function HomePage() {
 
     let i = 0;
 
+    const getCurrentLocation = () => {
+        Geolocation.getCurrentPosition(
+            position => {
+                const {latitude, longitude} = position.coords;
+                dispatcher(setLocationReducer({lat: latitude, lon: longitude}));
+            },
+            error => {
+                console.log("Error: " + error.message);
+            },
+            {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000}
+        )
+    }
+
+    function getAverageDistance(systems: System[]) {
+        let dist = 0
+        systems.forEach(s => { 
+            dist += distBetweenEarthPoints(s.latitude, s.longitude, userLoc.lat, userLoc.lon)
+        })
+    
+        if(systems.length == 0) {
+            dist = Number.MAX_VALUE;
+        } else {
+            dist /= systems.length
+        }
+        return dist;
+    }
+
+
     useEffect(() =>  {
         async function getAll() {
             if(loggedUser !== null) {
@@ -51,13 +83,16 @@ function HomePage() {
                             crops.crops[i].systems = []
                         }
                     }
-                    setCrops(crops.crops);
+                    setCrops(
+                        crops.crops.map((c: any) => { return { ...c, averageDistance: getAverageDistance(c.systemsDetails) }})
+                    );
                 } else {
                     console.log("Error: " + response.status);
                 }
             }
         }
         getAll();
+        getCurrentLocation();
     }, [])
 
     return (

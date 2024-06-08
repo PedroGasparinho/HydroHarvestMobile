@@ -4,10 +4,9 @@ import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { CROP_PAGE, homeStackProp } from "../../routes/homeStack";
 import StatusComponent from "../StatusComponent";
-import ActionWithIconComponent from "../ActionWithIconComponent";
 import { Crop } from "../../utils/domain";
-import { deleteIcon, wateringCanIcon } from "../../utils/icons";
-import { BORDER_COLOR, ITEM_BACK_COLOR, ITEM_ICON_SIZE, ITEM_RADIUS, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
+import { wateringCanIcon } from "../../utils/icons";
+import { BORDER_COLOR, BORDER_WIDTH, ITEM_BACK_COLOR, ITEM_ICON_SIZE, ITEM_RADIUS, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
 import SpaceComponent from "../SpaceComponent";
 
 type Props = {
@@ -24,61 +23,50 @@ function CropComponent(prop: Props) {
         homeNav.navigate(CROP_PAGE, crop);
     }
 
-    function onPressWater() {
-        //homeNav.navigate(SCHEDULE_PAGE, crop);
-    }
-
-    const wateringAction : Action = {
-        icon: wateringCanIcon,
-        action: onPressWater,
-    }
-
-    function getWateringAction() {
-        return undefined;
+    function getLocationText() {
+        if(crop.systemsDetails.length == 0) {
+            return crop.location;
+        } else {
+            return crop.location + " (" + crop.averageDistance.toFixed(2) + " km)"
+        }
     }
 
     return (
-        <TouchableOpacity style={styles.outerView} onPress={onPressItem}>
-            <View style={styles.topView}>
-                <>
-                    {
-                        getSpaceIfNoAction(getWateringAction(), 15, ITEM_ICON_SIZE)
-                    }
-                </>
-                <View style={styles.topMiddleView}>
+        <View style={styles.outerView}>
+            <TouchableOpacity style={styles.innerView} onPress={onPressItem}>
+                <View style={styles.topView}>
                     <Text style={styles.cropNameText}>{crop.name}</Text>
-                    <Text style={styles.cropDistanceText}>{crop.location}</Text>
+                    <Text style={styles.cropDistanceText}>{getLocationText()}</Text>
                 </View>
-                <SpaceComponent value={15} dimension={Dimension.Width}/>
-            </View>
-            <View style={styles.middleView}>
-                <View style={styles.imageView}>
-                    <Text>{"Image of " + crop.crop}</Text>
+                <View style={styles.middleView}>
+                    <View style={styles.imageView}>
+                        <Text>{"Image of " + crop.crop}</Text>
+                    </View>
                 </View>
-            </View>
-            <StatusComponent status={crop.cropStatus} fontSize={ITEM_TEXT_SIZE} height={15} isCrop={true}/>
-        </TouchableOpacity>
+                <StatusComponent status={crop.cropStatus} fontSize={ITEM_TEXT_SIZE} height={15} isCrop={true}/>
+            </TouchableOpacity>
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
     
     outerView: {
-        borderColor: BORDER_COLOR,
-        borderWidth: 3,
         height: 200,
-        margin: 10,
+        padding: 10,
+        width: "100%",
+    },
+
+    innerView: {
+        borderColor: BORDER_COLOR,
+        borderWidth: BORDER_WIDTH,
         backgroundColor: ITEM_BACK_COLOR,
         borderRadius: ITEM_RADIUS,
     },
 
     topView: {
         height: "30%",
-        flexDirection: "row"
-    },
-
-    topMiddleView: {
-        width: "70%",
+        width: "100%",
         justifyContent: "center",
         alignItems: "center",
     },
@@ -104,7 +92,7 @@ const styles = StyleSheet.create({
         height: "90%",
         width: "60%",
         borderColor: BORDER_COLOR,
-        borderWidth: 3,
+        borderWidth: BORDER_WIDTH,
         justifyContent: "center",
         alignItems: "center",
         borderRadius: ITEM_RADIUS,

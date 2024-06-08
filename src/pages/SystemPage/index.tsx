@@ -7,12 +7,12 @@ import { addNewIcon, editIcon, goBackIcon } from "../../utils/icons";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { ITEM_ICON_SIZE, PAGE_SUBTITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
 import ScheduleComponent from "../../components/ScheduleComponent";
-import { Schedule, ScheduleDTO } from "../../utils/domain";
+import { Schedule, ScheduleDTO, scheduleSortByDate } from "../../utils/domain";
 import SpaceComponent from "../../components/SpaceComponent";
 import ActionWithIconComponent from "../../components/ActionWithIconComponent";
 import { useEffect, useState } from "react";
 import { changeSystemName, getWater, getWateringForecast } from "../../utils/api";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { State } from "../../store";
 import PopUpComponent from "../../components/PopUpComponent";
 import AddScheduleForm from "../../components/AddScheduleFormComponent";
@@ -72,19 +72,35 @@ function SystemPage({navigation, route}: NavProps) {
                 const response = await getWater(crop, loggedUser, system);
                 const sch = await response.json();
                 SetSchedules(sch.map((s: ScheduleDTO) => {
-                    return { startDate: new Date(s.startDate), endDate: new Date(s.endDate), done: s.done };
+                    return { startDate: new Date(s.startDate), endDate: new Date(s.endDate), done: s.done, isSuggestion: false };
                 }));
-                
-                //only god knows
-                const res = await getWateringForecast(crop, loggedUser, system);
-                console.log(res);
-                const predictions = await res.json();
-                console.log("Predictions: " + predictions);
             }
         }
-
         getSchedules();
+    }, [])
 
+    useEffect(() => {
+        async function getPrediction() {
+            if(loggedUser !== null) {
+                const res = await getWateringForecast(crop, loggedUser, system);
+                if(res.ok) {
+                    const p = await res.json();
+                    console.log(p);
+                    if(p.start !== null && p.end !== null) {
+                        const newSchedules = [...schedules, { 
+                            startDate: new Date(p.start), 
+                            endDate: new Date(p.end), 
+                            done: false,
+                            isSuggestion: true
+                        }]
+                        SetSchedules(newSchedules);
+                    }
+                } else {
+                    console.log("Error: " + res.status);
+                }
+            }
+        }
+        getPrediction();
     }, [])
 
     let i = 0;
@@ -103,8 +119,13 @@ function SystemPage({navigation, route}: NavProps) {
             <ScrollView style={styles.scrollView}>
             <>
                 {
-                    //schedules.sort(scheduleSortByDate).map(s => <ScheduleComponent key={i++} schedule={s}/>)
-                    schedules.map(s => <ScheduleComponent key={i++} schedule={s}/>)
+                    schedules
+                        .filter(s => {
+                            const now = new Date();
+                            return s.endDate.getTime() > now.getTime();
+                        })
+                        .sort(scheduleSortByDate)
+                        .map(s => <ScheduleComponent key={i++} schedule={s} crop={crop} system={system}/>)
                 }
             </>
             </ScrollView>
