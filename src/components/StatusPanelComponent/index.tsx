@@ -20,11 +20,6 @@ function StatusPanelComponent(props: Props) {
 
     const item = props.item;
 
-    const reloadAction : Action = {
-        icon: reloadIcon,
-        action: () => {},
-    }
-
     function isCropFun(item: Crop | System): item is Crop {
         return (item as Crop).crop !== undefined;
     }
@@ -41,14 +36,9 @@ function StatusPanelComponent(props: Props) {
     return(
         <View style={styles.statusView}>
             <View style={styles.statusTopView}>
-                <SpaceComponent value={10} dimension={Dimension.Width}/>
                 <View style={styles.statusTitleView}>
                     <StatusComponent status={status} fontSize={PAGE_SUBTITLE_SIZE} height={60} isCrop={isCrop}/>
-                    <View style={styles.statusLastReadView}>
-                        <Text style={styles.statusLastReadText}>{lastUpdated}</Text>
-                    </View>
                 </View>
-                <ActionWithIconComponent action={reloadAction} width={10} size={ITEM_ICON_SIZE}/>
             </View>
             <View style={styles.statusBottomView}>
                 <View style={styles.propertyView}>
@@ -87,7 +77,7 @@ const styles = StyleSheet.create({
     },
 
     statusTitleView: {
-        width: "80%",
+        width: "100%",
         justifyContent: "center",
         alignItems: "center",
     },

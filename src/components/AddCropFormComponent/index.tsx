@@ -2,14 +2,15 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-nativ
 import { isStringEmpty } from "../../utils";
 import { useEffect, useState } from "react";
 import SelectComponent from "../SelectComponent";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { availableCrops } from "../../utils/domain";
 import { ALT_TEXT_COLOR, BORDER_COLOR, BORDER_WIDTH, ERROR_TEXT_COLOR, ITEM_RADIUS, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
 import { CONFIRM_ICON_MAIN_COLOR } from "../../utils/icons";
 import { regions } from "../../utils/regions";
-import { addCrop } from "../../utils/api";
+import { addCrop, sendCropToBoard } from "../../utils/api";
 import { State } from "../../store";
 import SelectIndexComponent from "../SelectIndexComponent";
+import { setDirty } from "../../store/dirty.reducer";
 
 type Props = {
     setModalVisible: React.Dispatch<React.SetStateAction<boolean>>
@@ -22,12 +23,13 @@ function AddCropForm(props: Props) {
     const [selectValue, setSelectValue] = useState<string>(availableCrops[0]);
     const [systemName, setSystemName] = useState<string>("");
     const [ip, setIP] = useState<string>("");
+    const [regionIdx, setRegionIdx] = useState<number>(0);
 
     const loggedUser = useSelector((state: State) => state.persistedReducer.userReducer.user);
     const userLoc = useSelector((state: State) => state.persistedReducer.locationReducer.location);
     const userRegion = useSelector((state: State) => state.persistedReducer.locationReducer.closestRegionIdx);
 
-    const [regionIdx, setRegionIdx] = useState<number>(0);
+    const dispatcher = useDispatch();
 
     async function onSubmit() {
         setError("");
@@ -39,12 +41,20 @@ function AddCropForm(props: Props) {
             setError("IP cannot be empty");
         } else {
             if(loggedUser !== null) {
-                const response = await addCrop(name, regions[regionIdx].name, selectValue, loggedUser, regions[regionIdx].lat, regions[regionIdx].lon, ip, systemName);
-                if(response.ok) {
-                    props.setModalVisible(false);
-                } else {
-                    setError("Error: " + response.status);
-                }
+                //const res = await sendCropToBoard(selectValue);
+                //if(res.ok) {
+                    const response = await addCrop(name, regions[regionIdx].name, selectValue, loggedUser, regions[regionIdx].lat, regions[regionIdx].lon, ip, systemName);
+                    if(response.ok) {
+                        props.setModalVisible(false);
+                        dispatcher(setDirty(true));
+                    } else {
+                        setError("Server Error: " + response.status);
+                    }
+                //} else {
+                    //setError("Board Error: " + res.status);
+                //}
+
+
             }
         }
     }

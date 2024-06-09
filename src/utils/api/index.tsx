@@ -7,31 +7,23 @@ const GET = "GET";
 const POST = "POST";
 const PUT = "PUT";
 
-export const PROXY : string = "http://98.67.151.103:8080/mobile";
+export const PROXY : string = "http://20.170.106.81:8080/mobile";
 export const BOARD : string = "http://192.168.1.125";
 
-export async function getDataBoard() {
-    return await fetch(BOARD + "/getValue", {
-        method: GET,
-        headers: {"Content-Type":"application/json"},
-    });
-}
+/*********************************** BOARD ***********************************/
 
-export async function setStartWatering() {
-    return await fetch(BOARD + "/setStartWatering", {
+export async function sendCropToBoard(crop: string) {
+    return await fetch(BOARD + "/setPlantation", {
         method: POST,
         headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({
+            plantation: crop
+        })
     });
 }
 
-export async function setStoptWatering() {
-    return await fetch(BOARD + "/setStoptWatering", {
-        method: POST,
-        headers: {"Content-Type":"application/json"},
-    });
-}
+/*********************************** SERVER ***********************************/
 
-//DONE
 export async function userExists(userId: string) {
     return await fetch(PROXY + "/userExists?userId=" + userId, {
         method: GET,
@@ -39,7 +31,6 @@ export async function userExists(userId: string) {
     });
 }
 
-//DONE
 export async function addClient(user: User) {
     return await fetch(PROXY + "/addClient", {
         method: POST,
@@ -53,7 +44,6 @@ export async function addClient(user: User) {
     });
 }
 
-//DONE
 export async function getAllCrops(user: User) {
     return await fetch(PROXY + "/getAllCrops?userId=" + user.id + "&password=" + user.password, {
         method: GET,
@@ -61,7 +51,6 @@ export async function getAllCrops(user: User) {
     });
 }
 
-//DONE
 export async function addCrop(name: string, region: string, crop: string, user: User, lat: number, lon: number, ip: string, systemName: string) {
     return await fetch(PROXY + "/addCrop", {
         method: POST,
@@ -84,7 +73,6 @@ export async function addCrop(name: string, region: string, crop: string, user: 
     });
 }
 
-//DONE
 export async function addSystem(cropId: string, user: User, lat: number, lon: number, ip: string, systemName: string) {
     return await fetch(PROXY + "/addSystem/" + cropId + "?userId=" + user.id + "&password=" + user.password, {
         method: POST,
@@ -98,7 +86,6 @@ export async function addSystem(cropId: string, user: User, lat: number, lon: nu
     });
 }
 
-//http://localhost:8080/mobile/changeName/SVbNWWOiNVUhnUGyZyHk?userId=59731&password=didi&name=QuintadoRoger    PUT
 export async function changeName(crop: Crop, user: User, name: string) {
     return await fetch(PROXY + "/changeName/" +  crop.id + "?userId=" + user.id + 
                         "&password=" + user.password + "&name=" + name, {
@@ -107,7 +94,6 @@ export async function changeName(crop: Crop, user: User, name: string) {
     });
 }
 
-//http://localhost:8080/mobile/changeSystemName/SVbNWWOiNVUhnUGyZyHk?userId=59731&password=didi&systemIp=192.168.1.100&name=norte   PUT
 export async function changeSystemName(crop: Crop, user: User, system: System, name: string) {
     return await fetch(PROXY + "/changeSystemName/" +  crop.id + "?userId=" + user.id + 
                         "&password=" + user.password + "&systemIp=" + system.ip + "&name=" + name, {
@@ -116,8 +102,6 @@ export async function changeSystemName(crop: Crop, user: User, system: System, n
     });
 }
 
-
-//http://localhost:8080/mobile/addWater/SVbNWWOiNVUhnUGyZyHk?userId=59731&password=didi          POST
 export async function addWater(crop: Crop, user: User, system: System, startDate: Date, endDate: Date) {
     return await fetch(PROXY + "/addWater/" +  crop.id + "?userId=" + user.id + 
                         "&password=" + user.password, {
@@ -131,7 +115,6 @@ export async function addWater(crop: Crop, user: User, system: System, startDate
     });
 }
 
-//http://localhost:8080/mobile/getWater/SVbNWWOiNVUhnUGyZyHk?userId=59731&password=didi&systemIp=192.168.1.100 GET
 export async function getWater(crop: Crop, user: User, system: System) {
     return await fetch(PROXY + "/getWater/" +  crop.id + "?userId=" + user.id + 
                         "&password=" + user.password + "&systemIp=" + system.ip, {
@@ -140,7 +123,6 @@ export async function getWater(crop: Crop, user: User, system: System) {
     });
 }
 
-//http://localhost:8080/mobile/wateringForecast/SVbNWWOiNVUhnUGyZyHk?userId=59731&password=didi&systemIp=192.168.1.100  GET
 export async function getWateringForecast(crop: Crop, user: User, system: System) {
     return await fetch(PROXY + "/wateringForecast/" +  crop.id + "?userId=" + user.id + 
                         "&password=" + user.password + "&systemIp=" + system.ip, {
@@ -149,10 +131,17 @@ export async function getWateringForecast(crop: Crop, user: User, system: System
     });
 }
 
-//http://4.157.98.148:8080/mobile/getWeather?region=Setúbal     GET
 export async function getWeather(region: Region) {
     return await fetch(PROXY + "/getWeather?region=" + region.name, {
         method: GET,
+        headers: {"Content-Type":"application/json"},
+    });
+}
+
+export async function addUserCrop(crop: Crop, userToAdd: string, userInCrop: User) {
+    return await fetch(PROXY + "/addUserCrop/" +  crop.id + "?userIdToAdd=" + userToAdd + 
+                        "&userId=" + userInCrop.id + "&password=" + userInCrop.password, {
+        method: PUT,
         headers: {"Content-Type":"application/json"},
     });
 }

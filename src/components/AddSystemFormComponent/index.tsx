@@ -9,6 +9,7 @@ import { regions } from "../../utils/regions";
 import { addSystem } from "../../utils/api";
 import { State } from "../../store";
 import SelectIndexComponent from "../SelectIndexComponent";
+import { setDirty } from "../../store/dirty.reducer";
 
 type Props = {
     crop: Crop;
@@ -38,6 +39,7 @@ function AddSystemForm(props: Props) {
                 const response = await addSystem(props.crop.id, loggedUser, regions[regionIdx].lat, regions[regionIdx].lon, ip, systemName);
                 if(response.ok) {
                     props.setModalVisible(false);
+                    dispatcher(setDirty(true));
                 } else {
                     setError("Error: " + response.status);
                 }
@@ -176,3 +178,7 @@ const styles = StyleSheet.create({
 });
 
 export default AddSystemForm;
+
+function dispatcher(arg0: any) {
+    throw new Error("Function not implemented.");
+}

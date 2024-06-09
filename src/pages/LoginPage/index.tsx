@@ -6,39 +6,44 @@ import { useEffect } from "react";
 import auth from '@react-native-firebase/auth';
 import { ALT_TEXT_COLOR, ITEM_RADIUS, PAGE_SUBTITLE_SIZE, PAGE_TITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
 import { hashCode } from "../../utils";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { User, setUser } from "../../store/user.reducer";
 import { addClient, userExists } from "../../utils/api";
+import { State } from "../../store";
 
 function LoginPage() {
 
     const mainNav = useNavigation<mainStackProp>();
 
-    //const loggedUser = useSelector((state: State) => state.user);
+    const loggedUser = useSelector((state: State) => state.persistedReducer.userReducer.user);
     const dispatcher = useDispatch();
 
     async function onGoogleButtonPress() {
         try {
-            await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-            const { idToken, user } = await GoogleSignin.signIn();
-
-            const name = (user.name !== null ? user.name : "Guest");
-            const hydroUser = {
-                id: user.id,
-                name: name,
-                email: user.email,
-                photo: "/src/assets/defaultUserLogo.png",
-                password: hashCode(name).toString(),
-            }
-
-            dispatcher(setUser(hydroUser));
-        
-            const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-            const res = auth().signInWithCredential(googleCredential);
+            if(loggedUser !== null) {
+                mainNav.navigate(APP_SCREEN);
+            } else {
+                await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+                const { idToken, user } = await GoogleSignin.signIn();
+    
+                const name = (user.name !== null ? user.name : "Guest");
+                const hydroUser = {
+                    id: user.id,
+                    name: name,
+                    email: user.email,
+                    photo: "/src/assets/defaultUserLogo.png",
+                    password: hashCode(name).toString(),
+                }
+    
+                dispatcher(setUser(hydroUser));
             
-            loginRequest(hydroUser);
-
-            return res;
+                const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+                const res = auth().signInWithCredential(googleCredential);
+                
+                loginRequest(hydroUser);
+    
+                return res;
+            }
         } catch(error) {
             console.log(error);
         }

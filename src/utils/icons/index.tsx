@@ -90,3 +90,15 @@ export const confirmIcon : Icon = {
     color: CONFIRM_ICON_MAIN_COLOR,
     backgroundColor: CONFIRM_ICON_BACK_COLOR,
 }
+
+export const wifiIcon : Icon = {
+    name: "wifi",
+    color: ICON_MAIN_COLOR,
+    backgroundColor: ICON_BACK_COLOR,
+}
+
+export const noWifiIcon : Icon = {
+    name: "wifi-off",
+    color: ICON_MAIN_COLOR,
+    backgroundColor: ICON_BACK_COLOR,
+}

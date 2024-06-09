@@ -14,9 +14,10 @@ import SpaceComponent from "../../components/SpaceComponent";
 import ActionWithIconComponent from "../../components/ActionWithIconComponent";
 import { useState } from "react";
 import EditNameFormComponent from "../../components/EditNameFormComponent";
-import { changeName } from "../../utils/api";
+import { addUserCrop, changeName } from "../../utils/api";
 import { useSelector } from "react-redux";
 import { State } from "../../store";
+import CropOptionsComponent from "../../components/CropOptionsComponent";
 
 type NavProps = NativeStackScreenProps<homeNavigationStackProp, 'CropPage'>;
 
@@ -39,6 +40,21 @@ function CropPage({navigation, route}: NavProps) {
         action: () => setNameFormVisible(true),
     }
 
+    async function onAddUser(email: string) {
+        if(loggedUser !== null) {
+            const response = await addUserCrop(crop, email, loggedUser);
+            console.log(response);
+            if(response.ok) {
+                return "";
+            } else {
+                return response.status.toString();
+            }
+        } else {
+            return "Not logged in";
+        }
+    }
+
+
     async function onNameChange(name: string) {
         if(loggedUser !== null) {
             const response = await changeName(crop, loggedUser, name);
@@ -54,7 +70,7 @@ function CropPage({navigation, route}: NavProps) {
 
 
     function getRightAction() {
-        return rightAction; //crop.isWatering? rightAction : undefined; 
+        return rightAction; 
     }
 
     const addAction : Action = {
@@ -95,8 +111,9 @@ function CropPage({navigation, route}: NavProps) {
                 setModalVisible={setSystemFormVisible}
             />
             <PopUpComponent
-                body={<EditNameFormComponent setModalVisible={setNameFormVisible} callback={onNameChange}/>}
-                height={30}
+                body={<CropOptionsComponent setModalVisible={setNameFormVisible} 
+                    onAddUserCallback={onAddUser} onNameChangeCallback={onNameChange}/>}
+                height={60}
                 modalVisible={nameFormVisible}
                 setModalVisible={setNameFormVisible}
             />

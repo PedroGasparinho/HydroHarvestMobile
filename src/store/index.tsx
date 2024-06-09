@@ -4,6 +4,8 @@ import { combineReducers } from '@reduxjs/toolkit';
 import { persistReducer } from 'redux-persist';
 import userReducer from './user.reducer';
 import locationReducer from './location.reducer';
+import forecastReducer from './forecast.reducer';
+import dirtyReducer from './dirty.reducer';
 
 const persistConfig = {
     key: "root",
@@ -14,7 +16,8 @@ const persistConfig = {
 
 const reducer = combineReducers({
     userReducer: userReducer,
-    locationReducer: locationReducer
+    locationReducer: locationReducer,
+    forecastReducer: forecastReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);
@@ -22,6 +25,7 @@ const persistedReducer = persistReducer(persistConfig, reducer);
 export const store = configureStore({
     reducer: {
         persistedReducer,
+        dirtyReducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware(
         {
