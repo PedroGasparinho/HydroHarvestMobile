@@ -31,6 +31,15 @@ function AddCropForm(props: Props) {
 
     const dispatcher = useDispatch();
 
+    /*async function birra(){
+        const response = await setStartWatering();
+        if(response.ok) {
+            console.log(await response.json());
+        }else{
+            console.log(response.status);
+        }
+    }*/
+
     async function onSubmit() {
         setError("");
         if(isStringEmpty(name)) {
@@ -41,8 +50,9 @@ function AddCropForm(props: Props) {
             setError("IP cannot be empty");
         } else {
             if(loggedUser !== null) {
-                //const res = await sendCropToBoard(selectValue);
-                //if(res.ok) {
+                const res = await sendCropToBoard(selectValue);
+                console.log(res);
+                if(res.ok) {
                     const response = await addCrop(name, regions[regionIdx].name, selectValue, loggedUser, regions[regionIdx].lat, regions[regionIdx].lon, ip, systemName);
                     if(response.ok) {
                         props.setModalVisible(false);
@@ -50,9 +60,9 @@ function AddCropForm(props: Props) {
                     } else {
                         setError("Server Error: " + response.status);
                     }
-                //} else {
-                    //setError("Board Error: " + res.status);
-                //}
+                } else {
+                    setError("Board Error: " + res.status);
+                }
 
 
             }

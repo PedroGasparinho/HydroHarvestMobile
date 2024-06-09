@@ -34,14 +34,6 @@ function SystemPage({navigation, route}: NavProps) {
         action: () => navigation.goBack(),
     }
 
-    /*async function birra(){
-        const response = await setStartWatering();
-        if(response.ok) {
-            console.log(await response.json());
-        }else{
-            console.log(response.status);
-        }
-    }*/
 
     async function onNameChange(name: string) {
         if(loggedUser !== null) {
