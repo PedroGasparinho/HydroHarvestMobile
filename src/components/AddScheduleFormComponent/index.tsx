@@ -14,6 +14,7 @@ type Props = {
     crop: Crop;
     system: System;
     setModalVisible: React.Dispatch<React.SetStateAction<boolean>>
+    setDirty: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 function AddScheduleForm(props: Props) {
@@ -51,6 +52,7 @@ function AddScheduleForm(props: Props) {
                 } else {
                     const response = await addWater(crop, loggedUser, system, start, end);
                     if(response.ok) {
+                        props.setDirty(true);
                         props.setModalVisible(false);
                     } else {
                         setError("Error: " + response.status);

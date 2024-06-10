@@ -88,7 +88,6 @@ function HomePage() {
         async function getCrops() {
             if(loggedUser !== null) {
                 const response = await getAllCrops(loggedUser);
-                console.log(response);
                 if(response.ok) {
                     const crops = await response.json();
                     for(let i = 0; i < crops.crops.length; i++) {

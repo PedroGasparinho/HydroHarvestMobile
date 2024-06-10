@@ -9,11 +9,11 @@ import { regions } from "../../utils/regions";
 import { addSystem } from "../../utils/api";
 import { State } from "../../store";
 import SelectIndexComponent from "../SelectIndexComponent";
-import { setDirty } from "../../store/dirty.reducer";
 
 type Props = {
     crop: Crop;
     setModalVisible: React.Dispatch<React.SetStateAction<boolean>>
+    setDirty: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 function AddSystemForm(props: Props) {
@@ -39,7 +39,8 @@ function AddSystemForm(props: Props) {
                 const response = await addSystem(props.crop.id, loggedUser, regions[regionIdx].lat, regions[regionIdx].lon, ip, systemName);
                 if(response.ok) {
                     props.setModalVisible(false);
-                    dispatcher(setDirty(true));
+                    props.setDirty(true);
+                    //dispatcher(setDirty(true));
                 } else {
                     setError("Error: " + response.status);
                 }

@@ -48,13 +48,13 @@ function AddCropForm(props: Props) {
                     const response = await addCrop(name, regions[regionIdx].name, selectValue, loggedUser, regions[regionIdx].lat, regions[regionIdx].lon, ip, systemName);
                     if(response.ok) {
                         props.setModalVisible(false);
-                        //props.setDirty(true);
-                        dispatcher(setDirty(true));
+                        props.setDirty(true);
+                        //dispatcher(setDirty(true));
                     } else {
                         setError("Server Error: " + response.status);
                     }
                 //} else {
-                //    setError("Board Error: " + res.status);
+                    //setError("Board Error: " + res.status);
                 //}
 
 

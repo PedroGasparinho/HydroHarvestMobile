@@ -10,6 +10,7 @@ import { State } from "../../store";
 type Props = {
     crop: Crop,
     system: System
+    setDirty: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 function SystemComponent(props: Props) {
@@ -21,7 +22,7 @@ function SystemComponent(props: Props) {
     const loc = useSelector((state: State) => state.persistedReducer.locationReducer.location);
 
     function onPressItem() {
-        homeNav.navigate(SYSTEM_PAGE, {crop: props.crop, system: props.system});
+        homeNav.navigate(SYSTEM_PAGE, {crop: props.crop, system: props.system, setDirty: props.setDirty});
     }
 
     return(

@@ -51,6 +51,13 @@ export async function getAllCrops(user: User) {
     });
 }
 
+export async function getCrop(user: User, cropId: string) {
+    return await fetch(PROXY + "/getCrop/" + cropId + "?userId=" + user.id + "&password=" + user.password, {
+        method: GET,
+        headers: {"Content-Type":"application/json"},
+    });
+}
+
 export async function addCrop(name: string, region: string, crop: string, user: User, lat: number, lon: number, ip: string, systemName: string) {
     return await fetch(PROXY + "/addCrop", {
         method: POST,

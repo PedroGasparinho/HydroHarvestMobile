@@ -22,7 +22,7 @@ type NavProps = NativeStackScreenProps<homeNavigationStackProp, 'SystemPage'>;
 
 function SystemPage({navigation, route}: NavProps) {
 
-    const { crop, system } = route.params;
+    const { crop, system, setDirty } = route.params;
     const loggedUser = useSelector((state: State) => state.persistedReducer.userReducer.user);
 
     const [schedules, SetSchedules] = useState<Schedule[]>([]);
@@ -122,7 +122,7 @@ function SystemPage({navigation, route}: NavProps) {
             </>
             </ScrollView>
             <PopUpComponent
-                body={<AddScheduleForm crop={crop} system={system} setModalVisible={setScheduleFormVisible}/>}
+                body={<AddScheduleForm crop={crop} system={system} setModalVisible={setScheduleFormVisible} setDirty={setDirty}/>}
                 height={60}
                 modalVisible={scheduleFormVisible}
                 setModalVisible={setScheduleFormVisible}

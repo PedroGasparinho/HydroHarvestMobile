@@ -1,16 +1,10 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import StatusComponent from "../StatusComponent";
-import ActionWithIconComponent from "../ActionWithIconComponent";
 import PropertyComponent from "../PropertyComponent";
-import { Action, Dimension} from "../../utils";
-import SpaceComponent from "../SpaceComponent";
-import { getLastReadFormatted } from "../../utils/date";
-import { Crop, System, getLastCropUpdate } from "../../utils/domain";
-import { reloadIcon } from "../../utils/icons";
+import { Crop, System } from "../../utils/domain";
 import { Property, getPropertyAverage } from "../../utils/property";
-import { getCropStatus } from "../../utils/status";
-import { PAGE_SUBTITLE_SIZE, ITEM_ICON_SIZE, TEXT_COLOR, ITEM_TEXT_SIZE } from "../../utils/styles";
+import { PAGE_SUBTITLE_SIZE, TEXT_COLOR, ITEM_TEXT_SIZE } from "../../utils/styles";
 
 type Props = {
     item: Crop | System,
@@ -31,7 +25,7 @@ function StatusPanelComponent(props: Props) {
     const tankLevel = isCrop ? getPropertyAverage(item, Property.TankLevel) : item.tankLevel;
     const temperature = isCrop ? getPropertyAverage(item, Property.Temperature) : item.temperatureLevel;
     const light = isCrop ? getPropertyAverage(item, Property.Light) : item.lightLevel;
-    const lastUpdated = "Last Updated: " //+ getLastReadFormatted(isCrop ? getLastCropUpdate(item) : item.lastRead);
+    const lastUpdated = "Last Updated: "
 
     return(
         <View style={styles.statusView}>

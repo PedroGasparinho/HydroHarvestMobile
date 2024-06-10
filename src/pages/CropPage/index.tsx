@@ -7,13 +7,13 @@ import SystemComponent from "../../components/SystemComponent";
 import StatusPanelComponent from "../../components/StatusPanelComponent";
 import { goBackIcon, editIcon, addNewIcon } from "../../utils/icons";
 import { PAGE_SUBTITLE_SIZE, TEXT_COLOR, ITEM_ICON_SIZE } from "../../utils/styles";
-import { System, compareSystems } from "../../utils/domain";
+import { Crop, System, compareSystems } from "../../utils/domain";
 import PopUpComponent from "../../components/PopUpComponent";
 import AddSystemForm from "../../components/AddSystemFormComponent";
 import SpaceComponent from "../../components/SpaceComponent";
 import ActionWithIconComponent from "../../components/ActionWithIconComponent";
-import { useState } from "react";
-import { addUserCrop, changeName } from "../../utils/api";
+import { SetStateAction, useEffect, useState } from "react";
+import { addUserCrop, changeName, getCrop } from "../../utils/api";
 import { useSelector } from "react-redux";
 import { State } from "../../store";
 import CropOptionsComponent from "../../components/CropOptionsComponent";
@@ -22,10 +22,12 @@ type NavProps = NativeStackScreenProps<homeNavigationStackProp, 'CropPage'>;
 
 function CropPage({navigation, route}: NavProps) {
 
-    const crop = route.params;
+    //const crop = route.params;
 
     const [systemFormVisible, setSystemFormVisible] = useState<boolean>(false); 
     const [nameFormVisible, setNameFormVisible] = useState<boolean>(false); 
+    const [dirty, setDirty] = useState<boolean>(false); 
+    const [crop, setCrop] = useState<Crop>(route.params);
 
     const loggedUser = useSelector((state: State) => state.persistedReducer.userReducer.user);
     const userLoc = useSelector((state: State) => state.persistedReducer.locationReducer.location);
@@ -84,6 +86,29 @@ function CropPage({navigation, route}: NavProps) {
         return compareSystems(a, b, userLoc.lat, userLoc.lon);
     }
 
+    useEffect(() => {
+        setCrop(route.params);
+    }, [])
+
+    useEffect(() => {
+        async function setServerCrop() {
+            if(loggedUser !== null) {
+                const response = await getCrop(loggedUser, crop.id);
+                if(response.ok) {
+                    const newCrop = await response.json();
+                    setCrop(newCrop);
+                } else {
+                    console.log("Error: " + response.status);
+                }
+            } else {
+                return false;
+            }
+        }
+
+        setServerCrop();
+        setDirty(false);
+    }, [dirty])
+
     return(
         <>
             <TitleBarComponent title={crop.name} leftAction={leftAction} rightAction={getRightAction()}/>
@@ -100,14 +125,14 @@ function CropPage({navigation, route}: NavProps) {
                     {
                         crop.systemsDetails.sort(sortSystems).map((s: System) => 
                             <View key={i++} style={styles.systemsItemView}>
-                                <SystemComponent system={s} crop={crop}/>
+                                <SystemComponent system={s} crop={crop} setDirty={setDirty}/>
                             </View>
                         )
                     }
                 </>
             </ScrollView>
             <PopUpComponent
-                body={<AddSystemForm crop={crop} setModalVisible={setSystemFormVisible}/>}
+                body={<AddSystemForm crop={crop} setModalVisible={setSystemFormVisible} setDirty={setDirty}/>}
                 height={60}
                 modalVisible={systemFormVisible}
                 setModalVisible={setSystemFormVisible}
