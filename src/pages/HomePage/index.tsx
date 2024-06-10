@@ -35,6 +35,7 @@ function HomePage() {
 
     const [crops, setCrops] = useState<Crop[]>([]);
     const [modalVisible, setModalVisible] = useState<boolean>(false); 
+    const [dirty, setDirty] = useState<boolean>(false);
 
     const { type, isConnected } = useNetInfo();
 
@@ -87,6 +88,7 @@ function HomePage() {
         async function getCrops() {
             if(loggedUser !== null) {
                 const response = await getAllCrops(loggedUser);
+                console.log(response);
                 if(response.ok) {
                     const crops = await response.json();
                     for(let i = 0; i < crops.crops.length; i++) {
@@ -107,7 +109,9 @@ function HomePage() {
         }
 
         getCrops();
-    }, [])
+    }, [dirty])
+
+    console.log(dirty);
 
     return (
         <>
@@ -134,7 +138,7 @@ function HomePage() {
                 <SpaceComponent value={10} dimension={Dimension.Width}/>
             </View>
             <PopUpComponent
-                body={<AddCropForm setModalVisible={setModalVisible}/>}
+                body={<AddCropForm setModalVisible={setModalVisible} setDirty={setDirty}/>}
                 height={60}
                 modalVisible={modalVisible}
                 setModalVisible={setModalVisible}

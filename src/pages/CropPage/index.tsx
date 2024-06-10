@@ -7,13 +7,12 @@ import SystemComponent from "../../components/SystemComponent";
 import StatusPanelComponent from "../../components/StatusPanelComponent";
 import { goBackIcon, editIcon, addNewIcon } from "../../utils/icons";
 import { PAGE_SUBTITLE_SIZE, TEXT_COLOR, ITEM_ICON_SIZE } from "../../utils/styles";
-import { System } from "../../utils/domain";
+import { System, compareSystems } from "../../utils/domain";
 import PopUpComponent from "../../components/PopUpComponent";
 import AddSystemForm from "../../components/AddSystemFormComponent";
 import SpaceComponent from "../../components/SpaceComponent";
 import ActionWithIconComponent from "../../components/ActionWithIconComponent";
 import { useState } from "react";
-import EditNameFormComponent from "../../components/EditNameFormComponent";
 import { addUserCrop, changeName } from "../../utils/api";
 import { useSelector } from "react-redux";
 import { State } from "../../store";
@@ -29,6 +28,7 @@ function CropPage({navigation, route}: NavProps) {
     const [nameFormVisible, setNameFormVisible] = useState<boolean>(false); 
 
     const loggedUser = useSelector((state: State) => state.persistedReducer.userReducer.user);
+    const userLoc = useSelector((state: State) => state.persistedReducer.locationReducer.location);
 
     const leftAction : Action = {
         icon: goBackIcon,
@@ -80,7 +80,9 @@ function CropPage({navigation, route}: NavProps) {
 
     let i = 0;
 
-    console.log(crop);
+    function sortSystems(a: System, b: System) {
+        return compareSystems(a, b, userLoc.lat, userLoc.lon);
+    }
 
     return(
         <>
@@ -96,7 +98,7 @@ function CropPage({navigation, route}: NavProps) {
             <ScrollView style={styles.systemsListView} contentContainerStyle={{flexDirection: 'row', flexWrap: 'wrap'}}>
                 <>
                     {
-                        crop.systemsDetails.map((s: System) => 
+                        crop.systemsDetails.sort(sortSystems).map((s: System) => 
                             <View key={i++} style={styles.systemsItemView}>
                                 <SystemComponent system={s} crop={crop}/>
                             </View>

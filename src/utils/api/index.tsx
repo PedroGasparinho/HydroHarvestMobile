@@ -1,13 +1,12 @@
-import { hashCode } from "..";
 import { User } from "../../store/user.reducer";
 import { Crop, System, cropInServerMap } from "../domain";
-import { Region, regions } from "../regions";
+import { Region } from "../regions";
 
 const GET = "GET";
 const POST = "POST";
 const PUT = "PUT";
 
-export const PROXY : string = "http://20.170.106.81:8080/mobile";
+export const PROXY : string = "http://4.182.99.186:8080/mobile";
 export const BOARD : string = "http://192.168.1.125";
 
 /*********************************** BOARD ***********************************/

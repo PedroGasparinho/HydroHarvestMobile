@@ -1,3 +1,4 @@
+import { distBetweenEarthPoints } from "../regions";
 import { cropStatusOrder, getCropStatus } from "../status";
 
 export type Crop = {
@@ -85,6 +86,21 @@ export type ScheduleDTO = {
 export function compareCrops(a: Crop, b: Crop) {
     const firstCriterion = a.averageDistance - b.averageDistance;
     const secondCriterion = cropStatusOrder(getCropStatus(a)) - cropStatusOrder(getCropStatus(b));
+    const thirdCriterion = (a.name).localeCompare(b.name);
+    if(firstCriterion !== 0) {
+        return firstCriterion;
+    } else if(secondCriterion !== 0) {
+        return secondCriterion;
+    } else {
+        return thirdCriterion;
+    }
+}
+
+export function compareSystems(a: System, b: System, userLat: number, userLon: number) {
+    const aDistance = distBetweenEarthPoints(a.latitude, a.longitude, userLat, userLon);
+    const bDistance = distBetweenEarthPoints(b.latitude, b.longitude, userLat, userLon);
+    const firstCriterion = aDistance - bDistance;
+    const secondCriterion = cropStatusOrder(a.status) - cropStatusOrder(b.status);
     const thirdCriterion = (a.name).localeCompare(b.name);
     if(firstCriterion !== 0) {
         return firstCriterion;

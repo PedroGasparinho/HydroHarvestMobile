@@ -31,7 +31,7 @@ export function cropStatusToColor(status: string) {
     }
 }
 
-export function cropStatusOrder(status: Status) : number {
+export function cropStatusOrder(status: string) : number {
     switch(status) {
         case Status.Great:
             return 4;
@@ -50,8 +50,8 @@ export function cropStatusOrder(status: Status) : number {
 
 export function getCropStatus(crop: Crop) {
     let sum = 0;
-    crop.systems.forEach(s => sum += cropStatusOrder(s.status));
-    const avg = Math.round(sum / crop.systems.length);
+    crop.systemsDetails.forEach(s => sum += cropStatusOrder(s.status));
+    const avg = Math.round(sum / crop.systemsDetails.length);
     switch(avg) {
         case 0:
             return Status.Critical;
