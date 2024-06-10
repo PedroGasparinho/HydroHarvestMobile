@@ -12,8 +12,7 @@ export const SYSTEM_PAGE = "SystemPage";
 
 type SystemPageProps = {
   crop: Crop,
-  system: System,
-  setDirty: React.Dispatch<React.SetStateAction<boolean>>
+  system: System
 }
 
 export type homeNavigationStackProp = {

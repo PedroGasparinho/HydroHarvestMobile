@@ -22,12 +22,13 @@ type NavProps = NativeStackScreenProps<homeNavigationStackProp, 'SystemPage'>;
 
 function SystemPage({navigation, route}: NavProps) {
 
-    const { crop, system, setDirty } = route.params;
+    const { crop, system } = route.params;
     const loggedUser = useSelector((state: State) => state.persistedReducer.userReducer.user);
 
     const [schedules, SetSchedules] = useState<Schedule[]>([]);
     const [scheduleFormVisible, setScheduleFormVisible] = useState<boolean>(false); 
     const [nameFormVisible, setNameFormVisible] = useState<boolean>(false); 
+    const [dirty, setDirty] = useState<boolean>(false);
    
     const leftAction : Action = {
         icon: goBackIcon,
@@ -69,7 +70,7 @@ function SystemPage({navigation, route}: NavProps) {
             }
         }
         getSchedules();
-    }, [])
+    }, [dirty])
 
     useEffect(() => {
         async function getPrediction() {
@@ -77,7 +78,6 @@ function SystemPage({navigation, route}: NavProps) {
                 const res = await getWateringForecast(crop, loggedUser, system);
                 if(res.ok) {
                     const p = await res.json();
-                    console.log(p);
                     if(p.start !== null && p.end !== null) {
                         const newSchedules = [...schedules, { 
                             startDate: new Date(p.start), 
@@ -128,7 +128,7 @@ function SystemPage({navigation, route}: NavProps) {
                 setModalVisible={setScheduleFormVisible}
             />
             <PopUpComponent
-                body={<EditNameFormComponent setModalVisible={setNameFormVisible} callback={onNameChange}/>}
+                body={<EditNameFormComponent setDirty={setDirty} setModalVisible={setNameFormVisible} callback={onNameChange}/>}
                 height={30}
                 modalVisible={nameFormVisible}
                 setModalVisible={setNameFormVisible}

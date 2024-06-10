@@ -5,7 +5,6 @@ import { persistReducer } from 'redux-persist';
 import userReducer from './user.reducer';
 import locationReducer from './location.reducer';
 import forecastReducer from './forecast.reducer';
-import dirtyReducer from './dirty.reducer';
 
 const persistConfig = {
     key: "root",
@@ -25,7 +24,6 @@ const persistedReducer = persistReducer(persistConfig, reducer);
 export const store = configureStore({
     reducer: {
         persistedReducer,
-        dirtyReducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware(
         {

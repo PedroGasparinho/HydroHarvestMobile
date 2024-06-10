@@ -19,7 +19,6 @@ import { useNetInfo } from "@react-native-community/netinfo";
 import { ITEM_ICON_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
 import IconComponent from "../../components/IconComponent";
 import SpaceComponent from "../../components/SpaceComponent";
-import { setDirty } from "../../store/dirty.reducer";
 
 function HomePage() {
 
@@ -30,7 +29,6 @@ function HomePage() {
     const mainNav = useNavigation<mainStackProp>();
     const loggedUser = useSelector((state: State) => state.persistedReducer.userReducer.user);
     const userLoc = useSelector((state: State) => state.persistedReducer.locationReducer.location);
-    //const dirty = useSelector((state: State) => state.dirtyReducer.dirty);
     const dispatcher = useDispatch();
 
     const [crops, setCrops] = useState<Crop[]>([]);
@@ -110,8 +108,6 @@ function HomePage() {
         getCrops();
     }, [dirty])
 
-    console.log(dirty);
-
     return (
         <>
             <TitleBarComponent title={title} subtitle={subtitle} leftAction={leftAction} rightAction={rightAction}/>
@@ -163,8 +159,6 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-        //borderTopWidth: BORDER_WIDTH,
-        //borderTopColor: BORDER_COLOR,
     },
 
     connectionTextView: {

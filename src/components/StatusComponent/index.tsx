@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import { valueToDimension } from "../../utils";
-import { Status, cropStatusToColor } from "../../utils/status";
+import { cropStatusToColor } from "../../utils/status";
 import { TEXT_COLOR } from "../../utils/styles";
 
 type Props = {

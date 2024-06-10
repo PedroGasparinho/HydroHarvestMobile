@@ -8,6 +8,7 @@ type Props = {
     setModalVisible: React.Dispatch<React.SetStateAction<boolean>>
     onNameChangeCallback: (name: string) => Promise<string>
     onAddUserCallback: (name: string) => Promise<string>
+    setDirty: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 function CropOptionsComponent(props: Props) {
@@ -16,7 +17,7 @@ function CropOptionsComponent(props: Props) {
     const [email, setEmail] = useState<string>("");
     const [name, setName] = useState<string>("");
 
-    const { setModalVisible, onNameChangeCallback, onAddUserCallback } = props;
+    const { setModalVisible, onNameChangeCallback, onAddUserCallback, setDirty } = props;
 
     async function onUserSubmit() {
         setError("");
@@ -25,6 +26,7 @@ function CropOptionsComponent(props: Props) {
         } else {
             const errorString = await onAddUserCallback(email)
             if(isStringEmpty(errorString)) {
+                setDirty(true);
                 setModalVisible(false);
             } else {
                 setError("Error: " + errorString);
@@ -39,6 +41,7 @@ function CropOptionsComponent(props: Props) {
         } else {
             const errorString = await onNameChangeCallback(name)
             if(isStringEmpty(errorString)) {
+                setDirty(true);
                 setModalVisible(false);
             } else {
                 setError("Error: " + errorString);

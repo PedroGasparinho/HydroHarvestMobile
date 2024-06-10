@@ -7,6 +7,7 @@ import { CONFIRM_ICON_MAIN_COLOR } from "../../utils/icons";
 type Props = {
     setModalVisible: React.Dispatch<React.SetStateAction<boolean>>
     callback: (name: string) => Promise<string>
+    setDirty: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 function EditNameFormComponent(props: Props) {
@@ -14,7 +15,7 @@ function EditNameFormComponent(props: Props) {
     const [error, setError] = useState<string>("");
     const [name, setName] = useState<string>("");
 
-    const { setModalVisible, callback } = props;
+    const { setModalVisible, callback, setDirty } = props;
 
     async function onSubmit() {
         setError("");
@@ -23,6 +24,7 @@ function EditNameFormComponent(props: Props) {
         } else {
             const errorString = await callback(name)
             if(isStringEmpty(errorString)) {
+                setDirty(true);
                 setModalVisible(false);
             } else {
                 setError("Error: " + errorString);

@@ -36,7 +36,7 @@ function ScheduleComponent(props: Props) {
         if(loggedUser !== null) {
             const response = await addWater(crop, loggedUser, system, s.startDate, s.endDate);
             if(response.ok) {
-                //
+                //TODO
             } else {
                 console.log("Error: " + response.status);
             }

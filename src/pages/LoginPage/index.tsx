@@ -1,4 +1,4 @@
-import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { APP_SCREEN, mainStackProp } from "../../routes/stack";
 import { useNavigation } from "@react-navigation/native";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
@@ -20,9 +20,9 @@ function LoginPage() {
 
     async function onGoogleButtonPress() {
         try {
-            //if(loggedUser !== null) {
-                //mainNav.navigate(APP_SCREEN);
-            //} else {
+            if(loggedUser !== null) {
+                mainNav.navigate(APP_SCREEN);
+            } else {
                 await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
                 const { idToken, user } = await GoogleSignin.signIn();
     
@@ -43,7 +43,7 @@ function LoginPage() {
                 loginRequest(hydroUser);
     
                 return res;
-            //}
+            }
         } catch(error) {
             console.log(error);
         }

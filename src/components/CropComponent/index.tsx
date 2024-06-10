@@ -1,13 +1,10 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Action, Dimension, getSpaceIfNoAction } from "../../utils";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { CROP_PAGE, homeStackProp } from "../../routes/homeStack";
 import StatusComponent from "../StatusComponent";
 import { Crop } from "../../utils/domain";
-import { wateringCanIcon } from "../../utils/icons";
-import { BORDER_COLOR, BORDER_WIDTH, ITEM_BACK_COLOR, ITEM_ICON_SIZE, ITEM_RADIUS, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
-import SpaceComponent from "../SpaceComponent";
+import { BORDER_COLOR, BORDER_WIDTH, ITEM_BACK_COLOR, ITEM_RADIUS, ITEM_TEXT_SIZE, ITEM_TITLE_SIZE, TEXT_COLOR } from "../../utils/styles";
 
 type Props = {
     crop: Crop

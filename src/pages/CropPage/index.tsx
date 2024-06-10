@@ -12,7 +12,7 @@ import PopUpComponent from "../../components/PopUpComponent";
 import AddSystemForm from "../../components/AddSystemFormComponent";
 import SpaceComponent from "../../components/SpaceComponent";
 import ActionWithIconComponent from "../../components/ActionWithIconComponent";
-import { SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { addUserCrop, changeName, getCrop } from "../../utils/api";
 import { useSelector } from "react-redux";
 import { State } from "../../store";
@@ -21,8 +21,6 @@ import CropOptionsComponent from "../../components/CropOptionsComponent";
 type NavProps = NativeStackScreenProps<homeNavigationStackProp, 'CropPage'>;
 
 function CropPage({navigation, route}: NavProps) {
-
-    //const crop = route.params;
 
     const [systemFormVisible, setSystemFormVisible] = useState<boolean>(false); 
     const [nameFormVisible, setNameFormVisible] = useState<boolean>(false); 
@@ -45,7 +43,6 @@ function CropPage({navigation, route}: NavProps) {
     async function onAddUser(email: string) {
         if(loggedUser !== null) {
             const response = await addUserCrop(crop, email, loggedUser);
-            console.log(response);
             if(response.ok) {
                 return "";
             } else {
@@ -125,7 +122,7 @@ function CropPage({navigation, route}: NavProps) {
                     {
                         crop.systemsDetails.sort(sortSystems).map((s: System) => 
                             <View key={i++} style={styles.systemsItemView}>
-                                <SystemComponent system={s} crop={crop} setDirty={setDirty}/>
+                                <SystemComponent system={s} crop={crop}/>
                             </View>
                         )
                     }
@@ -138,7 +135,7 @@ function CropPage({navigation, route}: NavProps) {
                 setModalVisible={setSystemFormVisible}
             />
             <PopUpComponent
-                body={<CropOptionsComponent setModalVisible={setNameFormVisible} 
+                body={<CropOptionsComponent setModalVisible={setNameFormVisible} setDirty={setDirty}
                     onAddUserCallback={onAddUser} onNameChangeCallback={onNameChange}/>}
                 height={60}
                 modalVisible={nameFormVisible}

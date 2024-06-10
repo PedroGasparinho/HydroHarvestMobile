@@ -40,7 +40,6 @@ function AddSystemForm(props: Props) {
                 if(response.ok) {
                     props.setModalVisible(false);
                     props.setDirty(true);
-                    //dispatcher(setDirty(true));
                 } else {
                     setError("Error: " + response.status);
                 }

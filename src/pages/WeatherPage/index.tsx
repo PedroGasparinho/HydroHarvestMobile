@@ -27,7 +27,7 @@ function WeatherPage() {
     const dispatcher = useDispatch();
 
     useEffect(() => {
-        setRegionIdx(closest-1); //-1 porque o api do ipma esta a ter problemas com vila do corvo
+        setRegionIdx(closest);
         if(isConnected) {
             sendRequest();
         } else {

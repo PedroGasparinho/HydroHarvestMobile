@@ -12,7 +12,6 @@ export const BOARD : string = "http://192.168.1.125";
 /*********************************** BOARD ***********************************/
 
 export async function sendCropToBoard(crop: string) {
-    console.log(BOARD + "/setPlantation");
     return await fetch(BOARD + "/setPlantation", {
         method: POST,
         headers: {"Content-Type":"application/json"},
